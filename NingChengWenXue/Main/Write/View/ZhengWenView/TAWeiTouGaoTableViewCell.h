@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewModel.h"
+#import "ZWDetailModel.h"
 
 @interface TAWeiTouGaoTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) ViewModel *viewModel;
+@property (nonatomic, strong) ZWDetailModel *viewModel;
 @property (nonatomic, assign) NSInteger row;
 
 @property (weak, nonatomic) IBOutlet UILabel *rankLab;

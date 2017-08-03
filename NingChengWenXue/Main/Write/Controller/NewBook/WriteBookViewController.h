@@ -10,4 +10,6 @@
 
 @interface WriteBookViewController : UIViewController
 
+@property (nonatomic, assign) NSInteger type;
+
 @end

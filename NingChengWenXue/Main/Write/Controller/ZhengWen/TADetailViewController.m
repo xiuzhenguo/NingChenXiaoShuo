@@ -10,15 +10,27 @@
 #import "TAWanJieHeaderView.h"
 #import "TAWanJIeTableViewCell.h"
 #import "TARuleViewController.h"
+#import "NCWriteHelper.h"
+#import "ZhengWenListModel.h"
+#import "ZWDetailModel.h"
 
 @interface TADetailViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) TAWanJieHeaderView *headerView;
+@property (strong, nonatomic) NCWriteHelper *helper;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
 @implementation TADetailViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -26,6 +38,7 @@
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1];
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;//不设置为黑色背景
+    
 }
 
 - (void)viewDidLoad {
@@ -37,11 +50,13 @@
     [self setUpNavButtonUI];
     
     [self setUpTableViewUI];
+    
+    [self getZhengWenDetailData];
 }
 
 #pragma mark - 创建TableView
 - (void) setUpTableViewUI{
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64) style:(UITableViewStylePlain)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64) style:(UITableViewStyleGrouped)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -49,13 +64,12 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TAWanJIeTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     
-    [self setUpTableHeaderViewUI];
 }
 
 #pragma mark - 创建tableView 头视图
 -(void) setUpTableHeaderViewUI {
     self.headerView = [[TAWanJieHeaderView alloc] init];
-    ViewModel *model = [[ViewModel alloc] init];
+    ZhengWenListModel *model = self.dataArray.firstObject;
     self.headerView.model = model;
     self.headerView.frame = CGRectMake(0, 0, BXScreenW, self.headerView.height);
     self.headerView.backgroundColor = [UIColor whiteColor];
@@ -97,6 +111,10 @@
 #pragma mark - 分区头设置
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 46;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.01;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -154,6 +172,40 @@
 -(void)leftNavBtnAction:(UIButton *)btn{
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 征文详情获取
+-(void) getZhengWenDetailData {
+    NSString *userId = @"00000000-0000-0000-0000-000000000000";
+    if (kUserLogin == YES) {
+        userId = kUserID;
+    }
+    [self.view showHudWithActivity:@"正在加载"];
+    [self.helper zhengWenDetailWithID:self.ficID UserId:userId success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            self.dataArray = [[NSMutableArray alloc] init];
+           
+            ZhengWenListModel *model = [ZhengWenListModel mj_objectWithKeyValues:response];
+            
+            [self.dataArray addObject:model];
+            
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            [self.tableView reloadData];
+            [self setUpTableHeaderViewUI];
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.tableView.mj_header endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            [self getZhengWenDetailData];
+        }];
+    }];
 }
 
 @end

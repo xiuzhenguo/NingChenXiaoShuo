@@ -12,6 +12,7 @@
 @interface ThemeArtTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) ZhengWenListModel *viewModel;
+@property (nonatomic, assign) CGFloat height;
 
 @property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong) UILabel *titleLab;

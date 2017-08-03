@@ -11,5 +11,6 @@
 @interface NBEditViewController : UIViewController
 
 @property (nonatomic, strong) NSString *bookID;
+@property (nonatomic, assign) NSInteger newtype;
 
 @end

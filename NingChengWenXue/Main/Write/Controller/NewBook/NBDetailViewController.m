@@ -7,12 +7,23 @@
 //
 
 #import "NBDetailViewController.h"
+#import "NCWriteHelper.h"
 
 @interface NBDetailViewController ()
+
+@property (strong, nonatomic) NCWriteHelper *helper;
+@property (nonatomic, strong) UILabel *contentLab;
 
 @end
 
 @implementation NBDetailViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -31,17 +42,16 @@
     [self setUpNavButtonUI];
     
     [self setUpUILableUI];
+    
+    [self getApplyFaileReasonData];
 }
 
 #pragma mark - 创建显示UILabe
 -(void) setUpUILableUI {
-    UILabel *contentLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, BXScreenW - 30, BXScreenH - 30)];
-    contentLab.font = THIRDFont;
-    contentLab.textColor = BXColor(40, 40, 40);
-    contentLab.numberOfLines = 0;
-    contentLab.text = @"签约不成功的原因是，签约不成功的原因是：签约不成功的原因是；签约不成功的原因是，签约不成功的原因是。签约不成功的原因是、签约不成功的原因是";
-    [contentLab sizeToFit];
-    [self.view addSubview:contentLab];
+    self.contentLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, BXScreenW - 30, BXScreenH - 30)];
+    self.contentLab.font = THIRDFont;
+    self.contentLab.textColor = BXColor(40, 40, 40);
+    [self.view addSubview:self.contentLab];
 }
 
 #pragma mark - 设置导航栏按钮
@@ -61,6 +71,37 @@
 -(void)leftNavBtnAction:(UIButton *)btn{
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 申请失败原因的获取
+-(void)getApplyFaileReasonData {
+    
+    [self.view showHudWithActivity:@"正在加载"];
+    [self.helper faileApplySignNovelWithFictionId:self.bookID success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200) {
+                self.contentLab.text = model.datas;
+                self.contentLab.numberOfLines = 0;
+                [self.contentLab sizeToFit];
+            }else{
+                
+                [SVProgressHUD showErrorWithStatus:model.Message];
+            }
+            
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.view showFailedViewReloadBlock:^{
+            [self getApplyFaileReasonData];
+        }];
+    }];
 }
 
 @end

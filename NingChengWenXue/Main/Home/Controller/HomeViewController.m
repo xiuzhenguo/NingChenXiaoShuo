@@ -72,6 +72,7 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, assign) NSInteger pageNum;
 @property (nonatomic, assign) CGFloat collectionHeight;
+@property (nonatomic, strong) NSMutableArray *picArray;
 
 
 @end
@@ -94,6 +95,8 @@
     self.navigationController.navigationBar.translucent = true;//不设置为黑色背景
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:0];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    NSLog(@"%f%f",BXScreenW, BXScreenH);
     
     [self getSearchNovelData];
     // 系统消息的获取
@@ -143,12 +146,6 @@
 - (void)loadNewData
 {
 
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        // 刷新表格
-//        [tableView reloadData];
-//        
-//        // 拿到当前的下拉刷新控件，结束刷新状态
-//    });
     self.pageNum = 1;
     [self getSearchNovelData];
     // 系统消息的获取
@@ -188,11 +185,6 @@
     self.headView.frame = CGRectMake(0, 0, BXScreenW, 372);
     self.headView.backgroundColor = BXColor(195, 195, 195);
     self.rootTableView.tableHeaderView = self.headView;
-    
-//    self.tableFootView = [[UIView alloc] init];
-//    self.tableFootView.frame = CGRectMake(0, 0, BXScreenW, 500);
-//    self.tableFootView.backgroundColor = BXColor(195, 195, 195);
-//    self.rootTableView.tableFooterView = self.tableFootView;
     
     // 调用按钮
     [self setHeadEightButton];
@@ -423,24 +415,6 @@
     
     UIView *footView = [[UIView alloc] init];
     footView.backgroundColor = BXColor(195, 195, 195);
-//    [self AddHeaderLine];
-//    if (section == 0) {
-//        [self AddHeaderLine];
-//        [footView addSubview:self.footView];
-//        self.cellHeaderImg.image = [UIImage imageNamed:@"消息_2"];
-//        [self.headLine setBgColor:[UIColor whiteColor] textColor:BXColor(253,198,70) textFont:THIRDFont];
-//    }else if (section == 1) {
-//        [self AddHeaderLine];
-//        [footView addSubview:self.footView];
-//        self.cellHeaderImg.image = [UIImage imageNamed:@"消息_3"];
-//        [self.headLine setBgColor:[UIColor whiteColor] textColor:BXColor(253,116,157) textFont:THIRDFont];
-//    }else if (section == 2) {
-//        [self AddHeaderLine];
-//        [footView addSubview:self.footView];
-//        self.cellHeaderImg.image = [UIImage imageNamed:@"消息_4"];
-//        [self.headLine setBgColor:[UIColor whiteColor] textColor:BXColor(149,195,255) textFont:THIRDFont];
-//    }
-    
 
     return footView;
 
@@ -504,9 +478,11 @@
 
 #pragma mark - SDCycleScrollViewDelegate(轮播图的点击方法)
 
-- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
-{
-    NSLog(@"---点击了第%ld张图片", (long)index);
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
+    SysMessageModel *model = self.picArray[index];
+    NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
+    vc.bookId = model.FictionId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - 上方排行榜、分类等按钮点击方法
@@ -790,10 +766,6 @@
         return ;
     } faild:^(NSString *response, NSError *error) {
         [self.view hideHubWithActivity];
-//        [self.view showFailedViewReloadBlock:^{
-//            [self.view showActivityWithImage:kLoadingImage];
-//            [self getSysmessageDate];
-//        }];
         [SVProgressHUD showSuccessWithStatus:@"失败"];
         
     }];
@@ -804,14 +776,16 @@
     [self.helper CarouselPictrueWithSuccess:^(NSArray *response) {
         st_dispatch_async_main(^{
             
-            NSMutableArray *picArray = [[NSMutableArray alloc] init];
+            self.picArray = [[NSMutableArray alloc] init];
+            NSMutableArray *arr = [[NSMutableArray alloc] init];
             for (int i=0; i<response.count; i++) {
                 SysMessageModel *model = [SysMessageModel mj_objectWithKeyValues:response[i]];
                 
-                [picArray addObject:model.FictionImage];
+                [self.picArray addObject:model];
+                [arr addObject:model.FictionImage];
             }
             
-            [self setHeadCycleScrollView:picArray];
+            [self setHeadCycleScrollView:arr];
             
         });
         

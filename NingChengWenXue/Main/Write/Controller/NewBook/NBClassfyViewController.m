@@ -165,10 +165,10 @@
     if (!title.selected) {
         TypeListModel *model = list.Item[tag];
         self.typeID = model.Id;
-     
+        self.type = model.ClassName;
     }else{
         self.typeID = -10000000000000;
-        
+        self.type = @"";
     }
     [self.tableView reloadData];
 }
@@ -304,6 +304,23 @@
         [self presentViewController:wAlert animated:YES completion:nil];
     }else{
         TypeListModel *model = self.footArray[indexPath.row];
+        
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        for (int i = 0; i < self.footArray.count; i++) {
+            TypeListModel *mode = self.footArray[i];
+            if (mode.IsCheck == YES) {
+                [array addObject:mode];
+            }
+            if (array.count == 3) {
+                if (model.IsCheck == YES) {
+//                    model.IsCheck =! model.IsCheck;
+                }else{
+                    [SVProgressHUD showErrorWithStatus:@"其他标签最多只能选3个"];
+                    return;
+                }
+            }
+        }
+        
         model.IsCheck =! model.IsCheck;
         [self.colletionView reloadData];
     }
@@ -343,7 +360,11 @@
     [rightBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
     rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     rightBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-    [rightBtn addTarget:self action:@selector(clickRightButton) forControlEvents:UIControlEventTouchUpInside];
+    if (self.newType == 1) {
+        [rightBtn addTarget:self action:@selector(clickRightButtonOne) forControlEvents:UIControlEventTouchUpInside];
+    }else{
+        [rightBtn addTarget:self action:@selector(clickRightButton) forControlEvents:UIControlEventTouchUpInside];
+    }
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:rightBtn];
     self.navigationItem.rightBarButtonItem = item1;
 }
@@ -377,6 +398,23 @@
          [self.view hideHubWithActivity];
          [SVProgressHUD showErrorWithStatus:@"失败"];
      }];
+}
+
+#pragma mark - 新建作品的分类
+-(void) clickRightButtonOne {
+    if (self.typeID == -10000000000000) {
+        [SVProgressHUD showErrorWithStatus:@"请选择官方标签"];
+        return;
+    }
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    for (int i = 0; i < self.footArray.count; i++) {
+        TypeListModel *model = self.footArray[i];
+        if (model.IsCheck == YES) {
+            [array addObject:model.ClassName];
+        }
+    }
+    [self.delegate selectClassfy:self.typeID Biaoqian:self.type Other:[array componentsJoinedByString:@","]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - 返回按钮的实现方法

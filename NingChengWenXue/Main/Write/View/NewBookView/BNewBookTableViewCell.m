@@ -43,7 +43,7 @@
     self.typeLab.font = [UIFont boldSystemFontOfSize:14];
     self.typeLab.textColor = [UIColor whiteColor];
     self.typeLab.backgroundColor = [UIColor blackColor];
-    self.typeLab.alpha = 0.4;
+    self.typeLab.alpha = 0.5;
     self.typeLab.textAlignment = NSTextAlignmentCenter;
     [self.imgView addSubview:self.typeLab];
     

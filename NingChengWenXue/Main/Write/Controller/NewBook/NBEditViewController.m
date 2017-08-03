@@ -24,8 +24,12 @@
 #import "NCWriteHelper.h"
 #import "SwichTableViewCell.h"
 #import "ChangeNameTableViewCell.h"
+#import "BNewBookViewController.h"
+#import "WriteBookViewController.h"
+#import "DateTimePickerView.h"
+#import "TABookViewController.h"
 
-@interface NBEditViewController ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface NBEditViewController ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate, DateTimePickerViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *imgBtn;
@@ -96,7 +100,7 @@
 
 #pragma mark - 创建TableView
 - (void) setUpTableViewUI{
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64) style:(UITableViewStylePlain)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64) style:(UITableViewStyleGrouped)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -104,7 +108,7 @@
     
     [self.tableView registerClass:[ChangeNameTableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[NBEditTableViewCell class] forCellReuseIdentifier:@"cell1"];
-    [self.tableView registerClass:[NBEditSecTableViewCell class] forCellReuseIdentifier:@"cell2"];
+//    [self.tableView registerClass:[NBEditSecTableViewCell class] forCellReuseIdentifier:@"cell2"];
     [self.tableView registerClass:[SwichTableViewCell class] forCellReuseIdentifier:@"cell3"];
     
     
@@ -253,8 +257,13 @@
         [cell addSubview:lineLab];
         return cell;
         
-    }else{
-        NBEditSecTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell2" forIndexPath:indexPath];
+    }else if (indexPath.section == 3) {
+        
+        NSString *CellIdentifier = [NSString stringWithFormat:@"cell%ld%ld",indexPath.section,indexPath.row];
+         NBEditSecTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (!cell) {
+            cell = [[NBEditSecTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        }
         
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -268,8 +277,7 @@
         
         return cell;
     }
-    
-
+    return nil;
 }
 
 #pragma mark - tabeViewCell的点击事件
@@ -312,7 +320,14 @@
     }
     if (indexPath.section == 3) {
         NBWriteViewController *vc = [[NBWriteViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
+        NewBookModel *list = self.dataArray.firstObject;
+        SectionListModel *model = list.SectionItem[indexPath.row];
+        vc.sectionID = model.SectionId;
+        vc.ficID = self.bookID;
+        vc.typeInt = 2;
+        if (model.SectionStatus == 3) {
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -328,12 +343,19 @@
         if ([title isEqualToString:@"1000"]) {
             NSLog(@"%@",model.SectionId);
             [weakSelf pushNovelSectionData:model.SectionId Model:model];
+        }else if ([title isEqualToString:@"1003"]){
+            [weakSelf removeNovelSection:model.SectionId Index:sender.tag - 1000];
+        }else if ([title isEqualToString:@"1001"]){
+            DateTimePickerView *pickerView = [[DateTimePickerView alloc] init];
+            pickerView.delegate = self;
+            pickerView.model = model;
+            pickerView.secID = model.SectionId;
+            pickerView.pickerViewMode = DatePickerViewDateTimeMode;
+            [self.view.window addSubview:pickerView];
+            [pickerView showDateTimePickerView];
         }
     }];
-    
 }
-
-
 
 #pragma mark - switchIsChanged 方法，用于监听UISwitch控件的值改变
 -(void)switchIsChanged:(UISwitch *)swith
@@ -347,7 +369,13 @@
     }
     [self.helper daiBiaoZuoWithFictionId:self.bookID UserId:kUserID Q:type success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
-            [SVProgressHUD showSuccessWithStatus:@"更改成功"];
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200) {
+                [SVProgressHUD showSuccessWithStatus:@"更改成功"];
+            }else{
+                
+                [SVProgressHUD showErrorWithStatus:model.Message];
+            }
             
             [self getProductionMessageData];
         });
@@ -369,6 +397,10 @@
     }else{
         return 10;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.01;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -409,8 +441,9 @@
 
 #pragma mark - 添加新章节按钮的点击事件
 -(void) clickNewSectionButton {
-    NSLog(@"添加新章节");
+    
     NBWriteViewController *vc = [[NBWriteViewController alloc] init];
+    vc.ficID = self.bookID;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -471,7 +504,7 @@
     __weak typeof(alertControl) wAlert = alertControl;
     [wAlert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         // 点击确定按钮的时候, 会调用这个block
-        [self.navigationController popViewControllerAnimated:YES];
+        [self deleteNovelData];
         
     }]];
     
@@ -482,11 +515,19 @@
 
 #pragma mark - 返回按钮的实现方法
 -(void)leftNavBtnAction:(UIButton *)btn{
-    
-    [self.navigationController popViewControllerAnimated:YES];
+
+    if (self.newtype == 1) {
+        for (UIViewController *controller in self.navigationController.viewControllers) {
+            if ([controller isKindOfClass:[TABookViewController class]]) {
+                TABookViewController *A =(TABookViewController *)controller;
+                [self.navigationController popToViewController:A animated:YES];
+            }
+        }
+    }else{
+        //直接返回到第一个视图
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
-
-
 
 #pragma mark - 作品信息的获取
 -(void) getProductionMessageData {
@@ -606,6 +647,59 @@
         return ;
     } faild:^(NSString *response, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"发布失败"];
+    }];
+}
+
+#pragma mark - 删除作品
+-(void)deleteNovelData{
+    [self.helper deleteNovelWithFictionId:self.bookID AuthorId:kUserID success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            [SVProgressHUD showSuccessWithStatus:@"删除成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"删除失败"];
+    }];
+}
+
+#pragma mark - 删除章节
+-(void)removeNovelSection:(NSString *)secID Index:(NSInteger )index {
+    NewBookModel *model = self.dataArray.firstObject;
+    SectionListModel *list = model.SectionItem[index];
+    [self.helper removeNovelSectionWithFictionId:self.bookID SectionId:secID success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            [SVProgressHUD showSuccessWithStatus:@"删除成功"];
+            NSMutableArray *arr = [[NSMutableArray alloc] init];
+            arr = [model.SectionItem mutableCopy];
+            [arr removeObjectAtIndex:index];
+            model.SectionItem = [arr copy];
+            if (list.SectionStatus == 2) {
+                model.Count = model.Count - 1;
+            }
+            [self.tableView reloadData];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"删除失败"];
+    }];
+}
+
+#pragma mark - delegate 定时发布功能的实现
+- (void)didClickFinishDateTimePickerView:(NSString *)date SecID:(NSString *)secId Model:(SectionListModel *)model{
+    
+    [self.helper dingShiPublishSectionWithSectionId:secId FictionId:self.bookID UserId:kUserID PublishTime:[NSString stringWithFormat:@"%@:00",date] success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            [SVProgressHUD showSuccessWithStatus:@"成功"];
+            model.SectionStatus = 4;
+            [self.tableView reloadData];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"失败"];
     }];
 }
 

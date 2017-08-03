@@ -11,6 +11,7 @@
 #import "NCHomePageHelper.h"
 #import "UserItemModel.h"
 #import "UnionModel.h"
+#import "HAuthorsViewController.h"
 
 @interface HClubPersonViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -123,6 +124,14 @@
     [cell.btn addTarget:self action:@selector(clickGunzhuButton:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
     
+}
+
+#pragma mark - tableViewCell的点击事件跳转(跳转作者页面)
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    UserItemModel *model = self.dataArray[indexPath.row];
+    HAuthorsViewController *vc = [[HAuthorsViewController alloc] init];
+    vc.autherID = model.UserId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - 点击关注按钮的点击事件

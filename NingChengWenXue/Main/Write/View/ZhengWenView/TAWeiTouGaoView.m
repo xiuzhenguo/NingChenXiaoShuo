@@ -23,6 +23,7 @@
     // 活动名
     self.titleLab = [[UILabel alloc] init];
     self.titleLab.font = FIFFont;
+    self.titleLab.numberOfLines = 0;
     self.titleLab.textColor = BXColor(40,40,40);
     [self addSubview:self.titleLab];
     // 投稿时间
@@ -72,28 +73,28 @@
     [self addSubview:self.twoView];
 }
 
-- (void)setModel:(ViewModel *)model{
+- (void)setModel:(ZhengWenListModel *)model{
     for (UIView *view in self.subviews) {
         view.frame = CGRectZero;
     }
     
     self.imgView.frame = CGRectMake(0, 0, BXScreenW, 130);
-    self.imgView.image = [UIImage imageNamed:@"上首页_3"];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.FileImage] placeholderImage:[UIImage imageNamed:@"默认图片"]];
     
     self.oneView.frame = CGRectMake(0, 130, BXScreenW, 10);
     // 活动名
-    self.titleLab.text = @"校园那点事征文第四弹";
-    CGRect nameWith = [self.titleLab.text boundingRectWithSize:CGSizeMake(BXScreenW - 110, 15) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:(self.titleLab.font)} context:nil];
-    self.titleLab.frame = CGRectMake(15, 155, nameWith.size.width, 15);
+    self.titleLab.text = model.Title;
+    CGRect nameWith = [self.titleLab.text boundingRectWithSize:CGSizeMake(BXScreenW - 110, 60) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:(self.titleLab.font)} context:nil];
+    self.titleLab.frame = CGRectMake(15, 155, nameWith.size.width, nameWith.size.height);
     // 进度
     self.typeLab.frame = CGRectMake(CGRectGetMaxX(self.titleLab.frame)+6, 152.5, 73, 20);
-    self.typeLab.text = @"投稿阶段";
+    self.typeLab.text = model.StatusName;
     
     self.typeImg.frame = CGRectMake(CGRectGetMaxX(self.titleLab.frame)+6, 152.5, 73, 20);
     self.typeImg.image = [UIImage imageNamed:@"标签"];
     
     self.contentLab.frame = CGRectMake(15, CGRectGetMaxY(self.titleLab.frame)+15, BXScreenW - 30, 1000);
-    self.contentLab.text = @"的护卫凤凰网也更符合因违反微风过文艺范非工业误国府夜无个非官方会计师醋和夫和非要发个我邮费给物业费我发文件不符合发给我二月份个网页复位后覅了花都区后我父亲";
+    self.contentLab.text = model.Intro;
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.contentLab.text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

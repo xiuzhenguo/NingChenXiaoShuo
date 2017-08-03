@@ -9,20 +9,34 @@
 #import "TATouGaoViewController.h"
 #import "TAWeiTouGaoTableViewCell.h"
 #import "TAWeiTouGaoView.h"
-#import "ViewModel.h"
+#import "TAWanJieHeaderView.h"
 #import "TARuleViewController.h"
 #import "TAMoreViewController.h"
 #import "TABookViewController.h"
+#import "NCWriteHelper.h"
+#import "ZhengWenListModel.h"
+#import "ZWDetailModel.h"
+#import "NovelDetailViewController.h"
 
 @interface TATouGaoViewController ()<UITableViewDelegate, UITableViewDataSource,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) TAWanJieHeaderView *headView;
 @property (nonatomic, strong) TAWeiTouGaoView *weitougaoView;
+@property (strong, nonatomic) NCWriteHelper *helper;
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
 @implementation TATouGaoViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -30,6 +44,8 @@
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1];
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;//不设置为黑色背景
+    
+    [self getZhengWenDetailData];
 }
 
 
@@ -42,6 +58,16 @@
     [self setUpNavButtonUI];
     
     [self setUpTableViewUI];
+    self.tableView.mj_header = [MJDIYHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+}
+
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    [self getZhengWenDetailData];
+    
 }
 
 #pragma mark - 创建TableView
@@ -54,18 +80,17 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TAWeiTouGaoTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     
-    [self setUpTableHeaderViewUI];
-    
+//    [self setUpTableHeaderViewUI];
 }
 
-#pragma mark - 创建tableView 头视图
+#pragma mark - 创建tableView 头视图(投稿状态)
 -(void) setUpTableHeaderViewUI {
     
     self.headerView = [[UIView alloc] init];
     self.headerView.backgroundColor = [UIColor whiteColor];
     
     self.weitougaoView = [[TAWeiTouGaoView alloc] init];
-    ViewModel *model = [[ViewModel alloc] init];
+    ZhengWenListModel *model = self.dataArray.firstObject;
     self.weitougaoView.model = model;
     self.weitougaoView.frame = CGRectMake(0, 0, BXScreenW, self.weitougaoView.height);
     [self.headerView addSubview:self.weitougaoView];
@@ -88,7 +113,7 @@
     moreImg.image = [UIImage imageNamed:@"箭头"];
     [btn addSubview:moreImg];
     
-    if ([self.typeStr isEqualToString:@"未投稿"]) {
+    if (model.IsTg == 0) {
         
         UIButton *tougaoBtn = [[UIButton alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(self.weitougaoView.frame), BXScreenW - 30, 44)];
         tougaoBtn.backgroundColor = BXColor(236,105,65);
@@ -99,11 +124,8 @@
         [self.headerView addSubview:tougaoBtn];
         
         lineLab.frame = CGRectMake(0, CGRectGetMaxY(self.weitougaoView.frame)+14.5+44, BXScreenW, 0.5);
-        
         btn.frame = CGRectMake(0, CGRectGetMaxY(tougaoBtn.frame)+15, BXScreenW, 44);
-        
     }else{
-        
         UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.weitougaoView.frame), BXScreenW, 0.5)];
         line.backgroundColor = BXColor(195,195,195);
         [self.headerView addSubview:line];
@@ -132,21 +154,47 @@
     self.tableView.tableHeaderView = self.headerView;
 }
 
+#pragma mark - 创建tableView 头视图(评选状态)
+-(void) setUpTableHeadViewUI {
+    self.headView = [[TAWanJieHeaderView alloc] init];
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    self.headView.model = model;
+    self.headView.frame = CGRectMake(0, 0, BXScreenW, self.headView.height);
+    self.headView.backgroundColor = [UIColor whiteColor];
+    self.tableView.tableHeaderView = self.headView;
+    
+    [self.headView.btn addTarget:self action:@selector(clickRuleButton) forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void) clickRuleButton {
+    TARuleViewController *vc = [[TARuleViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - 马上投稿按钮的点击事件
 -(void) clickTouGaoButton {
+    if (kUserLogin == NO) {
+        LoginViewController *vc = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     TABookViewController *vc = [[TABookViewController alloc] init];
+    vc.ficStr = self.ficId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - 退出征文按钮的点击事件
 -(void) clickTuiChuButton {
+    if (kUserLogin == NO) {
+        LoginViewController *vc = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:@"是否删除作品" preferredStyle:UIAlertControllerStyleAlert];
     __weak typeof(alertControl) wAlert = alertControl;
     [wAlert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         // 点击确定按钮的时候, 会调用这个block
-        self.typeStr = @"未投稿";
-        [self setUpTableHeaderViewUI];
-        [self.tableView reloadData];
+        [self tuiChuNovelData];
         
     }]];
     
@@ -167,7 +215,8 @@
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 11;
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    return model.FictionList.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -180,13 +229,22 @@
     TAWeiTouGaoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    ViewModel *model = [[ViewModel alloc] init];
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    ZWDetailModel *list = model.FictionList[indexPath.row];
     
     cell.row = indexPath.row;
-    cell.viewModel = model;
+    cell.viewModel = list;
     
     return cell;
+}
+
+#pragma mark - tableViewCell的点击事件跳转
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    ZWDetailModel *list = model.FictionList[indexPath.row];
+    NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
+    vc.bookId = list.FictionId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - 分区头设置
@@ -237,6 +295,7 @@
 #pragma mark - tableView分区头更多按钮的点击事件
 -(void) clickSectionMoreButton {
     TAMoreViewController *vc = [[TAMoreViewController alloc] init];
+    vc.ficID = self.ficId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -273,6 +332,54 @@
 -(void)leftNavBtnAction:(UIButton *)btn{
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 征文详情获取
+-(void) getZhengWenDetailData {
+    NSString *userId = @"00000000-0000-0000-0000-000000000000";
+    if (kUserLogin == YES) {
+        userId = kUserID;
+    }
+    [self.view showHudWithActivity:@"正在加载"];
+    [self.helper zhengWenDetailWithID:self.ficId UserId:userId success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            self.dataArray = [[NSMutableArray alloc] init];
+            
+            ZhengWenListModel *model = [ZhengWenListModel mj_objectWithKeyValues:response];
+            
+            [self.dataArray addObject:model];
+            
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            [self.tableView reloadData];
+            if (self.type == 1) {
+                [self setUpTableHeaderViewUI];
+            }else{
+                [self setUpTableHeadViewUI];
+            }
+            
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.tableView.mj_header endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            [self getZhengWenDetailData];
+        }];
+    }];
+}
+
+#pragma mark - 退出征文
+-(void)tuiChuNovelData {
+    [self.helper tuiChuCallForPapersWithID:@"" SolicitationId:self.ficId UserId:kUserID success:^(NSDictionary *response) {
+        
+    } faild:^(NSString *response, NSError *error) {
+        
+    }];
 }
 
 @end

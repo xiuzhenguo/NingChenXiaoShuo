@@ -282,6 +282,7 @@
 #pragma mark - 签约失败详情按钮的点击事件
 -(void)clickErrorDetailButton{
     NBDetailViewController *vc = [[NBDetailViewController alloc] init];
+    vc.bookID = self.bookId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

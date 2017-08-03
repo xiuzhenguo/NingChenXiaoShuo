@@ -11,6 +11,7 @@
 @interface WriteBookTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) UILabel *titleLab;
+@property (nonatomic, strong) UILabel *contentLab;
 @property (nonatomic, strong) UILabel *lineLab;
 
 @end

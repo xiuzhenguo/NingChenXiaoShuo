@@ -10,4 +10,6 @@
 
 @interface TADetailViewController : UIViewController
 
+@property (nonatomic, strong) NSString *ficID;
+
 @end

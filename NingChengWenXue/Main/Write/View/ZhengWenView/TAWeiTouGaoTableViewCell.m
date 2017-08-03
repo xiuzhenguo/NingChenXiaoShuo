@@ -10,10 +10,16 @@
 
 @implementation TAWeiTouGaoTableViewCell
 
-- (void)setViewModel:(ViewModel *)viewModel{
+- (void)setViewModel:(ZWDetailModel *)viewModel{
     self.nameLab.font = [UIFont systemFontOfSize:15];
     self.rankLab.layer.cornerRadius = 1.5;
     self.rankLab.text = [NSString stringWithFormat:@"%ld",self.row + 1];
+    
+    self.nameLab.text = viewModel.FictionName;
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.FictionImage] placeholderImage:[UIImage imageNamed:@"书"]];
+    self.writorLab.text = [NSString stringWithFormat:@"by:%@",viewModel.AuthorName];
+    self.numLab.text = [NSString stringWithFormat:@"%ld",viewModel.ClickCount];
+    
     if (self.row == 0) {
         self.rankLab.backgroundColor = BXColor(230,78,54);
     }else if (self.row == 1){

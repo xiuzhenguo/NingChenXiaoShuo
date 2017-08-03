@@ -14,6 +14,7 @@
 #import "NCWriteHelper.h"
 #import "ZhengWenListModel.h"
 
+
 @interface ThemeArtViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -40,7 +41,7 @@
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;//不设置为黑色背景
     
-    [self getThemaListData];
+    
 }
 
 - (void)viewDidLoad {
@@ -51,6 +52,8 @@
     self.pagenum = 1;
     
     [self setUpTableViewUI];
+    [self getThemaListData];
+    
     self.tableView.mj_header = [MJDIYHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
     
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
@@ -73,7 +76,7 @@
 }
 #pragma mark - 创建TableView
 - (void) setUpTableViewUI{
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64 - 20) style:(UITableViewStylePlain)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64 - 20 - 40) style:(UITableViewStylePlain)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -88,9 +91,9 @@
     return self.dataArray.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 230;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    return 230;
+//}
 
 #pragma mark - tableViewCell设置
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -101,22 +104,23 @@
     
     ZhengWenListModel *model = self.dataArray[indexPath.row];
     cell.viewModel = model;
+    tableView.rowHeight = cell.height;
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0) {
+    ZhengWenListModel *model = self.dataArray[indexPath.row];
+
+    if (model.Status == 3) {
         
         TADetailViewController *vc = [[TADetailViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }else if (indexPath.row == 1){
-        TATouGaoViewController *vc = [[TATouGaoViewController alloc] init];
-        vc.typeStr = @"未投稿";
+        vc.ficID = model.Id;
         [self.navigationController pushViewController:vc animated:YES];
     }else{
         TATouGaoViewController *vc = [[TATouGaoViewController alloc] init];
-        vc.typeStr = @"已投稿";
+        vc.ficId = model.Id;
+        vc.type = model.Status;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol WriteIntrofyDelegate <NSObject>
+@optional
+- (void)writeIntro:(NSString *)intro;
+
+@end
+
 @interface NBIntruViewController : UIViewController
 
 @property (nonatomic, strong) NSString *introduceStr;
 
 @property (nonatomic, strong) NSString *bookId;
+
+@property (nonatomic, assign) NSInteger newType;
+
+@property (nonatomic, weak) id<WriteIntrofyDelegate> delegate;
 
 @end

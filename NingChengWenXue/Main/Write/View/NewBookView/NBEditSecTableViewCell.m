@@ -53,6 +53,7 @@
 }
 
 - (void)setViewModel:(SectionListModel *)viewModel{
+    
     for (UIView *view in self.contentView.subviews) {
         view.frame = CGRectZero;
     }

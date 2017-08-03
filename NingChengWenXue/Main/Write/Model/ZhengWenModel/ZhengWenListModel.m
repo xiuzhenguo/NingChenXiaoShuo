@@ -10,4 +10,10 @@
 
 @implementation ZhengWenListModel
 
++ (NSDictionary *)objectClassInArray{
+    return @{
+             @"FictionList" : @"ZWDetailModel"
+             };
+}
+
 @end

@@ -67,7 +67,7 @@
     
     // 小说名
     self.nameLab.text = viewModel.FictionName;
-    CGRect rectLab = [self.nameLab.text boundingRectWithSize:CGSizeMake(BXScreenW-118-40, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.nameLab.font} context:nil];
+    CGRect rectLab = [self.nameLab.text boundingRectWithSize:CGSizeMake(BXScreenW-138-40, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.nameLab.font} context:nil];
     self.nameLab.frame = CGRectMake(CGRectGetMaxX(self.imgView.frame)+10, 10, rectLab.size.width, 15);
     
     self.longLab.frame = CGRectMake(CGRectGetMaxX(self.nameLab.frame)+5, 13, 0.5, 12);

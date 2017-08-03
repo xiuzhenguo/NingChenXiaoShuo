@@ -73,6 +73,12 @@
 -(void)publishNovelSectionWithSectionId:(NSString *)sectionId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 /**
+ *  定时发布章节
+ *
+ */
+-(void)dingShiPublishSectionWithSectionId:(NSString *)sectionId FictionId:(NSString *)FictionId UserId:(NSString *)UserId PublishTime:(NSString *)PublishTime success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
  *  签约条件
  *
  */
@@ -84,11 +90,83 @@
  */
 -(void)applySignNovelWithFictionId:(NSString *)fictionId AuthorId:(NSString *)authorId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+/**
+ *  签约失败原因
+ *
+ */
+-(void)faileApplySignNovelWithFictionId:(NSString *)fictionId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  删除作品
+ *
+ */
+-(void)deleteNovelWithFictionId:(NSString *)fictionId AuthorId:(NSString *)authorId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  删除章节
+ *
+ */
+-(void)removeNovelSectionWithFictionId:(NSString *)fictionId SectionId:(NSString *)sectionId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  预览章节
+ *
+ */
+-(void)PreviewNovelSectionWithSectionid:(NSString *)sectionid success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  新建章节
+ *
+ */
+-(void)createNewNovelSectionWithFictionId:(NSString *)fictionId Title:(NSString *)title Content:(NSString *)content Remark:(NSString *)remark success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  修改章节
+ *
+ */
+-(void)changeNovelSectionContentWithFictionId:(NSString *)fictionId SectionId:(NSString *)sectionId Title:(NSString *)title Content:(NSString *)content Remark:(NSString *)Remark success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
 #pragma mark - 征文
 /**
  *  征文集合
  *
  */
 -(void)getZhengWenListWithPageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  征文详情
+ *
+ */
+-(void)zhengWenDetailWithID:(NSString *)Id UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  征文作品
+ *
+ */
+-(void)callForPapersListWithSolicitationId:(NSString *)SolicitationId PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  获奖作品
+ *
+ */
+-(void)AwardsNovelWithSolicitationId:(NSString *)solicitationId success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  可投小说
+ *
+ */
+-(void)canTouNovelWithSolicitationId:(NSString *)SolicitationId UserId:(NSString *)userId success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  投递小说
+ *
+ */
+-(void)DeliveryNovelWithSolicitationId:(NSString *)solicitationId UserId:(NSString *)userId FictionId:(NSString *)fictionId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  退出征文
+ *
+ */
+-(void)tuiChuCallForPapersWithID:(NSString *)Id SolicitationId:(NSString *)solicitationId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 @end

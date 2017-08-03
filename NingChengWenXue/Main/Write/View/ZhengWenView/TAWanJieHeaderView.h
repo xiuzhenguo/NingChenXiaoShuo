@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewModel.h"
+#import "ZhengWenListModel.h"
 
 @interface TAWanJieHeaderView : UIView
 
@@ -27,7 +27,7 @@
 @property (nonatomic, strong) UIView *twoView;
 
 
-@property (nonatomic, strong) ViewModel *model;
+@property (nonatomic, strong) ZhengWenListModel *model;
 @property (nonatomic, assign) CGFloat height;
 
 @end

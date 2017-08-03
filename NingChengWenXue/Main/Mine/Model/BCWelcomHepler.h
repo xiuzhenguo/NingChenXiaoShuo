@@ -53,5 +53,13 @@
  */
 -(void) forgeterWithCode:(NSString *)code NewPassword:(NSString *)newPassword Phone:(NSString *)phone UserName:(NSString *)username success:(ETResponseBlock)success faild:(ETResponseErrorBlock) faild;
 
+#pragma mark - 我的首页
+/**
+ *  忘记密码
+ *  
+ *
+ */
+-(void)mineHomeInfoWithUserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
 
 @end

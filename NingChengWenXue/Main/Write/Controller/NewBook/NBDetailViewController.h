@@ -10,4 +10,6 @@
 
 @interface NBDetailViewController : UIViewController
 
+@property (nonatomic, strong) NSString *bookID;
+
 @end

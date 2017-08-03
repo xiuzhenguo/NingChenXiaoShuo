@@ -160,7 +160,7 @@
             return ;
         } faild:^(NSString *response, NSError *error) {
             [self.view hideHubWithActivity];
-            [SVProgressHUD showSuccessWithStatus:@"失败"];
+            [SVProgressHUD showErrorWithStatus:@"失败"];
         }];
     }
 }

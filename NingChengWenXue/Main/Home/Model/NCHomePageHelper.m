@@ -64,7 +64,7 @@
         HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
         if (model.StatusCode == 200) {
             success(model.Result);
-            NSLog(@"啦啦啦啦啦啦啦%@",task.currentRequest.URL);
+            NSLog(@"首页轮播图%@",task.currentRequest.URL);
         }else{
             faild(@"",nil);
         }
@@ -84,7 +84,7 @@
         HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
         if (model.StatusCode == 200) {
             success(model.Result);
-            NSLog(@"啦啦啦啦啦啦啦%@",task.currentRequest.URL);
+            NSLog(@"订阅小说%@",task.currentRequest.URL);
         }else{
             faild(@"",nil);
         }
@@ -105,7 +105,7 @@
         HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
         if (model.StatusCode == 200) {
             success(model.Result);
-            NSLog(@"啦啦啦啦啦啦啦%@",task.currentRequest.URL);
+            NSLog(@"更多类别%@",task.currentRequest.URL);
         }else{
             faild(@"",nil);
         }

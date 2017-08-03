@@ -10,4 +10,6 @@
 
 @interface TAMoreViewController : UIViewController
 
+@property (nonatomic, strong) NSString *ficID;
+
 @end

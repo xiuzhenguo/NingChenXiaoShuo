@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) NSString *bookTypeStr;
 
+@property (nonatomic, strong) NSString *ficStr;
+
 @end

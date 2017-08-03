@@ -10,7 +10,8 @@
 
 @interface TATouGaoViewController : UIViewController
 
+@property (nonatomic, strong) NSString *ficId;
 
-@property (nonatomic, strong) NSString *typeStr;
+@property (nonatomic, assign) NSInteger type;
 
 @end

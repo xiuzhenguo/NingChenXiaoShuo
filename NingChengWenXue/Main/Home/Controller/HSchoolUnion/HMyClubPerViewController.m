@@ -11,6 +11,7 @@
 #import "NCHomePageHelper.h"
 #import "UserItemModel.h"
 #import "UnionModel.h"
+#import "HAuthorsViewController.h"
 
 @interface HMyClubPerViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -110,18 +111,16 @@
     
     [cell.deleteBtn addTarget:self action:@selector(clickDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
     
-    // 测试
-//    if (indexPath.row % 2 == 0) {
-//        [cell.btn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
-//        cell.btn.borderColor = BXColor(236,105,65);
-//    }else{
-//        
-//        [cell.btn setTitleColor:BXColor(152,152,152) forState:UIControlStateNormal];
-//        cell.btn.borderColor = BXColor(152,152,152);
-//    }
-    
     return cell;
     
+}
+
+#pragma mark - tableViewCell的点击事件(跳转作者页面)
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    UserItemModel *model = self.dataArray[indexPath.row];
+    HAuthorsViewController *vc = [[HAuthorsViewController alloc] init];
+    vc.autherID = model.UserId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - 设置管理按钮的点击事件
@@ -152,22 +151,33 @@
     }];
 }
 
-#pragma mark - 
+#pragma mark - 删除社团成员
 -(void)clickDeleteButton:(UIButton *)sender{
-    UserItemModel *model = self.dataArray[sender.tag - 10000];
-    [self.helper removeCommunityPersonWithUserId:model.UserId CommunityId:self.communityID OptionId:kUserID success:^(NSDictionary *response) {
-        st_dispatch_async_main(^{
-            [self.view hideHubWithActivity];
-            [SVProgressHUD showSuccessWithStatus:@"成功"];
-            [self.dataArray removeObjectAtIndex:sender.tag - 10000];
-            [self.tableView reloadData];
-        });
+    UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:@"是否删除社团成员" preferredStyle:UIAlertControllerStyleAlert];
+    __weak typeof(alertControl) wAlert = alertControl;
+    [wAlert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        // 点击确定按钮的时候, 会调用这个block
+        UserItemModel *model = self.dataArray[sender.tag - 10000];
+        [self.helper removeCommunityPersonWithUserId:model.UserId CommunityId:self.communityID OptionId:kUserID success:^(NSDictionary *response) {
+            st_dispatch_async_main(^{
+                [self.view hideHubWithActivity];
+                [SVProgressHUD showSuccessWithStatus:@"成功"];
+                [self.dataArray removeObjectAtIndex:sender.tag - 10000];
+                [self.tableView reloadData];
+            });
+            
+            return ;
+            
+        } faild:^(NSString *response, NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"失败"];
+        }];
         
-        return ;
-        
-    } faild:^(NSString *response, NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"失败"];
-    }];
+    }]];
+    
+    [wAlert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:wAlert animated:YES completion:nil];
+    
 }
 
 #pragma mark - 设置导航栏按钮

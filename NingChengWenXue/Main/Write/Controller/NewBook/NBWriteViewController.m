@@ -13,6 +13,8 @@
 #import "PictureModel.h"
 #import "NBEditPhoneView.h"
 #import "NBXieXieFontView.h"
+#import "NCWriteHelper.h"
+#import "SectionListModel.h"
 
 //Image default max size，图片显示的最大宽度
 #define IMAGE_MAX_SIZE (100)
@@ -43,9 +45,19 @@
 @property (assign,nonatomic) NSUInteger finishImageNum;//纪录图片下载完成数目
 @property (assign,nonatomic) NSUInteger apperImageNum; //纪录图片将要下载数目
 
+@property (nonatomic, strong) NCWriteHelper *helper;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation NBWriteViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -75,21 +87,21 @@
     
     self.font = 16;
     
-    self.content = @"解放军诶房间诶发房间诶反而<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>解股东权益为广大一千万供大于求刀光枪影为广大一千万dwdewfwefwe放军诶房间诶发房间诶反而<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>";
-    [self setUpNavButtonUI];
+//    self.content = @"解放军诶房间诶发房间诶\n的的";
     
     [self setUpNovelTitleUI];
     
     [self resetTextStyle];
     
-    NSString *str3 = [self.content stringByReplacingOccurrencesOfString:@"<" withString:@"\n<"];
-    NSString *str = [str3 stringByReplacingOccurrencesOfString:@">" withString:@">\n"];
-    
-    if (self.content!=nil) {
-        [self setRichTextViewContent:str];
+    if (self.typeInt != 2) {
+//        self.content = @"";
+        [self setRichTextViewContent:self.content];
+    }else{
+        [self getNovelSectionContentData];
     }
     
     [self setUpNavButtonUI];
+    
 }
 
 #pragma mark - 文章标题的UI设置
@@ -154,10 +166,6 @@
 {
     self.locationStr=nil;
     self.locationStr=[[NSMutableAttributedString alloc]initWithAttributedString:self.textView.attributedText];
-//    if (self.textView.textStorage.length>0) {
-//        self.placeholderLabel.hidden=YES;
-//    }
-    
 }
 
 #pragma mark  设置内容，二次编辑
@@ -189,7 +197,8 @@
     }
     else
     {
-        NSAssert(NO, @"需要传入字符串");
+//        NSAssert(NO, @"需要传入字符串");
+        
     }
 }
 
@@ -204,7 +213,7 @@
     //设置初始内容
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = self.lineSapce;// 字体的行间距
-     paragraphStyle.firstLineHeadIndent = 10.f;    /**首行缩进宽度*/
+     paragraphStyle.firstLineHeadIndent = 30.f;    /**首行缩进宽度*/
     NSDictionary *attributes =[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:self.font],NSFontAttributeName,self.fontColor,NSForegroundColorAttributeName,paragraphStyle,NSParagraphStyleAttributeName,nil ];
     [attrubuteStr addAttributes:attributes range:NSMakeRange(0, attrubuteStr.length)];
     self.textView.attributedText =attrubuteStr;
@@ -348,88 +357,16 @@
     return att;
 }
 
-#pragma mark - 选择图片按钮事件
--(void) clickTitleButton {
-    self.titleView = [[NBEditPhoneView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH)];
-    [self.view.window addSubview:self.titleView];
-    // 记录图片位置
-    self.pickerRange=self.textView.selectedRange;
-    
-    [self.titleView.camBtn addTarget:self action:@selector(takePhoto) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.titleView.phoBtn addTarget:self action:@selector(getLocationPhoto) forControlEvents:UIControlEventTouchUpInside];
-}
-
-
-#pragma mark - 调用相机
-- (void)takePhoto{
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIImagePickerController * picker = [[UIImagePickerController alloc]init];
-        picker.delegate = self;
-        picker.allowsEditing = true;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        [self presentViewController:picker animated:true completion:nil];
-        return;
-    }
-    [SVProgressHUD showErrorWithStatus:@"相机不可用"];
-}
-
-#pragma mark - 调用相册
-- (void)getLocationPhoto{
-    [self.titleView removeFromSuperview];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImagePickerController * picker = [[UIImagePickerController alloc]init];
-        picker.delegate = self;
-        picker.allowsEditing = true;
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:picker animated:true completion:nil];
-        return;
-    }
-    [SVProgressHUD showErrorWithStatus:@"相册不可用"];
-}
-
-#pragma mark ----UIImagePickerControllerDelegate-----
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info;{
-    if (![info[UIImagePickerControllerMediaType] isEqualToString:@"public.image"]) {
-        return;
-    }
-    [picker dismissViewControllerAnimated:YES completion:^{}];
-    
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    /* 此处info 有六个值
-     * UIImagePickerControllerMediaType; // an NSString UTTypeImage)
-     * UIImagePickerControllerOriginalImage;  // a UIImage 原始图片
-     * UIImagePickerControllerEditedImage;    // a UIImage 裁剪后图片
-     * UIImagePickerControllerCropRect;       // an NSValue (CGRect)
-     * UIImagePickerControllerMediaURL;       // an NSURL
-     * UIImagePickerControllerReferenceURL    // an NSURL that references an asset in the AssetsLibrary framework
-     * UIImagePickerControllerMediaMetadata    // an NSDictionary containing metadata from a captured photo
-     */
-    //    // 保存图片至本地，方法见下文
-    //    NSLog(@"img = %@",image);
-    
-    
-    
-    //图片添加后 自动换行
-    [self setImageText:image withRange:self.pickerRange appenReturn:YES];
-}
-
-
-
 #pragma mark - 设置导航栏按钮
 -(void) setUpNavButtonUI {
     
     self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.leftBtn.frame = CGRectMake(0, 0, 80, 30);
     [self.leftBtn setImage:[UIImage imageNamed:@"返回-1"] forState:UIControlStateNormal];
-    NSString *string = _textView.text;
-    NSString *subString = @"\n";
-    NSArray *array = [string componentsSeparatedByString:subString];
-    NSInteger count = [array count] - 1;
+    
     NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-//    NSLog(@"%@",str3);
-//    NSString *str = [str3 stringByReplacingOccurrencesOfString:@">" withString:@">\n"];
-    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length - count];
+
+    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
     [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
     NSLog(@"%@",self.textView.text);
     [self.leftBtn addTarget:self action:@selector(leftNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -489,13 +426,19 @@
 
 -(void) clickEditRightButton:(UIButton *)btn {
     NSLog(@"%@",self.locationStr);
+    SectionListModel *model = self.dataArray.firstObject;
+    self.textField.text = model.SectionName;
+    [self setRichTextViewContent:model.SectionContent];
+    
+    NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+    [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
 }
 
 
 #pragma mark - 右侧完成按钮的点击事件
 -(void) clickRightButton:(UIButton *)btn {
     if (btn.tag == 1001) {
-//        [self clickTitleButton];
         self.textView.text = @"fwehehfuwehfuwheufwe";
     }else if (btn.tag == 1002){
         self.fontView = [[NBXieXieFontView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH)];
@@ -503,12 +446,14 @@
         [self.fontView.addFontBtn addTarget:self action:@selector(clickAddFontButton) forControlEvents:UIControlEventTouchUpInside];
         [self.fontView.subFontBtn addTarget:self action:@selector(clickSubFontButton) forControlEvents:UIControlEventTouchUpInside];
     }else{
-        self.textView.font = [UIFont systemFontOfSize:21];
-        
-        [self uploadData:[_textView.attributedText getPlainString] withImageArray:[_textView.attributedText getImgaeArray]];
+//        self.textView.font = [UIFont systemFontOfSize:21];
+//        [self uploadData:[_textView.attributedText getPlainString] withImageArray:[_textView.attributedText getImgaeArray]];
+        if (self.typeInt != 2) {
+            [self createNovelSectionContent];
+        }
 
     }
-}
+}                                                                                                                              
 
 #pragma mark - 增大字体按钮的点击事件
 -(void) clickAddFontButton {
@@ -525,47 +470,13 @@
 #pragma mark uploadData 上传服务器
 - (void)uploadData:(id )contentData withImageArray:(NSArray *)imageArr
 {
-    //这是选择完图片一次性上传，可能会慢,.另一种就是在用户选择图片的时候就上传，这种方法大家可以考虑
-    //1.先上传图片
-    
-    //2.模拟上传
-    /*
-     
-     这个时候重新组装数据，吧image替换成url
-     
-     来代替的图片地址
-     http://pic32.nipic.com/20130829/12906030_124355855000_2.png
-     http://pic55.nipic.com/file/20141208/19462408_171130083000_2.jpg
-     http://pic36.nipic.com/20131217/6704106_233034463381_2.jpg
-     http://img05.tooopen.com/images/20140604/sy_62331342149.jpg
-     http://img05.tooopen.com/images/20150531/tooopen_sy_127457023651.jpg
-     http://pic44.nipic.com/20140721/11624852_001107119409_2.jpg
-     
-     */
-    
-    
-    //比如这是服务器返回的数据
-    NSArray * urlarr=@[@"<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>",
-                       @"<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>",
-                       @"<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>",
-                       @"<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>",
-                       @"<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>",
-                       @"<http://pic32.nipic.com/20130829/12906030_124355855000_2.png>"
-                       ];
-    
-    
-    //这里是把字符串分割成数组，
+        //这里是把字符串分割成数组，
     NSArray * strArr=[contentData  componentsSeparatedByString:RICHTEXT_IMAGE];
     
     NSString * newContent=@"";
     for (int i=0; i<strArr.count; i++) {
         
         NSString * imgTag=@"";
-        if (i<strArr.count-1) {
-            //这是用url 地址替换 图片标示 imgTag=urlarr[i];
-            imgTag=urlarr[i%6];
-            NSLog(@"图片顺序比对地址－－－%@",urlarr[i%6]);
-        }
         
         //因为cutstr 可能是null
         NSString * cutStr=[strArr objectAtIndex:i];
@@ -593,11 +504,19 @@
     [self setUpNavButtonUI];
 }
 
+#pragma mark - textView的代理方法
 - (void)textViewDidChange:(UITextView *)textView
 {
-    NSString  *nsTextContent = textView.text;
-    NSInteger existTextNum = nsTextContent.length;
+   
+    if (textView.text.length == 1) {// 为了新建章节时首行缩进
+        self.content = textView.text;
+        [self setRichTextViewContent:textView.text];
+    }
+
+    NSString *str3 = [textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     
+    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+    [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
     
 }
 
@@ -606,6 +525,66 @@
 -(void)leftNavBtnAction:(UIButton *)btn{
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 获取章节内容
+-(void) getNovelSectionContentData {
+    [self.helper PreviewNovelSectionWithSectionid:self.sectionID success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            self.dataArray = [[NSMutableArray alloc] init];
+            
+            SectionListModel *model = [SectionListModel mj_objectWithKeyValues:response];
+            [self.dataArray addObject:model];
+            
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+
+            self.textField.text = model.SectionName;
+            self.content = model.SectionContent;
+            [self setRichTextViewContent:self.content];
+            
+            NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+            NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+            [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.view showFailedViewReloadBlock:^{
+            [self getNovelSectionContentData];
+        }];
+    }];
+}
+
+#pragma mark - 新建章节功能的实现
+-(void) createNovelSectionContent {
+    if (self.textField.text.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写标题"];
+        return;
+    }
+    if (self.textView.text.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写章节内容"];
+        return;
+    }
+    [self.helper createNewNovelSectionWithFictionId:self.ficID Title:self.textField.text Content:self.textView.text Remark:@"" success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200) {
+                [SVProgressHUD showSuccessWithStatus:@"章节创建成功"];
+                [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                [SVProgressHUD showErrorWithStatus:model.Message];
+            }
+            
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"章节创建失败"];
+    }];
 }
 
 @end

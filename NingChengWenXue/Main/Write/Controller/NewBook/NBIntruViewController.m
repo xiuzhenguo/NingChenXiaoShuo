@@ -159,7 +159,11 @@
     [rightBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
     rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     rightBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-    [rightBtn addTarget:self action:@selector(clickRightButton) forControlEvents:UIControlEventTouchUpInside];
+    if (self.newType == 1) {
+        [rightBtn addTarget:self action:@selector(clickRightButtonOne) forControlEvents:UIControlEventTouchUpInside];
+    }else{
+        [rightBtn addTarget:self action:@selector(clickRightButton) forControlEvents:UIControlEventTouchUpInside];
+    }
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:rightBtn];
     self.navigationItem.rightBarButtonItem = item1;
 }
@@ -180,6 +184,16 @@
         [self.view hideHubWithActivity];
         [SVProgressHUD showErrorWithStatus:@"失败"];
     }];
+}
+
+#pragma mark - 新建作品简介
+-(void) clickRightButtonOne {
+    if (self.textView.text.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写简介"];
+        return;
+    }
+    [self.delegate writeIntro:self.textView.text];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - 返回按钮的实现方法

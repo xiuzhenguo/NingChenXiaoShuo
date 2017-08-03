@@ -147,7 +147,11 @@
 
 #pragma mark - 创作按钮的点击事件
 -(void) clickCreateButton {
-   
+    if (kUserLogin == NO) {
+        LoginViewController *vc = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     WriteBookViewController *vc = [[WriteBookViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }

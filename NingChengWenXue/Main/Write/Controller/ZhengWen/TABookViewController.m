@@ -9,16 +9,29 @@
 #import "TABookViewController.h"
 #import "TANoBookTableViewCell.h"
 #import "TABookTableViewCell.h"
+#import "WriteBookViewController.h"
+#import "NCWriteHelper.h"
+#import "ZWDetailModel.h"
 
 @interface TABookViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headView;
 @property (nonatomic, strong) UIView *footView;
+@property (strong, nonatomic) NCWriteHelper *helper;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSString *fictionID;
 
 @end
 
 @implementation TABookViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -26,6 +39,8 @@
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1];
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;//不设置为黑色背景
+    
+    [self getCanTouGaoData];
 }
 
 - (void)viewDidLoad {
@@ -37,6 +52,7 @@
     [self setUpNavButtonUI];
     
     [self setUpTableViewUI];
+    
 }
 
 #pragma mark - 创建TableView
@@ -70,6 +86,7 @@
     btn.backgroundColor = BXColor(236,105,65);
     [btn setTitle:@"创建新作品投稿" forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:18];
+    [btn addTarget:self action:@selector(clickCreateButton) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 5;
     [self.headView addSubview:btn];
     
@@ -78,21 +95,28 @@
     [self.headView addSubview:grayView];
 }
 
+#pragma mark - 创建新作品按钮的点击事件
+-(void)clickCreateButton{
+    WriteBookViewController *vc = [[WriteBookViewController alloc] init];
+    vc.type = 1;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - UITableViewViewDelegate
 // 每个分区cell的个数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if ([self.bookTypeStr isEqualToString:@"啦啦啦"]) {
+    if (self.dataArray.count == 0) {
         return 1;
     }else{
-        return 4;
+        return self.dataArray.count;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([self.bookTypeStr isEqualToString:@"啦啦啦"]) {
+    if (self.dataArray.count == 0) {
         return 112;
     }else{
         return 44;
@@ -102,7 +126,7 @@
 #pragma mark - tableViewCell设置
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if ([self.bookTypeStr isEqualToString:@"啦啦啦"]) {
+    if (self.dataArray.count == 0) {
         TANoBookTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell1" forIndexPath:indexPath];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -113,8 +137,8 @@
         TABookTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        cell.nameLab.text = @"小说名称";
+        ZWDetailModel *model = self.dataArray[indexPath.row];
+        cell.nameLab.text = model.Name;
         
         cell.imgView.tag = 1000 + indexPath.row;
         [cell.imgView addTarget:self action:@selector(clickSelectButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -125,10 +149,12 @@
 
 #pragma mark - tableViewCell 中选中按钮的点击事件
 -(void) clickSelectButton:(UIButton *)sender{
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < self.dataArray.count; i++) {
+        ZWDetailModel *model = self.dataArray[i];
         UIButton *btn = (UIButton *)[self.view viewWithTag:1000+i];
         if (sender.tag - 1000 == i) {
             [btn setImage:[UIImage imageNamed:@"选中"] forState:UIControlStateNormal];
+            self.fictionID = model.FictionId;
             
         }else{
             [btn setImage:[UIImage imageNamed:@"未选择"] forState:UIControlStateNormal];
@@ -165,7 +191,7 @@
 
 #pragma mark - 当有投稿作品情况下tableView的分区尾设置
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if ([self.bookTypeStr isEqualToString:@"啦啦啦"]) {
+    if (self.dataArray.count == 0) {
         return 0.01;
     }else{
         return 74;
@@ -173,7 +199,7 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if ([self.bookTypeStr isEqualToString:@"啦啦啦"]) {
+    if (self.dataArray.count == 0) {
         return nil;
     }else{
         
@@ -200,7 +226,27 @@
 
 #pragma mark - tableView分区尾确定按钮的点击事件
 -(void) clickSectionSureButton {
-    NSLog(@"确定");
+    [self.helper DeliveryNovelWithSolicitationId:self.ficStr UserId:kUserID FictionId:self.fictionID success:^(NSDictionary *response) {
+        
+        st_dispatch_async_main(^{
+            
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200) {
+                
+                [SVProgressHUD showSuccessWithStatus:@"投递成功"];
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }else{
+                
+                [SVProgressHUD showErrorWithStatus:model.Message];
+            }
+            
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        
+    }];
 }
 
 #pragma mark - 创建TableView的尾视图
@@ -246,7 +292,7 @@
 
 #pragma mark - 右侧分享按钮的点击事件
 -(void) clickRightButton {
-    
+    NSLog(@"分享");
 }
 
 #pragma mark - 返回按钮的实现方法
@@ -254,5 +300,38 @@
     
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+#pragma mark - 投稿作品的获取
+-(void) getCanTouGaoData {
+    [self.helper canTouNovelWithSolicitationId:self.ficStr UserId:kUserID success:^(NSArray *response) {
+        st_dispatch_async_main(^{
+            
+            self.dataArray = [[NSMutableArray alloc] init];
+            for (int i=0; i<response.count; i++) {
+                ZWDetailModel *model = [ZWDetailModel mj_objectWithKeyValues:response[i]];
+                
+                [self.dataArray addObject:model];
+                
+            }
+            
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            [self.tableView reloadData];
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.tableView.mj_header endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            [self getCanTouGaoData];
+        }];
+    }];
+}
+
+
 
 @end

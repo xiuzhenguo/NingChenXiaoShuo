@@ -1,14 +1,18 @@
 //
-//  WriteBookTableViewCell.m
+//  WriteNovelTableViewCell.m
 //  NingChengWenXue
 //
-//  Created by 云彩 on 2017/5/9.
+//  Created by 云彩 on 2017/7/27.
 //  Copyright © 2017年 bravedark. All rights reserved.
 //
 
-#import "WriteBookTableViewCell.h"
+#import "WriteNovelTableViewCell.h"
 
-@implementation WriteBookTableViewCell
+@interface WriteNovelTableViewCell() <UITextFieldDelegate>
+
+@end
+
+@implementation WriteNovelTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     
@@ -21,16 +25,11 @@
 
 -(void) loadView {
     
-    self.titleLab = [[UILabel alloc] init];
-    self.titleLab.font = [UIFont systemFontOfSize:16];
-    [self.contentView addSubview:self.titleLab];
-    
-    self.contentLab = [[UILabel alloc] init];
-    self.contentLab.font = FIFFont;
-    self.contentLab.textColor = BXColor(152,152,152);
-    self.contentLab.textAlignment = NSTextAlignmentRight;
-    [self.contentView addSubview:self.contentLab];
-
+    self.text = [[UITextField alloc] init];
+    self.text.font = [UIFont systemFontOfSize:16];
+    self.text.textColor = BXColor(152,152,152);
+    self.text.returnKeyType = UIReturnKeyDone;
+    [self.contentView addSubview:self.text];
     
     self.lineLab = [[UILabel alloc] init];
     self.lineLab.backgroundColor = BXColor(195, 195, 195);
@@ -42,10 +41,11 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     
-    self.titleLab.frame = CGRectMake(15, 0, 80, 43.5);
-    self.contentLab.frame = CGRectMake(110, 0, BXScreenW - 140, 43.5);
+    self.text.frame = CGRectMake(15, 0, BXScreenW - 60, 43.5);
     self.lineLab.frame = CGRectMake(0, 43.5, BXScreenW, 0.5);
 }
+
+
 
 - (void)awakeFromNib {
     [super awakeFromNib];

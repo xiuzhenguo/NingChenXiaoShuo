@@ -26,4 +26,8 @@
 
 @property (nonatomic, assign) NSInteger Status;
 
+@property (nonatomic, assign) NSInteger IsTg;
+
+@property (nonatomic, strong) NSArray *FictionList;
+
 @end

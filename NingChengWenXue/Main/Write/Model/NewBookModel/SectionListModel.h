@@ -18,4 +18,6 @@
 
 @property (nonatomic, assign) NSInteger SectionStatus;
 
+@property (nonatomic, strong) NSString *SectionContent;
+
 @end

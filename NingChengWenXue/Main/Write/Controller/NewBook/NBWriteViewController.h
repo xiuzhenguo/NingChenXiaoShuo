@@ -14,4 +14,8 @@
 @property (nonatomic,strong) id content;
 @property (nonatomic, strong) NSString *jsonString;
 
+@property (nonatomic, strong) NSString *sectionID; // 章节ID
+@property (nonatomic, strong) NSString *ficID; // 小说ID
+@property (nonatomic, assign) NSInteger typeInt;
+
 @end

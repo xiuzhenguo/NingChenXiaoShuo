@@ -8,12 +8,15 @@
 
 #import "WriteBookViewController.h"
 #import "WriteBookTableViewCell.h"
+#import "WriteNovelTableViewCell.h"
 #import "NBEditPhoneView.h"
 #import "NBIntruViewController.h"
 #import "NBClassfyViewController.h"
 #import "NBWriteViewController.h"
+#import "NCWriteHelper.h"
+#import "NBEditViewController.h"
 
-@interface WriteBookViewController ()<UITableViewDelegate, UITableViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface WriteBookViewController ()<UITableViewDelegate, UITableViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, SelectClassfyDelegate, WriteIntrofyDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headView;
@@ -22,9 +25,24 @@
 @property (nonatomic, strong) UIButton *imgBtn;
 @property (nonatomic, strong) NSArray *array;
 
+@property (nonatomic, assign) NSInteger classID;
+@property (nonatomic, strong) NSString *keyStr;
+@property (nonatomic, strong) NSString *nameStr;
+@property (nonatomic, strong) NSString *intorStr;
+@property (nonatomic, strong) NSData *imageData;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (strong, nonatomic) NCWriteHelper *helper;
+
 @end
 
 @implementation WriteBookViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -43,6 +61,7 @@
     self.title = @"新建作品";
     
     self.array = @[@"作品名称",@"作品标签",@"作品简介"];
+    self.dataArray = [NSMutableArray arrayWithObjects:@"",@"", nil];
     
     [self setUpNavButtonUI];
     
@@ -59,7 +78,7 @@
     [self.view addSubview:_tableView];
     
     [self.tableView registerClass:[WriteBookTableViewCell class] forCellReuseIdentifier:@"cell"];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell1"];
+    [self.tableView registerClass:[WriteNovelTableViewCell class] forCellReuseIdentifier:@"cell1"];
     
     self.headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 220)];
     self.tableView.tableHeaderView = self.headView;
@@ -156,18 +175,9 @@
     
     //先压缩图片
     NSData *imageData = UIImageJPEGRepresentation(image,0.3);
-    NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
-    formatter.dateFormat = @"yyyyMMddHHmmss";
-    NSString *imageName = [NSString stringWithFormat:@"%@",[formatter stringFromDate:[NSDate date]]];
-    // 上传网络时用
-    //    self.avatarStr = imageName;
-
-    [ConnectModel uploadWithImageName:imageName imageData:imageData URL:nil finish:^(NSData *resultData) {
-        st_dispatch_async_main(^{
-            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
-            [self.imgBtn setBackgroundImage:image forState:UIControlStateNormal];
-        });
-    }];
+    self.imageData = imageData;
+    [self.imgBtn setBackgroundImage:image forState:UIControlStateNormal];
+    
     [picker dismissViewControllerAnimated:true completion:nil];
 }
 
@@ -188,19 +198,12 @@
 #pragma mark - UItableViewCell 设置
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 0) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell1" forIndexPath:indexPath];
+        WriteNovelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell1" forIndexPath:indexPath];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        UITextField *text = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 150, 43.5)];
-        text.placeholder = self.array[indexPath.row];
-        text.font = [UIFont systemFontOfSize:16];
-        text.textColor = BXColor(152,152,152);
-        [cell.contentView addSubview:text];
-        
-        UILabel *lineLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 43.5, BXScreenW, 0.5)];
-        lineLab.backgroundColor = BXColor(195, 195, 195);
-        [cell.contentView addSubview:lineLab];
+        cell.text.placeholder = self.array[indexPath.row];
+        cell.text.delegate = self;
         
         return cell;
     }else{
@@ -211,6 +214,8 @@
         cell.titleLab.text = self.array[indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.titleLab.textColor = BXColor(40,40,40);
+        
+        cell.contentLab.text = self.dataArray[indexPath.row-1];
         
         return cell;
     }
@@ -223,9 +228,16 @@
     if (indexPath.row == 2) {
         
         NBIntruViewController *vc = [[NBIntruViewController alloc] init];
+        vc.newType = 1;
+        vc.delegate = self;
+        vc.introduceStr = self.dataArray[indexPath.row - 1];
         [self.navigationController pushViewController:vc animated:YES];
     }else if (indexPath.row == 1) {
         NBClassfyViewController *vc = [[NBClassfyViewController alloc] init];
+        vc.ortherArray =  [[NSMutableArray alloc] init];
+        vc.newType = 1;
+        vc.typeID = -10000000000000;
+        vc.delegate = self;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -249,12 +261,6 @@
     [self.footView addSubview:lable];
 }
 
-#pragma mark - 创作按钮的点击事件
--(void) clickWriteButton {
-    NBWriteViewController *vc = [[NBWriteViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
 #pragma mark - 设置导航栏按钮
 -(void) setUpNavButtonUI {
     
@@ -272,6 +278,83 @@
 -(void)leftNavBtnAction:(UIButton *)btn{
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 小说标签代理传值
+-(void)selectClassfy:(NSInteger)classfy Biaoqian:(NSString *)biaoqian Other:(NSString *)other {
+    self.classID = classfy;
+    self.keyStr = other;
+    [self.dataArray replaceObjectAtIndex:0 withObject:[NSString stringWithFormat:@"%@,%@",biaoqian,other]];
+    [self.tableView reloadData];
+}
+
+#pragma mark - 小说简介代理传值
+- (void)writeIntro:(NSString *)intro{
+    self.intorStr = intro;
+    [self.dataArray replaceObjectAtIndex:1 withObject:intro];
+    [self.tableView reloadData];
+}
+
+#pragma mark - UITextField的代理的实现方法
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    self.nameStr = textField.text;
+    return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    
+    self.nameStr = textField.text;
+}
+
+#pragma mark - 创作按钮的点击事件
+-(void) clickWriteButton {
+
+    if (self.imageData.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请添加小说封面"];
+        return;
+    }
+    if (self.nameStr.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写作品名称"];
+        return;
+    }
+    if ([NSString stringWithFormat:@"%ld",self.classID].length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写作品标签"];
+        return;
+    }
+    if (self.intorStr.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写作品简介"];
+        return;
+    }
+    
+    NSDictionary *dicDat = @{@"authorId":kUserID,@"fictionName":self.nameStr,@"fictionClass":@(self.classID),@"intor":self.intorStr,@"key":self.keyStr};
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];//初始化请求对象
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];//设置服务器允许的请求格式内容
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
+    //上传图片/文字，只能同POST
+    [manager POST:@"http://192.168.199.177:8100/api/writing/fiction/new" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
+        [formData appendPartWithFileData:self.imageData name:@"FileImage" fileName:@"aaa.png" mimeType:@"image/png"];
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSLog(@"obj = %@",obj[@"Result"][@"FictionId"]);
+        if ([obj[@"StatusCode"] intValue] == 200 ) {
+            [SVProgressHUD showSuccessWithStatus:@"成功"];
+            NBEditViewController *vc = [[NBEditViewController alloc] init];
+            vc.bookID = obj[@"Result"][@"FictionId"];
+            vc.newtype = self.type;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [SVProgressHUD showErrorWithStatus:obj[@"Message"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [SVProgressHUD showErrorWithStatus:@"失败"];
+    }];
+    
 }
 
 

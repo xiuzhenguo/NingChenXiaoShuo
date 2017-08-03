@@ -13,7 +13,7 @@
 #import "HBListView.h"
 #import "NCHomePageHelper.h"
 #import "BillboardModel.h"
-
+#import "HAuthorsViewController.h"
 
 @interface HBillboardViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -185,11 +185,21 @@
     }
 }
 
+#pragma mark - tableViewCell的点击事件
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (_rightTableView == tableView) {
-        if (self.typenum == 6 || self.typenum == 8) {
-            NSLog(@"好像要跳作者页面");
-        }else{
+        if (self.typenum == 6 || self.typenum == 8) {//土豪榜、码王榜跳转作者页面
+            
+            HAuthorsViewController *vc = [[HAuthorsViewController alloc] init];
+            BillboardModel *model = self.dataArray[indexPath.row];
+            if (self.typenum == 6) {
+                vc.autherID = model.FictionId;
+            }else{
+                vc.autherID = model.UserId;
+            }
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }else{// 跳转小说详情页面
             
             NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
             BillboardModel *model = self.dataArray[indexPath.row];

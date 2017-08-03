@@ -78,6 +78,8 @@
 		BF124C631EC94C580042D5D3 /* NBClassfyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF124C621EC94C580042D5D3 /* NBClassfyViewController.m */; };
 		BF124C661EC97DAA0042D5D3 /* NBClassfyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF124C651EC97DAA0042D5D3 /* NBClassfyTableViewCell.m */; };
 		BF126B9E1F038E9A0036D55A /* HSeaNovelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF126B9D1F038E9A0036D55A /* HSeaNovelViewController.m */; };
+		BF128D4A1F2ED12B009F0137 /* DateTimePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF128D481F2ED12B009F0137 /* DateTimePickerView.m */; };
+		BF128D4D1F2F3101009F0137 /* ZWDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF128D4C1F2F3100009F0137 /* ZWDetailModel.m */; };
 		BF1330D01F1DBCEB00B812A3 /* WriterDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1330CF1F1DBCEB00B812A3 /* WriterDetailModel.m */; };
 		BF1330D31F1DBE7900B812A3 /* WriterNovelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1330D21F1DBE7900B812A3 /* WriterNovelModel.m */; };
 		BF1330D61F1E05EF00B812A3 /* WriterPerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1330D51F1E05EF00B812A3 /* WriterPerModel.m */; };
@@ -104,6 +106,7 @@
 		BF1486331F136E8600812114 /* ShuPingListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1486321F136E8600812114 /* ShuPingListModel.m */; };
 		BF14A19E1F01124B002B6679 /* UnionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF14A19D1F01124B002B6679 /* UnionModel.m */; };
 		BF161C631EF4D6EC0056F35C /* SearchListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF161C621EF4D6EC0056F35C /* SearchListModel.m */; };
+		BF163D811F29E6CB00439FF3 /* WriteNovelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF163D801F29E6CB00439FF3 /* WriteNovelTableViewCell.m */; };
 		BF1653761F0204DC005E304E /* UnionDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1653751F0204DC005E304E /* UnionDetailModel.m */; };
 		BF1653791F022DFA005E304E /* ExcellentFictionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1653781F022DFA005E304E /* ExcellentFictionModel.m */; };
 		BF16537C1F022E12005E304E /* UserItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF16537B1F022E12005E304E /* UserItemModel.m */; };
@@ -426,6 +429,10 @@
 		BF124C651EC97DAA0042D5D3 /* NBClassfyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBClassfyTableViewCell.m; sourceTree = "<group>"; };
 		BF126B9C1F038E9A0036D55A /* HSeaNovelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSeaNovelViewController.h; sourceTree = "<group>"; };
 		BF126B9D1F038E9A0036D55A /* HSeaNovelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSeaNovelViewController.m; sourceTree = "<group>"; };
+		BF128D481F2ED12B009F0137 /* DateTimePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTimePickerView.m; sourceTree = "<group>"; };
+		BF128D491F2ED12B009F0137 /* DateTimePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimePickerView.h; sourceTree = "<group>"; };
+		BF128D4B1F2F3100009F0137 /* ZWDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZWDetailModel.h; sourceTree = "<group>"; };
+		BF128D4C1F2F3100009F0137 /* ZWDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZWDetailModel.m; sourceTree = "<group>"; };
 		BF1330CE1F1DBCEB00B812A3 /* WriterDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WriterDetailModel.h; sourceTree = "<group>"; };
 		BF1330CF1F1DBCEB00B812A3 /* WriterDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WriterDetailModel.m; sourceTree = "<group>"; };
 		BF1330D11F1DBE7900B812A3 /* WriterNovelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WriterNovelModel.h; sourceTree = "<group>"; };
@@ -478,6 +485,8 @@
 		BF14A19D1F01124B002B6679 /* UnionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnionModel.m; sourceTree = "<group>"; };
 		BF161C611EF4D6EC0056F35C /* SearchListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchListModel.h; sourceTree = "<group>"; };
 		BF161C621EF4D6EC0056F35C /* SearchListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchListModel.m; sourceTree = "<group>"; };
+		BF163D7F1F29E6CB00439FF3 /* WriteNovelTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WriteNovelTableViewCell.h; sourceTree = "<group>"; };
+		BF163D801F29E6CB00439FF3 /* WriteNovelTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WriteNovelTableViewCell.m; sourceTree = "<group>"; };
 		BF1653741F0204DC005E304E /* UnionDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnionDetailModel.h; sourceTree = "<group>"; };
 		BF1653751F0204DC005E304E /* UnionDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnionDetailModel.m; sourceTree = "<group>"; };
 		BF1653771F022DFA005E304E /* ExcellentFictionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExcellentFictionModel.h; sourceTree = "<group>"; };
@@ -1098,6 +1107,8 @@
 			children = (
 				BF1707361F0E34A20092D317 /* ZhengWenListModel.h */,
 				BF1707371F0E34A20092D317 /* ZhengWenListModel.m */,
+				BF128D4B1F2F3100009F0137 /* ZWDetailModel.h */,
+				BF128D4C1F2F3100009F0137 /* ZWDetailModel.m */,
 			);
 			name = ZhengWenModel;
 			path = NingChengWenXue/Main/Write/Model/ZhengWenModel;
@@ -1179,6 +1190,8 @@
 				BF179F241EB1EEEB006D5649 /* BNewBookTableViewCell.m */,
 				BF10C5601EC1BD06009EA384 /* WriteBookTableViewCell.h */,
 				BF10C5611EC1BD06009EA384 /* WriteBookTableViewCell.m */,
+				BF163D7F1F29E6CB00439FF3 /* WriteNovelTableViewCell.h */,
+				BF163D801F29E6CB00439FF3 /* WriteNovelTableViewCell.m */,
 				BF10EECE1EBB1B6F006C7F8B /* NBEditTableViewCell.h */,
 				BF10EECF1EBB1B6F006C7F8B /* NBEditTableViewCell.m */,
 				BF10EED11EBB2EEC006C7F8B /* NBEditSecTableViewCell.h */,
@@ -1193,6 +1206,8 @@
 				BF138BB41EBC513500AB42C1 /* NBRightItemView.m */,
 				BF138BB61EBC5A0A00AB42C1 /* NBEditPhoneView.h */,
 				BF138BB71EBC5A0A00AB42C1 /* NBEditPhoneView.m */,
+				BF128D491F2ED12B009F0137 /* DateTimePickerView.h */,
+				BF128D481F2ED12B009F0137 /* DateTimePickerView.m */,
 				BF138BB91EBC7D5900AB42C1 /* NBTableViewRowView.h */,
 				BF138BBA1EBC7D5900AB42C1 /* NBTableViewRowView.m */,
 				BF1A43621EE2571C00A9C17D /* NBXieXieFontView.h */,
@@ -2219,6 +2234,7 @@
 				BFE83B651E6EBA1A001238BD /* HSchUniTableViewCell.m in Sources */,
 				BF11F38C1F26E47800B0EF84 /* ChangeNameTableViewCell.m in Sources */,
 				BF0D62791EDE622900CF809A /* ImageTextAttachment.m in Sources */,
+				BF163D811F29E6CB00439FF3 /* WriteNovelTableViewCell.m in Sources */,
 				BF0D627C1EDE622900CF809A /* NSString+Regular.m in Sources */,
 				BFE573611E5D6C6C0092854F /* HAWorksTableViewCell.m in Sources */,
 				BF123C9E1E8A109400AB90B8 /* HAutCardViewController.m in Sources */,
@@ -2330,6 +2346,7 @@
 				BF179F251EB1EEEB006D5649 /* BNewBookTableViewCell.m in Sources */,
 				BF0B18941EEFECB000FFDEF4 /* UIView+Loading.m in Sources */,
 				BF1122151EA6FEEC0085AD12 /* CYCenterButton.m in Sources */,
+				BF128D4A1F2ED12B009F0137 /* DateTimePickerView.m in Sources */,
 				BF75B4911E5AE8A0003B8EAE /* RootTableHeaderView.m in Sources */,
 				BF1017971EC58C79002124DB /* NBAttViewController.m in Sources */,
 				BF123CA71E8A36B700AB90B8 /* HAutMedalViewController.m in Sources */,
@@ -2378,6 +2395,7 @@
 				BFE599121E5C15E50065D554 /* CatalogueTableViewCell.m in Sources */,
 				BFE872211E66A67B005DD8F0 /* HBRightTableViewCell.m in Sources */,
 				BF0D627B1EDE622900CF809A /* NSAttributedString+RichText.m in Sources */,
+				BF128D4D1F2F3101009F0137 /* ZWDetailModel.m in Sources */,
 				BFECB8EE1E6D362000FFEE95 /* HClassifyTableViewCell.m in Sources */,
 				BF423D261E53EE7000E9B31A /* UIFont+Extension.m in Sources */,
 				BF10179A1EC597F0002124DB /* NBAttTableViewCell.m in Sources */,

@@ -23,6 +23,7 @@
     
     self.titleLab = [[UILabel alloc] init];
     self.titleLab.font = FIFFont;
+    self.titleLab.numberOfLines = 0;
     self.titleLab.textColor = BXColor(40,40,40);
     [self.contentView addSubview:self.titleLab];
     
@@ -74,8 +75,8 @@
     [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.FileImage] placeholderImage:[UIImage imageNamed:@"默认图片"]];
     // 标题
     self.titleLab.text = viewModel.Title;
-    CGRect nameWith = [self.titleLab.text boundingRectWithSize:CGSizeMake(BXScreenW - 120, 15) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:(self.titleLab.font)} context:nil];
-    self.titleLab.frame = CGRectMake(25, 155, nameWith.size.width, 15);
+    CGRect nameWith = [self.titleLab.text boundingRectWithSize:CGSizeMake(BXScreenW - 120, 50) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:(self.titleLab.font)} context:nil];
+    self.titleLab.frame = CGRectMake(25, 155, nameWith.size.width, nameWith.size.height);
     // 进度
     self.typeLab.frame = CGRectMake(CGRectGetMaxX(self.titleLab.frame)+6, 152.5, 73, 20);
     self.typeLab.text = viewModel.StatusName;
@@ -83,19 +84,21 @@
     self.typeImgView.frame = CGRectMake(CGRectGetMaxX(self.titleLab.frame)+6, 152.5, 73, 20);
     self.typeImgView.image = [UIImage imageNamed:@"标签"];
     // 简介
-    self.introLab.frame = CGRectMake(25, 180, BXScreenW - 30, 15);
+    self.introLab.frame = CGRectMake(25, CGRectGetMaxY(self.titleLab.frame)+10, BXScreenW - 30, 15);
     self.introLab.text = viewModel.Intro;
     // 作品数
-    self.numLab.frame = CGRectMake(25, 201, BXScreenW/2 - 30, 15);
+    self.numLab.frame = CGRectMake(25, CGRectGetMaxY(self.introLab.frame)+10, BXScreenW/2 - 30, 15);
     self.numLab.text = viewModel.FictionCount;
     // 热度
-    self.hotNumBtn.frame = CGRectMake(BXScreenW/2 +5, 205, BXScreenW/2 - 30, 15);
+    self.hotNumBtn.frame = CGRectMake(BXScreenW/2 +5, CGRectGetMaxY(self.introLab.frame)+10, BXScreenW/2 - 30, 15);
     [self.hotNumBtn setImage:[UIImage imageNamed:@"热门"] forState:UIControlStateNormal];
     [self.hotNumBtn setTitle:[NSString stringWithFormat:@"%ld",viewModel.ClickCount] forState:UIControlStateNormal];
     self.hotNumBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     self.hotNumBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     
-    self.backView.frame = CGRectMake(15, CGRectGetMaxY(self.imgView.frame), BXScreenW - 30, 85);
+    self.backView.frame = CGRectMake(15, CGRectGetMaxY(self.imgView.frame), BXScreenW - 30, CGRectGetMaxY(self.hotNumBtn.frame) + 20 - 155);
+    
+    self.height = CGRectGetMaxY(self.backView.frame);
     
 }
 
