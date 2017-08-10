@@ -180,13 +180,21 @@
                 self.emptyView = [[EmptyDataView alloc]initWithFrame:self.view.bounds title:@"没有数据" actionTitle:nil];
                 [self.tableView addSubview:self.emptyView];
             }
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
             [self.tableView reloadData];
         });
         
         return ;
     } faild:^(NSString *response, NSError *error) {
         [self.view hideHubWithActivity];
-        [SVProgressHUD showSuccessWithStatus:@"失败"];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            
+            [self getCollectionListData];
+        }];
     }];
 }
 

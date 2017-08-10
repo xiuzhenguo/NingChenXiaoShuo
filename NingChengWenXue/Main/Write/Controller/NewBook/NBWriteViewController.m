@@ -47,6 +47,8 @@
 
 @property (nonatomic, strong) NCWriteHelper *helper;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, assign) NSInteger btnInt;
+@property (nonatomic, assign) NSInteger cishu;
 
 @end
 
@@ -87,16 +89,19 @@
     
     self.font = 16;
     
-//    self.content = @"解放军诶房间诶发房间诶\n的的";
+    self.houtuiArray = [[NSMutableArray alloc] init];
+    self.qianjinArray = [[NSMutableArray alloc] init];
     
     [self setUpNovelTitleUI];
     
     [self resetTextStyle];
     
     if (self.typeInt != 2) {
-//        self.content = @"";
+        self.content = @"编辑章节内容";
+        self.textView.text = self.content;
         [self setRichTextViewContent:self.content];
     }else{
+    
         [self getNovelSectionContentData];
     }
     
@@ -158,6 +163,7 @@
     // 设置textView是否可编辑
 //    self.textView.editable = NO;
     [self.scrollView addSubview:self.textView];
+    
     [self setInitLocation];
 }
 
@@ -214,7 +220,13 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = self.lineSapce;// 字体的行间距
      paragraphStyle.firstLineHeadIndent = 30.f;    /**首行缩进宽度*/
-    NSDictionary *attributes =[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:self.font],NSFontAttributeName,self.fontColor,NSForegroundColorAttributeName,paragraphStyle,NSParagraphStyleAttributeName,nil ];
+    UIColor *textColor;
+    if (self.typeInt != 2 && [self.textView.text isEqualToString:@"编辑章节内容"]) {
+        textColor = [UIColor whiteColor];
+    }else{
+        textColor = self.fontColor;
+    }
+    NSDictionary *attributes =[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:self.font],NSFontAttributeName,textColor,NSForegroundColorAttributeName,paragraphStyle,NSParagraphStyleAttributeName,nil ];
     [attrubuteStr addAttributes:attributes range:NSMakeRange(0, attrubuteStr.length)];
     self.textView.attributedText =attrubuteStr;
     
@@ -365,10 +377,17 @@
     [self.leftBtn setImage:[UIImage imageNamed:@"返回-1"] forState:UIControlStateNormal];
     
     NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-
-    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+    
+    NSString *strlengh = @"";
+    if (self.typeInt != 2 && [self.textView.text isEqualToString:@"编辑章节内容"]) {
+        strlengh = [NSString stringWithFormat:@"0字"];
+    }else{
+        strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+        
+    }
+    
     [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
-    NSLog(@"%@",self.textView.text);
+    
     [self.leftBtn addTarget:self action:@selector(leftNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     self.leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     self.leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -410,8 +429,9 @@
     UIButton *rightBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     rightBtn2.frame = CGRectMake(0, 0, 40, 30);
     [rightBtn2 setImage:[UIImage imageNamed:@"前进"] forState:UIControlStateNormal];
-    [rightBtn2 addTarget:self action:@selector(clickEditRightButton:) forControlEvents:UIControlEventTouchUpInside];
+    [rightBtn2 addTarget:self action:@selector(clickEditRight:) forControlEvents:UIControlEventTouchUpInside];
     rightBtn2.tag = 1001;
+    self.btnInt = 1;
     
     UIButton *rightbtn3 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 30)];
     [rightbtn3 setImage:[UIImage imageNamed:@"后退"] forState:UIControlStateNormal];
@@ -424,15 +444,56 @@
     self.navigationItem.rightBarButtonItems = @[item1,item2,item3];
 }
 
+#pragma mark - 后退按钮的点击事件
 -(void) clickEditRightButton:(UIButton *)btn {
-    NSLog(@"%@",self.locationStr);
-    SectionListModel *model = self.dataArray.firstObject;
-    self.textField.text = model.SectionName;
-    [self setRichTextViewContent:model.SectionContent];
+    if ((self.btnInt - self.cishu == 1 || self.btnInt - self.cishu == 2) && self.textView.text.length != 0) {
+        NSString *str = self.textView.text;
+        
+        if (![self.textView.text isEqualToString:@""]) {
+            [self.houtuiArray addObject:str];
+        }
+        if (self.houtuiArray.count > 1) {
+            if (self.btnInt - self.cishu == 1) {
+                self.textView.text = self.houtuiArray[self.houtuiArray.count - 2];
+            }else if (self.btnInt - self.cishu == 2){
+                self.textView.text = self.houtuiArray[self.houtuiArray.count - 3];
+            }
+            
+        }else{
+            if (self.typeInt == 2) {
+                SectionListModel *model = self.dataArray.firstObject;
+                self.textView.text = model.SectionContent;
+            }else{
+                self.textView.text = @"";
+            }
+        }
+        self.btnInt = self.btnInt + 1;
+        NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        
+        NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+        [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
+        
+    }
     
-    NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
-    [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
+}
+
+#pragma mark - 前进按钮的点击事件
+-(void) clickEditRight:(UIButton *)btn {
+    if (self.btnInt != 1 && (self.btnInt - self.cishu == 2 || self.btnInt - self.cishu == 3)) {
+        if (self.btnInt - self.cishu == 2) {
+            self.textView.text = self.houtuiArray.lastObject;
+        }else if (self.btnInt - self.cishu == 1 && self.btnInt != 2){
+            self.textView.text = self.houtuiArray[self.houtuiArray.count - 2];
+        }else if(self.btnInt == 2){
+            return;
+        }
+        
+        NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        
+        NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+        self.cishu = self.cishu + 1;
+        [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
+    }
 }
 
 
@@ -446,10 +507,11 @@
         [self.fontView.addFontBtn addTarget:self action:@selector(clickAddFontButton) forControlEvents:UIControlEventTouchUpInside];
         [self.fontView.subFontBtn addTarget:self action:@selector(clickSubFontButton) forControlEvents:UIControlEventTouchUpInside];
     }else{
-//        self.textView.font = [UIFont systemFontOfSize:21];
 //        [self uploadData:[_textView.attributedText getPlainString] withImageArray:[_textView.attributedText getImgaeArray]];
         if (self.typeInt != 2) {
             [self createNovelSectionContent];
+        }else{
+            [self changeNovelSectionData];
         }
 
     }
@@ -494,6 +556,10 @@
 
 #pragma mark - 开始编辑的时候的点击事件
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
+    if ([self.textView.text isEqualToString:@"编辑章节内容"]) {
+        self.textView.text = @"";
+    }
+    self.textView.textColor = [UIColor blackColor];
     self.textView.font = [UIFont systemFontOfSize:self.font];
     [self setEditNavButton];
     return textView;
@@ -504,20 +570,14 @@
     [self setUpNavButtonUI];
 }
 
+
 #pragma mark - textView的代理方法
 - (void)textViewDidChange:(UITextView *)textView
 {
-   
-    if (textView.text.length == 1) {// 为了新建章节时首行缩进
-        self.content = textView.text;
-        [self setRichTextViewContent:textView.text];
-    }
-
     NSString *str3 = [textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     
     NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
     [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
-    
 }
 
 
@@ -543,6 +603,7 @@
             self.textField.text = model.SectionName;
             self.content = model.SectionContent;
             [self setRichTextViewContent:self.content];
+            [self.houtuiArray addObject:model.SectionContent];
             
             NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
             NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
@@ -564,10 +625,11 @@
         [SVProgressHUD showErrorWithStatus:@"请填写标题"];
         return;
     }
-    if (self.textView.text.length == 0) {
+    if ([self.textView.text isEqualToString:@"编辑章节内容"]) {
         [SVProgressHUD showErrorWithStatus:@"请填写章节内容"];
         return;
     }
+    
     [self.helper createNewNovelSectionWithFictionId:self.ficID Title:self.textField.text Content:self.textView.text Remark:@"" success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             
@@ -584,6 +646,35 @@
         return ;
     } faild:^(NSString *response, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"章节创建失败"];
+    }];
+}
+
+#pragma mark - 修改章节
+-(void)changeNovelSectionData {
+    if (self.textField.text.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写章节标题"];
+        return;
+    }
+    if (self.textView.text.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请填写章节内容"];
+        return;
+    }
+    [self.helper changeNovelSectionContentWithFictionId:self.ficID SectionId:self.sectionID Title:self.textField.text Content:self.textView.text Remark:@"" success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200) {
+                [SVProgressHUD showSuccessWithStatus:@"章节修改成功"];
+                [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                [SVProgressHUD showErrorWithStatus:model.Message];
+            }
+            
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"章节修改失败"];
     }];
 }
 

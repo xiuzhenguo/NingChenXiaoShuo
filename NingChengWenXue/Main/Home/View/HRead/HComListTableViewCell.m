@@ -85,7 +85,7 @@
     [self.contentLab sizeToFit];
     
     self.fromLab.frame = CGRectMake(CGRectGetMaxX(self.imgView.frame)+10, CGRectGetMaxY(self.contentLab.frame)+15, BXScreenW - 96, 15);
-    self.fromLab.text = [NSString stringWithFormat:@"来自第%ld章 %@",viewModel.SectionIndex,viewModel.SectionName];
+    self.fromLab.text = [NSString stringWithFormat:@"来自%@",viewModel.SectionName];
     
     self.zanBtn.frame = CGRectMake(BXScreenW - 200, CGRectGetMaxY(self.fromLab.frame)+10, 125, 20);
     if (viewModel.IsApplaud == 1) {

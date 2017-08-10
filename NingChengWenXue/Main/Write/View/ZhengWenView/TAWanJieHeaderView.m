@@ -30,7 +30,7 @@
     self.timeLab = [[UILabel alloc] init];
     self.timeLab.font = THIRDFont;
     self.timeLab.textColor = BXColor(152,152,152);
-    [self addSubview:self.timeLab];
+//    [self addSubview:self.timeLab];
     // 内容
     self.contentLab = [[UILabel alloc] init];
     self.contentLab.font = THIRDFont;
@@ -117,10 +117,10 @@
     [self.contentLab sizeToFit];
    
     
-    self.timeLab.frame = CGRectMake(15, CGRectGetMaxY(self.contentLab.frame)+15, BXScreenW - 30, 15);
-    self.timeLab.text = @"投稿时间：2017.2.12 - 2017.3.4";
+//    self.timeLab.frame = CGRectMake(15, CGRectGetMaxY(self.contentLab.frame)+15, BXScreenW - 30, 15);
+//    self.timeLab.text = @"投稿时间：2017.2.12 - 2017.3.4";
     
-    self.lineLab.frame = CGRectMake(0, CGRectGetMaxY(self.timeLab.frame)+14.5, BXScreenW, 0.5);
+    self.lineLab.frame = CGRectMake(0, CGRectGetMaxY(self.contentLab.frame)+14.5, BXScreenW, 0.5);
     
     self.btn.frame = CGRectMake(0, CGRectGetMaxY(self.lineLab.frame), BXScreenW, 44);
     self.guizeLab.frame = CGRectMake(15, 0, BXScreenW - 150, 44);

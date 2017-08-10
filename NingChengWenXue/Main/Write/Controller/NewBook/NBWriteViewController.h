@@ -18,4 +18,8 @@
 @property (nonatomic, strong) NSString *ficID; // 小说ID
 @property (nonatomic, assign) NSInteger typeInt;
 
+
+@property (nonatomic, strong) NSMutableArray *houtuiArray; // 后退
+@property (nonatomic, strong) NSMutableArray *qianjinArray;// 前进
+
 @end

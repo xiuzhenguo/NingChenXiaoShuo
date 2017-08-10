@@ -55,11 +55,39 @@
 
 #pragma mark - 我的首页
 /**
- *  忘记密码
- *  
+ *  我的首页
  *
  */
 -(void)mineHomeInfoWithUserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+/**
+ *  合成卡片集合
+ *
+ */
+-(void)compoundCardListWithUserId:(NSString *)userId PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  合成卡片
+ *
+ */
+-(void)compoundCardWithUserId:(NSString *)userId CardId:(NSString *)cardId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  收件箱集合
+ *
+ */
+-(void)receivedMessageBoxListWithUserId:(NSString *)userId PageIndex:(NSString *)pageIndex successs:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  收件箱详情
+ *
+ */
+-(void)receivedMessageBoxDetailWithUserId:(NSString *)userId MsgId:(NSString *)msgId MsgGener:(NSInteger)msgGener success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  发件箱集合
+ *
+ */
+-(void)sendMessageBoxListWithUserId:(NSString *)userId PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 @end

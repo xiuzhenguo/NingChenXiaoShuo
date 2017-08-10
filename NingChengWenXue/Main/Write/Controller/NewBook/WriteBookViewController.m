@@ -299,6 +299,8 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     self.nameStr = textField.text;
+    [textField resignFirstResponder];
+    [self.view endEditing:YES];
     return YES;
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -330,6 +332,7 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];//初始化请求对象
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];//设置服务器允许的请求格式内容
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
+    [self.view showHudWithActivity:@"正在加载"];
     //上传图片/文字，只能同POST
     [manager POST:@"http://192.168.199.177:8100/api/writing/fiction/new" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
@@ -338,9 +341,12 @@
     } progress:^(NSProgress * _Nonnull uploadProgress) {
     
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self.view hideHubWithActivity];
+        [self.view hidEmptyDataView];
+        [self.view hidFailedView];
         
         NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSLog(@"obj = %@",obj[@"Result"][@"FictionId"]);
+        
         if ([obj[@"StatusCode"] intValue] == 200 ) {
             [SVProgressHUD showSuccessWithStatus:@"成功"];
             NBEditViewController *vc = [[NBEditViewController alloc] init];
@@ -352,6 +358,9 @@
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view hideHubWithActivity];
+        [self.view hidEmptyDataView];
+        [self.view hidFailedView];
         [SVProgressHUD showErrorWithStatus:@"失败"];
     }];
     

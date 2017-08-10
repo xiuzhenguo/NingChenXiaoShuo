@@ -135,10 +135,14 @@
 		BF18D7971EFD1D9F00CB4D7D /* NewBookListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF18D7961EFD1D9F00CB4D7D /* NewBookListModel.m */; };
 		BF1A43641EE2571C00A9C17D /* NBXieXieFontView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1A43631EE2571C00A9C17D /* NBXieXieFontView.m */; };
 		BF1CD2681E8227A600C8F357 /* HSubscribeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1CD2671E8227A600C8F357 /* HSubscribeViewController.m */; };
+		BF21A5351F3C06B100F623EC /* PreviewSecViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF21A5341F3C06B100F623EC /* PreviewSecViewController.m */; };
 		BF21C30E1EB310EE00C67202 /* TAWanJIeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF21C30C1EB310EE00C67202 /* TAWanJIeTableViewCell.m */; };
 		BF21C30F1EB310EE00C67202 /* TAWanJIeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF21C30D1EB310EE00C67202 /* TAWanJIeTableViewCell.xib */; };
 		BF21C3121EB3305500C67202 /* TARuleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF21C3111EB3305500C67202 /* TARuleViewController.m */; };
 		BF21C3151EB33D4B00C67202 /* TARuleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF21C3141EB33D4B00C67202 /* TARuleTableViewCell.m */; };
+		BF22983C1F35B23D0064A033 /* MineInforModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF22983B1F35B23D0064A033 /* MineInforModel.m */; };
+		BF22983F1F35B3930064A033 /* ComCardModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF22983E1F35B3930064A033 /* ComCardModel.m */; };
+		BF2298421F35B8DC0064A033 /* InboxListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2298411F35B8DC0064A033 /* InboxListModel.m */; };
 		BF2345A41EC013910052DFE8 /* NBIntruViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2345A31EC013910052DFE8 /* NBIntruViewController.m */; };
 		BF423CEB1E53E9D800E9B31A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BF423CEA1E53E9D800E9B31A /* AppDelegate.m */; };
 		BF423CF11E53EA2900E9B31A /* BXNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF423CED1E53EA2900E9B31A /* BXNavigationController.m */; };
@@ -543,6 +547,8 @@
 		BF1A43631EE2571C00A9C17D /* NBXieXieFontView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBXieXieFontView.m; sourceTree = "<group>"; };
 		BF1CD2661E8227A600C8F357 /* HSubscribeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSubscribeViewController.h; sourceTree = "<group>"; };
 		BF1CD2671E8227A600C8F357 /* HSubscribeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSubscribeViewController.m; sourceTree = "<group>"; };
+		BF21A5331F3C06B100F623EC /* PreviewSecViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewSecViewController.h; sourceTree = "<group>"; };
+		BF21A5341F3C06B100F623EC /* PreviewSecViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewSecViewController.m; sourceTree = "<group>"; };
 		BF21C30B1EB310EE00C67202 /* TAWanJIeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAWanJIeTableViewCell.h; sourceTree = "<group>"; };
 		BF21C30C1EB310EE00C67202 /* TAWanJIeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAWanJIeTableViewCell.m; sourceTree = "<group>"; };
 		BF21C30D1EB310EE00C67202 /* TAWanJIeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TAWanJIeTableViewCell.xib; sourceTree = "<group>"; };
@@ -550,6 +556,12 @@
 		BF21C3111EB3305500C67202 /* TARuleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TARuleViewController.m; sourceTree = "<group>"; };
 		BF21C3131EB33D4B00C67202 /* TARuleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TARuleTableViewCell.h; sourceTree = "<group>"; };
 		BF21C3141EB33D4B00C67202 /* TARuleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TARuleTableViewCell.m; sourceTree = "<group>"; };
+		BF22983A1F35B23D0064A033 /* MineInforModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineInforModel.h; sourceTree = "<group>"; };
+		BF22983B1F35B23D0064A033 /* MineInforModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineInforModel.m; sourceTree = "<group>"; };
+		BF22983D1F35B3930064A033 /* ComCardModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComCardModel.h; sourceTree = "<group>"; };
+		BF22983E1F35B3930064A033 /* ComCardModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComCardModel.m; sourceTree = "<group>"; };
+		BF2298401F35B8DC0064A033 /* InboxListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxListModel.h; sourceTree = "<group>"; };
+		BF2298411F35B8DC0064A033 /* InboxListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxListModel.m; sourceTree = "<group>"; };
 		BF2345A21EC013910052DFE8 /* NBIntruViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBIntruViewController.h; sourceTree = "<group>"; };
 		BF2345A31EC013910052DFE8 /* NBIntruViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBIntruViewController.m; sourceTree = "<group>"; };
 		BF423CE91E53E9D800E9B31A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Other/AppDelegate.h; sourceTree = "<group>"; };
@@ -1154,6 +1166,8 @@
 				BF124C621EC94C580042D5D3 /* NBClassfyViewController.m */,
 				BF106C951ED28A52002132E3 /* NBWriteViewController.h */,
 				BF106C961ED28A52002132E3 /* NBWriteViewController.m */,
+				BF21A5331F3C06B100F623EC /* PreviewSecViewController.h */,
+				BF21A5341F3C06B100F623EC /* PreviewSecViewController.m */,
 			);
 			path = NewBook;
 			sourceTree = "<group>";
@@ -1523,6 +1537,12 @@
 			children = (
 				BF0DF9B71EE94E690066D208 /* BCWelcomHepler.h */,
 				BF0DF9B81EE94E690066D208 /* BCWelcomHepler.m */,
+				BF22983A1F35B23D0064A033 /* MineInforModel.h */,
+				BF22983B1F35B23D0064A033 /* MineInforModel.m */,
+				BF22983D1F35B3930064A033 /* ComCardModel.h */,
+				BF22983E1F35B3930064A033 /* ComCardModel.m */,
+				BF2298401F35B8DC0064A033 /* InboxListModel.h */,
+				BF2298411F35B8DC0064A033 /* InboxListModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2043,6 +2063,7 @@
 				TargetAttributes = {
 					BFECED161E52D59F00FACC66 = {
 						CreatedOnToolsVersion = 7.3.1;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -2155,6 +2176,7 @@
 				BF179F2B1EB1F282006D5649 /* TAWanJieHeaderView.m in Sources */,
 				BF111CBD1EC2F46100107A4F /* TAWeiTouGaoView.m in Sources */,
 				BFEB40831EA4C4A2000BDC1D /* BSOffLineViewController.m in Sources */,
+				BF21A5351F3C06B100F623EC /* PreviewSecViewController.m in Sources */,
 				BFE83B611E6EAACC001238BD /* HSchUniViewController.m in Sources */,
 				BFECED221E52D59F00FACC66 /* ViewController.m in Sources */,
 				BF75B4901E5AE8A0003B8EAE /* ScrollTableViewCell.m in Sources */,
@@ -2231,6 +2253,7 @@
 				BF13BE831F21DE6C00EA8BFF /* CardModel.m in Sources */,
 				BF75B4921E5AE8A0003B8EAE /* NovelCollectionViewCell.m in Sources */,
 				BF138BB81EBC5A0A00AB42C1 /* NBEditPhoneView.m in Sources */,
+				BF22983F1F35B3930064A033 /* ComCardModel.m in Sources */,
 				BFE83B651E6EBA1A001238BD /* HSchUniTableViewCell.m in Sources */,
 				BF11F38C1F26E47800B0EF84 /* ChangeNameTableViewCell.m in Sources */,
 				BF0D62791EDE622900CF809A /* ImageTextAttachment.m in Sources */,
@@ -2392,6 +2415,7 @@
 				BF2345A41EC013910052DFE8 /* NBIntruViewController.m in Sources */,
 				BFEAE1181E6FB18F00D446E8 /* HEntLitListViewController.m in Sources */,
 				BFEADD2A1E72A499000A6A98 /* HMyClubPerTableViewCell.m in Sources */,
+				BF22983C1F35B23D0064A033 /* MineInforModel.m in Sources */,
 				BFE599121E5C15E50065D554 /* CatalogueTableViewCell.m in Sources */,
 				BFE872211E66A67B005DD8F0 /* HBRightTableViewCell.m in Sources */,
 				BF0D627B1EDE622900CF809A /* NSAttributedString+RichText.m in Sources */,
@@ -2399,6 +2423,7 @@
 				BFECB8EE1E6D362000FFEE95 /* HClassifyTableViewCell.m in Sources */,
 				BF423D261E53EE7000E9B31A /* UIFont+Extension.m in Sources */,
 				BF10179A1EC597F0002124DB /* NBAttTableViewCell.m in Sources */,
+				BF2298421F35B8DC0064A033 /* InboxListModel.m in Sources */,
 				BF423D231E53EE7000E9B31A /* UIBarButtonItem+Extension.m in Sources */,
 				BFE9A0541E6950770069A4F0 /* HEssenceTableViewCell.m in Sources */,
 				BF14A19E1F01124B002B6679 /* UnionModel.m in Sources */,
@@ -2520,6 +2545,8 @@
 			baseConfigurationReference = ECF46CD55BC6F71172E8FCAC /* Pods-NingChengWenXue.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/NingChengWenXue/Other/PrefixHeader.pch";
 				INFOPLIST_FILE = NingChengWenXue/Info.plist;
@@ -2535,6 +2562,8 @@
 			baseConfigurationReference = 6C0655ADB3C8BA3CA7C27DA0 /* Pods-NingChengWenXue.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/NingChengWenXue/Other/PrefixHeader.pch";
 				INFOPLIST_FILE = NingChengWenXue/Info.plist;

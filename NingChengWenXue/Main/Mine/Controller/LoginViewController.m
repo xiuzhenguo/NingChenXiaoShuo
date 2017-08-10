@@ -277,6 +277,8 @@
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoginStateKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
+                [self.navigationController popViewControllerAnimated:YES];
+                
             }else{
                 [SVProgressHUD showSuccessWithStatus:model.Message];
             }
@@ -300,6 +302,8 @@
                 
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoginStateKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                [self.navigationController popViewControllerAnimated:YES];
                 
             }else{
                 [SVProgressHUD showSuccessWithStatus:model.Message];

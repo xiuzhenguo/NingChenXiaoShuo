@@ -328,7 +328,7 @@
         ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
         if (model.StatusCode == 200) {
             success(model.Result);
-            
+            NSLog(@"预览章节%@",task.currentRequest.URL);
         }else{
             faild(@"",nil);
             [SVProgressHUD showErrorWithStatus:model.Message];

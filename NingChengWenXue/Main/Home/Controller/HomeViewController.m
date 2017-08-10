@@ -16,6 +16,7 @@
 #import "WordsTableViewCell.h"
 #import "NovelCollectionViewCell.h"
 #import "NovelDetailViewController.h"
+#import "HAuthorsViewController.h"
 // 跑马灯
 #import "UIColor+Wonderful.h"
 #import "SXMarquee.h"
@@ -442,7 +443,10 @@
                 vc.bookId = model.FictionId;
                 [self.navigationController pushViewController:vc animated:YES];
             }else{
-                NSLog(@"跳作者页面");
+                
+                HAuthorsViewController *vc = [[HAuthorsViewController alloc] init];
+                vc.autherID = model.UserId;
+                [self.navigationController pushViewController:vc animated:YES];
             }
             
         }else{

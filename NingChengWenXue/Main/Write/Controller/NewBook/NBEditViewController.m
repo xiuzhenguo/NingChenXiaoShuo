@@ -287,7 +287,11 @@
     if (indexPath.section == 0 && indexPath.row == 1) {
         NBClassfyViewController *vc = [[NBClassfyViewController alloc] init];
         vc.typeID = listModel.Category;
-        vc.ortherArray =  [NSMutableArray arrayWithArray:[listModel.FictionKey componentsSeparatedByString:@","]];
+        if (listModel.FictionKey.length == 0) {
+            vc.ortherArray = [[NSMutableArray alloc] init];
+        }else{
+            vc.ortherArray =  [NSMutableArray arrayWithArray:[listModel.FictionKey componentsSeparatedByString:@","]];
+        }
         vc.bookId = self.bookID;
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -327,6 +331,12 @@
         vc.typeInt = 2;
         if (model.SectionStatus == 3) {
             [self.navigationController pushViewController:vc animated:YES];
+        }else if (model.SectionStatus == 2){
+            [SVProgressHUD showErrorWithStatus:@"此章节已发布,不能修改章节内容"];
+            return;
+        }else if (model.SectionStatus == 4){
+            [SVProgressHUD showErrorWithStatus:@"此章节处于待审核状态,不能修改章节内容"];
+            return;
         }
     }
 }
@@ -441,7 +451,11 @@
 
 #pragma mark - 添加新章节按钮的点击事件
 -(void) clickNewSectionButton {
-    
+    NewBookListModel *listModel = self.messageArray.firstObject;
+    if (listModel.FictionStatus == 2) {
+        [SVProgressHUD showErrorWithStatus:@"作品已完结,不能添加新章节"];
+        return;
+    }
     NBWriteViewController *vc = [[NBWriteViewController alloc] init];
     vc.ficID = self.bookID;
     [self.navigationController pushViewController:vc animated:YES];
@@ -531,6 +545,7 @@
 
 #pragma mark - 作品信息的获取
 -(void) getProductionMessageData {
+    [self.view showHudWithActivity:@"正在加载"];
     [self.helper productionMessageWithFictionId:self.bookID success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             self.messageArray = [[NSMutableArray alloc] init];
@@ -549,7 +564,7 @@
         
         return ;
     } faild:^(NSString *response, NSError *error) {
-        
+        [self.view hideHubWithActivity];
     }];
 }
 
@@ -655,7 +670,17 @@
     [self.helper deleteNovelWithFictionId:self.bookID AuthorId:kUserID success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             [SVProgressHUD showSuccessWithStatus:@"删除成功"];
-            [self.navigationController popViewControllerAnimated:YES];
+            if (self.newtype == 1) {
+                for (UIViewController *controller in self.navigationController.viewControllers) {
+                    if ([controller isKindOfClass:[TABookViewController class]]) {
+                        TABookViewController *A =(TABookViewController *)controller;
+                        [self.navigationController popToViewController:A animated:YES];
+                    }
+                }
+            }else{
+                //直接返回到第一个视图
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
         });
         
         return ;
