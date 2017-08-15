@@ -40,7 +40,6 @@
         [btn setTitle:array[i] forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:17];
         [btn setTitleColor:BXColor(40, 40, 40) forState:UIControlStateNormal];
-//        [self.dataArray addObject:btn];
         [btn addTarget:self action:@selector(clickTableRowViewButton:) forControlEvents:UIControlEventTouchUpInside];
     }
     

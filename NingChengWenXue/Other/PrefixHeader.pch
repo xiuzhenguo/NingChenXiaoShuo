@@ -49,7 +49,6 @@
 
 #define BXScreenH [UIScreen mainScreen].bounds.size.height
 #define BXScreenW [UIScreen mainScreen].bounds.size.width
-#define BXScreenBounds [UIScreen mainScreen].bounds
 #define BXKeyWindow [UIApplication sharedApplication].keyWindow
 
 // 随机色

@@ -28,6 +28,7 @@
 #import "WriteBookViewController.h"
 #import "DateTimePickerView.h"
 #import "TABookViewController.h"
+#import "PreviewSecViewController.h"
 
 @interface NBEditViewController ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate, DateTimePickerViewDelegate>
 

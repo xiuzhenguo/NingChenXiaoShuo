@@ -9,8 +9,9 @@
 #import "PreviewSecViewController.h"
 #import "NCWriteHelper.h"
 
-@interface PreviewSecViewController ()
+@interface PreviewSecViewController ()<UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NCWriteHelper *helper;
 
 @end
@@ -25,9 +26,43 @@
     return _helper;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1];
+    self.navigationController.navigationBar.backgroundColor =[UIColor whiteColor];
+    self.navigationController.navigationBar.translucent = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
+}
+
+#pragma mark - 创建TableView视图
+-(void) setUpUITabelViewUI {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:self.tableView];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+}
+
+#pragma mark - tableViewCell的个数
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+#pragma mark - tableViewCell设置
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
 }
 
 #pragma mark - 获取章节内容
@@ -48,6 +83,9 @@
         
     } faild:^(NSString *response, NSError *error) {
         [self.view hideHubWithActivity];
+        [self.view showFailedViewReloadBlock:^{
+            [self getNovelSectionDetailData];
+        }];
     }];
 }
 

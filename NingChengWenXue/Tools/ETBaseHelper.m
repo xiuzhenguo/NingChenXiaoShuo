@@ -17,7 +17,7 @@
 -(instancetype)init{
     if (self = [super init]) {
         _manager = [AFHTTPSessionManager manager];
-//        _manager.requestSerializer.timeoutInterval = 0.05;// 限定请求时间
+//        _manager.requestSerializer.timeoutInterval = 2;// 限定请求时间
         _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
     }
     return self;
