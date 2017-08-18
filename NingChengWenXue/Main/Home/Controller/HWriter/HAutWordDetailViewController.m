@@ -243,17 +243,18 @@
                 
                 [SVProgressHUD showSuccessWithStatus:@"成功"];
                 
-                NSDictionary *dic = [[NSDictionary alloc] init];
-                if ([reply isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
-                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":@"00000000-0000-0000-0000-000000000000",@"UserId":kUserID,@"ReplyName":@""};
-                }else{
-                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":self.replyID,@"UserId":kUserID,@"ReplyName":[self.textField.placeholder substringFromIndex:2]};
-                }
-                [_headView.comBtn setTitle:[NSString stringWithFormat:@"%ld",[_headView.comBtn.titleLabel.text integerValue] + 1] forState:UIControlStateNormal];
-                SPDetailModel *model = [SPDetailModel mj_objectWithKeyValues:dic];
-                [self.ReplyListArray addObject:model];
+//                NSDictionary *dic = [[NSDictionary alloc] init];
+//                if ([reply isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
+//                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":@"00000000-0000-0000-0000-000000000000",@"UserId":kUserID,@"ReplyName":@""};
+//                }else{
+//                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":self.replyID,@"UserId":kUserID,@"ReplyName":[self.textField.placeholder substringFromIndex:2]};
+//                }
+//                [_headView.comBtn setTitle:[NSString stringWithFormat:@"%ld",[_headView.comBtn.titleLabel.text integerValue] + 1] forState:UIControlStateNormal];
+//                SPDetailModel *model = [SPDetailModel mj_objectWithKeyValues:dic];
+//                [self.ReplyListArray addObject:model];
                 self.textField.text = @"";
-                [self.tableView reloadData];
+//                [self.tableView reloadData];
+                [self getLeaveMessageDetailData];
             });
             
             return ;
@@ -335,6 +336,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     LeaveMessageModel *model = self.dataArray.firstObject;
     [self.helper juBaoWithObjType:@"3" ObjId:self.leaveId ObjClass:title UserId:model.LeaveUserId OptionId:kUserID success:^(NSDictionary *response) {

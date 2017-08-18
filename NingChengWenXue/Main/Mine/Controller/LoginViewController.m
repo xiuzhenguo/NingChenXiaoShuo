@@ -303,6 +303,8 @@
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoginStateKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
+                
+                
                 [self.navigationController popViewControllerAnimated:YES];
                 
             }else{

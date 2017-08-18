@@ -142,6 +142,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     HAutWriteViewController *vc = [[HAutWriteViewController alloc] init];
     vc.authorId = self.authorId;

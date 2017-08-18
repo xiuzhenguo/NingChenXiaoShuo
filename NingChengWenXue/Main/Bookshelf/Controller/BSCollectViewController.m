@@ -125,7 +125,13 @@
 
 #pragma mark - 收藏集合的获取
 -(void) getCollectionListData {
-    [self.helper collectionListWithUserid:kUserID PageIndex:[NSString stringWithFormat:@"%ld",self.pagenum] success:^(NSArray *response) {
+    NSString *ID  = @"";
+    if (kUserLogin == YES) {
+        ID = kUserID;
+    }else{
+        ID = @"00000000-0000-0000-0000-000000000000";
+    }
+    [self.helper collectionListWithUserid:ID PageIndex:[NSString stringWithFormat:@"%ld",self.pagenum] success:^(NSArray *response) {
         st_dispatch_async_main(^{
             if (self.pagenum == 1) {
                  self.dataArray = [[NSMutableArray alloc] init];
@@ -159,7 +165,7 @@
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
         [self.view showFailedViewReloadBlock:^{
-            //            [self.view showActivityWithImage:kLoadingImage];
+            
             [self getCollectionListData];
         }];
     }];

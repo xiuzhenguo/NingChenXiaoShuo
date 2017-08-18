@@ -66,6 +66,7 @@
 #pragma mark - 进入章节目录
 -(void) clickCataButton {
     HCatalogueViewController *vc = [[HCatalogueViewController alloc] init];
+    vc.bookID = self.bookId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

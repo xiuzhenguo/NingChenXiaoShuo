@@ -80,7 +80,7 @@
     
     self.imgLab.frame = CGRectMake(CGRectGetMaxX(self.secLab.frame)+10, 30, 40, 13);
     self.imgLab.text = @"0图";
-    
+    self.imgLab.hidden = YES;
 
     self.lineLab.frame = CGRectMake(0, 52.5, BXScreenW, 0.5);
 }

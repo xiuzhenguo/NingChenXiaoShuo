@@ -119,6 +119,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     //    ShuPingListModel *model = self.dataArray.firstObject;
     [self.view showHudWithActivity:@"正在加载"];
@@ -308,6 +309,7 @@
         if (kUserLogin == NO) {
             LoginViewController *vc = [[LoginViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
+            return;
         }
         NSString *reply = @"";
         if ([self.textField.placeholder isEqualToString:@"回复此评论···"]) {
@@ -320,17 +322,18 @@
                 
                 [SVProgressHUD showSuccessWithStatus:@"成功"];
                 
-                NSDictionary *dic = [[NSDictionary alloc] init];
-                if ([reply isEqualToString:@""]) {
-                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":@"00000000-0000-0000-0000-000000000000",@"UserId":kUserID,@"ReplyName":@""};
-                }else{
-                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":self.replyID,@"UserId":kUserID,@"ReplyName":[self.textField.placeholder substringFromIndex:2]};
-                }
-                
-                SPDetailModel *model = [SPDetailModel mj_objectWithKeyValues:dic];
-                [self.replyArray addObject:model];
+//                NSDictionary *dic = [[NSDictionary alloc] init];
+//                if ([reply isEqualToString:@""]) {
+//                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":@"00000000-0000-0000-0000-000000000000",@"UserId":kUserID,@"ReplyName":@""};
+//                }else{
+//                    dic = @{@"Id":@"",@"AuthorName":@"修车",@"Content":self.textField.text,@"ReplyId":self.replyID,@"UserId":kUserID,@"ReplyName":[self.textField.placeholder substringFromIndex:2]};
+//                }
+//                
+//                SPDetailModel *model = [SPDetailModel mj_objectWithKeyValues:dic];
+//                [self.replyArray addObject:model];
                 self.textField.text = @"";
                 [self getShuPingDetailData];
+                [self getReplyShuPingListData];
             });
             
             return ;
@@ -445,6 +448,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     ShuPingListModel *model = self.dataArray.firstObject;
     [self.helper juBaoWithObjType:@"1" ObjId:self.secID ObjClass:title UserId:model.AuthorId OptionId:kUserID success:^(NSDictionary *response) {

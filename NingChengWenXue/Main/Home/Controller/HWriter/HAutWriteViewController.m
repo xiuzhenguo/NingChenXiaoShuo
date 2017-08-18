@@ -182,7 +182,7 @@
             ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
             if (model.StatusCode == 200) {
                 [SVProgressHUD showSuccessWithStatus:@"添加留言成功"];
-                NSDictionary *dic = @{@"Id":model.datas,@"AuthorId":self.authorId,@"LeaveUserId":kUserID,@"Content":weakSelf.textView.text,@"ReplyCount":@0,@"LeaveTime":@"1秒前",@"UserImage":@"",@"AuthorName":@"修车"};
+                NSDictionary *dic = @{@"Id":model.datas,@"AuthorId":self.authorId,@"LeaveUserId":kUserID,@"Content":weakSelf.textView.text,@"ReplyCount":@0,@"LeaveTime":@"1秒前",@"UserImage":@"",@"AuthorName":@""};
                 LeaveMessageModel *model = [LeaveMessageModel mj_objectWithKeyValues:dic];
                 [weakSelf.delegate addShupingModel:model];
                 [weakSelf.navigationController popViewControllerAnimated:YES];

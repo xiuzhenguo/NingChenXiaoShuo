@@ -319,7 +319,7 @@
         [SVProgressHUD showErrorWithStatus:@"请填写作品名称"];
         return;
     }
-    if ([NSString stringWithFormat:@"%ld",self.classID].length == 0) {
+    if ([NSString stringWithFormat:@"%ld",(long)self.classID].length == 0) {
         [SVProgressHUD showErrorWithStatus:@"请填写作品标签"];
         return;
     }
@@ -334,7 +334,7 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
     [self.view showHudWithActivity:@"正在加载"];
     //上传图片/文字，只能同POST
-    [manager POST:@"http://192.168.199.177:8100/api/writing/fiction/new" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:@"http://118.190.60.67:8100/api/writing/fiction/new" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
         [formData appendPartWithFileData:self.imageData name:@"FileImage" fileName:@"aaa.png" mimeType:@"image/png"];
         

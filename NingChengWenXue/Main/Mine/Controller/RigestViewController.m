@@ -96,6 +96,7 @@ static NSString * Get_ID_Key = @"getregistid";
     self.accountField = [[UITextField alloc] initWithFrame:CGRectMake(55, 0, BXScreenW - 70, 52)];
     self.accountField.placeholder = @"请输入您的账号";
     self.accountField.textColor = The_Prompt_Color_Nine;
+    self.accountField.keyboardType = UIKeyboardTypeASCIICapable;
     [self.rootScrollView addSubview:self.accountField];
     
     // 手机号码

@@ -295,6 +295,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }else{
         [self.helper attentionUserWithUserId:kUserID AppentionId:self.autherID success:^(NSDictionary *response) {
             st_dispatch_async_main(^{

@@ -58,7 +58,7 @@
     self.titleLab.text = viewModel.SectionName;
     self.titleLab.frame = CGRectMake(15, 4, BXScreenW - 30, 20);
     self.wordNumLab.frame = CGRectMake(15, CGRectGetMaxY(self.titleLab.frame)+5, 200, 15);
-    self.wordNumLab.text = [NSString stringWithFormat:@"%ld字",viewModel.CharacterCount];
+    self.wordNumLab.text = [NSString stringWithFormat:@"%ld字",(long)viewModel.CharacterCount];
     [self.wordNumLab sizeToFit];
     self.imgNumlab.frame = CGRectMake(CGRectGetMaxX(self.wordNumLab.frame)+10, CGRectGetMaxY(self.titleLab.frame)+5, 80, 15);
     self.typeLab.frame = CGRectMake(BXScreenW - 50, 0, 35, 48);

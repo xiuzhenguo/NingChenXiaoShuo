@@ -113,8 +113,14 @@
 
 #pragma mark - 书架数据的获取
 -(void) getBookRackListData {
+    NSString *ID  = @"";
+    if (kUserLogin == YES) {
+        ID = kUserID;
+    }else{
+        ID = @"00000000-0000-0000-0000-000000000000";
+    }
     [self.view showHudWithActivity:@"正在加载"];
-    [self.helper bookRackListWithUserid:kUserID PageIndex:[NSString stringWithFormat:@"%ld",self.pagenum] success:^(NSArray *response) {
+    [self.helper bookRackListWithUserid:ID PageIndex:[NSString stringWithFormat:@"%ld",self.pagenum] success:^(NSArray *response) {
         st_dispatch_async_main(^{
             if (self.pagenum == 1) {
                 self.dataArray = [[NSMutableArray alloc] init];

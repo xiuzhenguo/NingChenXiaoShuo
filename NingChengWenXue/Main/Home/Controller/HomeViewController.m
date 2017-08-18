@@ -74,6 +74,7 @@
 @property (nonatomic, assign) NSInteger pageNum;
 @property (nonatomic, assign) CGFloat collectionHeight;
 @property (nonatomic, strong) NSMutableArray *picArray;
+@property (nonatomic, strong) SDCycleScrollView *cycleScrollView;
 
 
 @end
@@ -649,6 +650,7 @@
     }else{
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
 }
 
@@ -788,7 +790,6 @@
                 [self.picArray addObject:model];
                 [arr addObject:model.FictionImage];
             }
-            
             [self setHeadCycleScrollView:arr];
             
         });
@@ -803,14 +804,14 @@
 - (void) setHeadCycleScrollView:(NSMutableArray *)dataArray {
     
     NSArray *groupImgs = [dataArray copy];
-    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 176) delegate:self placeholderImage:[UIImage imageNamed:@"上首页_1"]];
-    cycleScrollView.delegate = self;
-    cycleScrollView.imageURLStringsGroup = groupImgs;
-    cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
-    [self.headView addSubview:cycleScrollView];
-    cycleScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 176) delegate:self placeholderImage:[UIImage imageNamed:@"上首页_1"]];
+    self.cycleScrollView.delegate = self;
+    self.cycleScrollView.imageURLStringsGroup = groupImgs;
+    self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
+    [self.headView addSubview:self.cycleScrollView];
+    self.cycleScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     // --- 轮播时间间隔，默认1.0秒，可自定义
-    cycleScrollView.autoScrollTimeInterval = 2.0;
+    self.cycleScrollView.autoScrollTimeInterval = 2.0;
 }
 
 #pragma mark - 订阅小说数据的获取

@@ -90,6 +90,11 @@
 
 #pragma mark - 点击进入我的社团
 -(void) clickClubButton {
+    if (kUserLogin == NO) {
+        LoginViewController *vc = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     HMyClubListViewController *vc = [[HMyClubListViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -257,6 +262,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }else{
         
         HCreateClubViewController *vc = [[HCreateClubViewController alloc] init];

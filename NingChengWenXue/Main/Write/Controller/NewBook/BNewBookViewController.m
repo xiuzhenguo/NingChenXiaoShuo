@@ -127,7 +127,7 @@
     backView.backgroundColor = BXColor(242, 242, 242);
     NewBookModel *model = self.dataArray.firstObject;
     UILabel *titleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 31)];
-    titleLab.text = [NSString stringWithFormat:@"%ld部连载中，%ld部完结",model.NotComplete,model.Complete];
+    titleLab.text = [NSString stringWithFormat:@"%ld部连载中，%ld部完结",(long)model.NotComplete,model.Complete];
     titleLab.font = THIRDFont;
     titleLab.textColor = BXColor(101, 101, 101);
     titleLab.textAlignment = NSTextAlignmentCenter;
@@ -157,7 +157,13 @@
 }
 
 -(void) getProductionListData {
-    [self.helper productionWithAuthorid:kUserID success:^(NSDictionary *response) {
+    NSString *ID  = @"";
+    if (kUserLogin == YES) {
+        ID = kUserID;
+    }else{
+        ID = @"00000000-0000-0000-0000-000000000000";
+    }
+    [self.helper productionWithAuthorid:ID success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             self.dataArray = [[NSMutableArray alloc] init];
             

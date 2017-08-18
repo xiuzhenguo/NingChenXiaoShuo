@@ -42,6 +42,7 @@
 @property (nonatomic, assign) NSInteger pagenum;
 @property (nonatomic, strong) NSMutableArray *messageArray;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *listArray;
 
 @end
 
@@ -186,8 +187,8 @@
     }else if (section == 2){
         return 1;
     }else{
-        NewBookModel *model = self.dataArray.firstObject;
-        return model.SectionItem.count;
+//        NewBookModel *model = self.dataArray.firstObject;
+        return self.listArray.count;
     }
 }
 
@@ -269,8 +270,8 @@
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        NewBookModel *list = self.dataArray.firstObject;
-        SectionListModel *model = list.SectionItem[indexPath.row];
+//        NewBookModel *list = self.dataArray.firstObject;
+        SectionListModel *model = self.listArray[indexPath.row];
         cell.viewModel = model;
         
         cell.imgbtn.tag = 1000 + indexPath.row;
@@ -325,8 +326,8 @@
     }
     if (indexPath.section == 3) {
         NBWriteViewController *vc = [[NBWriteViewController alloc] init];
-        NewBookModel *list = self.dataArray.firstObject;
-        SectionListModel *model = list.SectionItem[indexPath.row];
+//        NewBookModel *list = self.dataArray.firstObject;
+        SectionListModel *model = self.listArray[indexPath.row];
         vc.sectionID = model.SectionId;
         vc.ficID = self.bookID;
         vc.typeInt = 2;
@@ -346,8 +347,8 @@
 -(void) cilckImageButton:(UIButton *)sender {
     self.rowView = [[NBTableViewRowView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH)];
     [self.view.window addSubview:self.rowView];
-    NewBookModel *list = self.dataArray.firstObject;
-    SectionListModel *model = list.SectionItem[sender.tag - 1000];
+//    NewBookModel *list = self.dataArray.firstObject;
+    SectionListModel *model = self.listArray[sender.tag - 1000];
     __weak typeof(self)weakSelf = self;
     [weakSelf.rowView setFinishButtonTitle:^(NSString *title){
         
@@ -575,9 +576,15 @@
         st_dispatch_async_main(^{
             if (self.pagenum == 1) {
                 self.dataArray = [[NSMutableArray alloc] init];
+                self.listArray = [[NSMutableArray alloc] init];
             }
             NewBookModel *model = [NewBookModel mj_objectWithKeyValues:response];
             [self.dataArray addObject:model];
+            for (int i = 0; i < model.SectionItem.count; i++) {
+                SectionListModel *mode = [SectionListModel mj_objectWithKeyValues:model.SectionItem[i]];
+                
+                [self.listArray addObject:mode];
+            }
             
             [self.view hideHubWithActivity];
             [self.view hidEmptyDataView];
@@ -628,7 +635,7 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];//设置服务器允许的请求格式内容
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
     //上传图片/文字，只能同POST
-    [manager POST:@"http://192.168.199.177:8100/api/writing/fiction/image" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:@"http://118.190.60.67:8100/api/writing/fiction/image" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
         [formData appendPartWithFileData:imageData name:@"FileImage" fileName:@"aaa.png" mimeType:@"image/png"];
         

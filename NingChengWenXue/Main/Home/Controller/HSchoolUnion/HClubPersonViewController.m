@@ -140,6 +140,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }else{
         NSLog(@"%@=====%@",kUserID,model.UserId);
         [self.helper attentionUserWithUserId:kUserID AppentionId:model.UserId success:^(NSDictionary *response) {

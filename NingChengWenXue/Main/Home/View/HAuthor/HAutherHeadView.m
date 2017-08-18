@@ -126,10 +126,10 @@
     _model = model;
     [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.AuthotImage] placeholderImage:[UIImage imageNamed:@"作者"]];
     self.nameLab.text = model.AuthorName;
-    self.rankLab.text = [NSString stringWithFormat:@"Lv%ld",model.lv];
+    self.rankLab.text = [NSString stringWithFormat:@"Lv%ld",(long)model.lv];
     self.IDLab.text = [NSString stringWithFormat:@"(UUID:%@)",model.UUID];
     self.martialLab.text = [NSString stringWithFormat:@"门派:%@",model.Martial];
-    self.vigorousLab.text = [NSString stringWithFormat:@"活力:%ld",model.Energy];
+    self.vigorousLab.text = [NSString stringWithFormat:@"活力:%ld",(long)model.Energy];
     self.personLab.text = [NSString stringWithFormat:@"人品:%@",model.Moral];
     self.nameLab.frame = CGRectMake(CGRectGetMaxX(self.imgView.frame)+10, 15, BXScreenW - 160, 20);
     [self.nameLab sizeToFit];

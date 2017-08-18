@@ -38,6 +38,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self setUpUITabelViewUI];
 }
 
 #pragma mark - 创建TableView视图
@@ -71,12 +73,8 @@
     [self.helper PreviewNovelSectionWithSectionid:self.sectionID success:^(NSDictionary *response) {
 
         st_dispatch_async_main(^{
-//            [self.view hideHubWithActivity];
-//            [self.view hidEmptyDataView];
-//            [self.view hidFailedView];
-//            model.FictionName = self.tectfield.text;
-//            [SVProgressHUD showSuccessWithStatus:@"更改成功"];
-//            [self.tableView reloadData];
+            
+            
         });
         
         return ;

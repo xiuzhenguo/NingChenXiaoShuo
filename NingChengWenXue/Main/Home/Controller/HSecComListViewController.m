@@ -115,6 +115,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     ShuPingListModel *model = self.dataArray[sender.tag - 1000];
     [self.view showHudWithActivity:@"正在加载"];
@@ -174,6 +175,7 @@
     if (kUserLogin == NO) {
         LoginViewController *vc = [[LoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
     
     HSecWriteViewController *vc = [[HSecWriteViewController alloc] init];

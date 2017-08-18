@@ -27,10 +27,7 @@
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1];
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;//不设置为黑色背景
-    
-    if (kUserLogin == NO) {
-        [SVProgressHUD showSuccessWithStatus:@"请先登录"];
-    }
+
 }
 
 - (void)viewDidLoad {

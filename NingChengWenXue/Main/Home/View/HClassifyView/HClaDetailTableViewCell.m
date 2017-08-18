@@ -86,7 +86,7 @@
     
     
     self.numLab.frame = CGRectMake(118, CGRectGetMaxY(self.authorLab.frame)+5, BXScreenW - 93 - 40, 15);
-    self.numLab.text = [NSString stringWithFormat:@"%ld阅读",viewModel.Reader];
+    self.numLab.text = [NSString stringWithFormat:@"%ld阅读",(long)viewModel.Reader];
     [self.numLab sizeToFit];
     
     

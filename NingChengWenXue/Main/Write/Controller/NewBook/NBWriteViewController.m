@@ -659,6 +659,7 @@
         [SVProgressHUD showErrorWithStatus:@"请填写章节内容"];
         return;
     }
+    
     [self.helper changeNovelSectionContentWithFictionId:self.ficID SectionId:self.sectionID Title:self.textField.text Content:self.textView.text Remark:@"" success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             

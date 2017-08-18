@@ -186,7 +186,7 @@
             ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
             if (model.StatusCode == 200) {
                 [SVProgressHUD showSuccessWithStatus:@"上传成功"];
-                NSDictionary *dic = @{@"PostClass":@1,@"SectionIndex":@0,@"IsApplaud":@0,@"Content":weakSelf.textView.text,@"SectionName":@"",@"Id":model.datas,@"AuthorName":@"修车",@"UserHeadImage":@"",@"Time":@"1秒前",@"Reply":@0,@"Applaud":@0};
+                NSDictionary *dic = @{@"PostClass":@1,@"SectionIndex":@0,@"IsApplaud":@0,@"Content":weakSelf.textView.text,@"SectionName":@"",@"Id":model.datas,@"AuthorName":@"",@"UserHeadImage":@"",@"Time":@"1秒前",@"Reply":@0,@"Applaud":@0};
                 ShuPingListModel *model = [ShuPingListModel mj_objectWithKeyValues:dic];
                 [weakSelf.delegate addShupingModel:model];
                 [weakSelf.navigationController popViewControllerAnimated:YES];

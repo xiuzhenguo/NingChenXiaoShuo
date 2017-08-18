@@ -127,7 +127,7 @@
         HLitDetOneTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"firstCell" forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        cell.numLab.text = [NSString stringWithFormat:@"(%ld)",detail.FictionCount];
+        cell.numLab.text = [NSString stringWithFormat:@"(%ld)",(long)detail.FictionCount];
         return cell;
     }else if (indexPath.section == 1){
         HLitDetMidTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MidCell" forIndexPath:indexPath];
@@ -135,7 +135,7 @@
         
         cell.count = detail.UserItem.count;
         cell.viewModel = detail.UserItem;
-        cell.numLab.text = [NSString stringWithFormat:@"(%ld)",detail.UserCount];
+        cell.numLab.text = [NSString stringWithFormat:@"(%ld)",(long)detail.UserCount];
         
         return cell;
     }else{
@@ -147,7 +147,7 @@
         cell.nameLab.text = model.FictionName;
         cell.timeLab.text = model.timeinfo;
         //        cell.numLab.text = @"2020220阅读/258289评论/200220收藏";
-        cell.numLab.text = [NSString stringWithFormat:@"%ld阅读/%ld评论/%ld收藏",model.Reader,model.EvalauteIndex,model.Collect];
+        cell.numLab.text = [NSString stringWithFormat:@"%ld阅读/%ld评论/%ld收藏",(long)model.Reader,model.EvalauteIndex,model.Collect];
         
         return cell;
     }
