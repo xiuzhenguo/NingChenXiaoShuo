@@ -14,6 +14,7 @@
 #import "WriterDynModel.h"
 #import "DynFictionModel.h"
 #import "NovelDetailViewController.h"
+#import "HReadPageViewController.h"
 
 @interface HDynListViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -128,6 +129,12 @@
     if (model.ActionGener == 1 || model.ActionGener == 4){
         NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
         vc.bookId = model.FictionId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        HReadPageViewController *vc = [[HReadPageViewController alloc] init];
+        vc.bookId = model.FictionId;
+        vc.secID = model.FictionSectionId;
+        vc.pushType = 1;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

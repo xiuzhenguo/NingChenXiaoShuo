@@ -175,16 +175,16 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
     
-    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightBtn.frame = CGRectMake(0, 0, 100, 30);
-    [rightBtn setTitle:@"离线作品" forState:UIControlStateNormal];
-    [rightBtn addTarget:self action:@selector(rightNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    [rightBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
-    rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    rightBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-    rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:rightBtn];
-    self.navigationItem.rightBarButtonItem = item1;
+//    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    rightBtn.frame = CGRectMake(0, 0, 100, 30);
+//    [rightBtn setTitle:@"离线作品" forState:UIControlStateNormal];
+//    [rightBtn addTarget:self action:@selector(rightNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+//    [rightBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
+//    rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+//    rightBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+//    rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+//    UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:rightBtn];
+//    self.navigationItem.rightBarButtonItem = item1;
 }
 
 #pragma mark - 返回按钮的实现方法
@@ -193,10 +193,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - 离线作品按钮的点击事件的实现
--(void)rightNavBtnAction:(UIButton *)sender{
-    NSLog(@"离线作品");
-}
+//#pragma mark - 离线作品按钮的点击事件的实现
+//-(void)rightNavBtnAction:(UIButton *)sender{
+//    NSLog(@"离线作品");
+//}
 
 
 @end

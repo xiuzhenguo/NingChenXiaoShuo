@@ -119,13 +119,6 @@
 
 }
 
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-//{
-//    NSInteger n = scrollView.contentOffset.x / scrollView.frame.size.width;
-//    self.segmentControl.selectedSegmentIndex = n;
-//    //    [self.searchbar resignFirstResponder];
-//}
-
 #pragma mark - 设置导航栏按钮
 -(void) setUpNavButtonUI {
     

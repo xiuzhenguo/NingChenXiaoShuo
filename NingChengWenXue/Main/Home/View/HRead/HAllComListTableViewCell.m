@@ -70,7 +70,7 @@
     self.imgView.frame = CGRectMake(15, 15, 112/2.0, 112/2.0);
     self.imgView.layer.cornerRadius = 112/4.0;
     self.imgView.clipsToBounds = YES;
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.UserHeadImage] placeholderImage:[UIImage imageNamed:@"作者头像"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.UserHeadImage] placeholderImage:[UIImage imageNamed:@"打赏头像"]];
 //    self.imgView.image = [UIImage imageNamed:@"作者头像"];
     
     self.nameLab.frame = CGRectMake(CGRectGetMaxX(self.imgView.frame)+10, 15, BXScreenW - 150, 20);

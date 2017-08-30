@@ -54,28 +54,15 @@
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    [self setUpNavButtonUI];
      [self getNovelDetailData];
+//    NSLog(@"123456%d",kUserLogin);
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-   
-    self.navigationController.navigationBar.translucent = true;//不设置为黑色背景
-    [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:0];
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
-//    // 设置返回按钮
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftBtn.frame = CGRectMake(0, 0, 100, 30);
-    [leftBtn setImage:[UIImage imageNamed:@"返回-1"] forState:UIControlStateNormal];
-    [leftBtn addTarget:self action:@selector(leftNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
-    self.navigationItem.leftBarButtonItem = item;
-    
     // 创建TableView
     [self setRootScrollViewUI];
 //    // 添加底部的三个按钮
@@ -99,10 +86,6 @@
     
     self.tableHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 400)];
     self.tableView.tableHeaderView = self.tableHeadView;
-    
-//    [self setImageViewUI];
-    // 设置tableView尾视图
-//    [self setUpTableViewFootViewUI];
     
 }
 
@@ -402,6 +385,20 @@
             [self getNovelDetailData];
         }];
     }];
+}
+
+#pragma mark - 设置返回按钮
+-(void)setUpNavButtonUI {
+
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftBtn.frame = CGRectMake(0, 0, 100, 30);
+//    leftBtn.backgroundColor = [UIColor redColor];
+    [leftBtn setImage:[UIImage imageNamed:@"返回-1"] forState:UIControlStateNormal];
+    [leftBtn addTarget:self action:@selector(leftNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+    self.navigationItem.leftBarButtonItem = item;
 }
 
 #pragma mark - 返回按钮点击事件

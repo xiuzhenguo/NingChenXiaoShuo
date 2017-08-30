@@ -14,7 +14,15 @@
 
 @property (nonatomic, strong) NSString *secID;// 章节Id
 
-@property (nonatomic, assign) NSInteger SectionIndex;
+@property (nonatomic, assign) NSInteger pushType;
+
+@property (nonatomic, assign) NSInteger SectionIndex;// 第几章
 @property (nonatomic, strong) NSString *SectionName;
+
+
+
+@property (nonatomic, strong) NSMutableArray *novelArray;
+@property (nonatomic, assign) NSInteger loadType;
+
 
 @end

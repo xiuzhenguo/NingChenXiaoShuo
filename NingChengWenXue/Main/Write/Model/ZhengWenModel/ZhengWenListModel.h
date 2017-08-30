@@ -28,6 +28,12 @@
 
 @property (nonatomic, assign) NSInteger IsTg;
 
+@property (nonatomic, strong) NSString *FictionId;
+
+@property (nonatomic, strong) NSString *FictionName;
+
 @property (nonatomic, strong) NSArray *FictionList;
+
+@property (nonatomic, strong) NSArray *SolicitationConfigList;
 
 @end

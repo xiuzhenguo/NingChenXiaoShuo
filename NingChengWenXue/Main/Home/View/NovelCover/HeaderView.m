@@ -21,7 +21,7 @@
 
 - (void)setModel:(NovelDatailModel *)model{
     
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.UserImage] placeholderImage:[UIImage imageNamed:@"作者头像"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.UserImage] placeholderImage:[UIImage imageNamed:@"打赏头像"]];
     
     self.nameLab.text = model.FictionName;
     [_nameLab sizeToFit];

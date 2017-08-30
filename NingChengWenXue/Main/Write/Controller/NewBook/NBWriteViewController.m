@@ -562,7 +562,7 @@
     self.textView.textColor = [UIColor blackColor];
     self.textView.font = [UIFont systemFontOfSize:self.font];
     [self setEditNavButton];
-    return textView;
+    return YES;
 }
 
 #pragma mark - 编辑完成事的点击事件

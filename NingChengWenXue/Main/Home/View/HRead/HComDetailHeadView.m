@@ -64,7 +64,7 @@
     self.imgView.frame = CGRectMake(15, 15, 112/2.0, 112/2.0);
     self.imgView.layer.cornerRadius = 112/4.0;
     self.imgView.clipsToBounds = YES;
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.AuthorHeadImage] placeholderImage:[UIImage imageNamed:@"作者头像"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.AuthorHeadImage] placeholderImage:[UIImage imageNamed:@"打赏头像"]];
     
     self.nameLab.frame = CGRectMake(CGRectGetMaxX(self.imgView.frame)+10, 15, BXScreenW - 150, 20);
     self.nameLab.text = viewModel.AuthorName;
@@ -78,7 +78,7 @@
     [self.contentLab sizeToFit];
     
     self.fromLab.frame = CGRectMake(CGRectGetMaxX(self.imgView.frame)+10, CGRectGetMaxY(self.contentLab.frame)+15, BXScreenW - 96, 15);
-    self.fromLab.text = [NSString stringWithFormat:@"来自第%ld章 %@",viewModel.SectionIndex,viewModel.SectionName];
+    self.fromLab.text = [NSString stringWithFormat:@"来自 %@",viewModel.SectionName];
     if (viewModel.PostClass == 1) {
         [self.fromLab removeFromSuperview];
         self.zanBtn.frame = CGRectMake(BXScreenW - 200, CGRectGetMaxY(self.contentLab.frame)+15, 125, 20);

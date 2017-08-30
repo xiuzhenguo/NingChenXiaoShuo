@@ -76,7 +76,7 @@
     }
    
     self.imgView.frame = CGRectMake(15, 10, 50, 50);
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.UserImage] placeholderImage:[UIImage imageNamed:@"作者头像"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.UserImage] placeholderImage:[UIImage imageNamed:@"打赏头像"]];
     
     self.nameLab.frame = CGRectMake(75, 15, BXScreenW - 90, 20);
     self.nameLab.text = viewModel.AuthorName;

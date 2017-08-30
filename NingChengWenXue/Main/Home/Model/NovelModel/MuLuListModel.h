@@ -26,5 +26,15 @@
 
 @property (nonatomic, strong) NSString *Title;
 
+@property (nonatomic, strong) NSString *Content;
+
+@property (nonatomic, assign) NSInteger ReadTextLength;
+
+@property (nonatomic, strong) NSString *Pre; // 上一章主键
+
+@property (nonatomic, strong) NSString *Next; // 下一章主键
+
+@property (nonatomic, assign) NSInteger IsCollect;// 判断小说是否收藏
+
 
 @end

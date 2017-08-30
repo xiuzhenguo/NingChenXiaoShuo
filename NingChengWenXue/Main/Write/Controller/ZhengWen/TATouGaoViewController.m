@@ -132,7 +132,7 @@
         UILabel *nameLab = [[UILabel alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(line.frame)+0.5, BXScreenW - 120, 43)];
         nameLab.font = FIFFont;
         nameLab.textColor = BXColor(152,152,152);
-        nameLab.text = @"小说名称";
+        nameLab.text = model.FictionName;
         [self.headerView addSubview:nameLab];
         
         UIButton *tuichuBtn = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 95, CGRectGetMaxY(line.frame)+9.5, 80, 24)];
@@ -168,6 +168,7 @@
 
 -(void) clickRuleButton {
     TARuleViewController *vc = [[TARuleViewController alloc] init];
+    vc.ficId = self.ficId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -206,6 +207,7 @@
 #pragma mark - 活动规则按钮的点击事件
 -(void) clickGuiZeButton {
     TARuleViewController *vc = [[TARuleViewController alloc] init];
+    vc.ficId = self.ficId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -375,10 +377,22 @@
 
 #pragma mark - 退出征文
 -(void)tuiChuNovelData {
-    [self.helper tuiChuCallForPapersWithID:@"" SolicitationId:self.ficId UserId:kUserID success:^(NSDictionary *response) {
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    [self.helper tuiChuCallForPapersWithID:model.FictionId SolicitationId:self.ficId UserId:kUserID success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200) {
+                [SVProgressHUD showSuccessWithStatus:@"删除成功"];
+                [self getZhengWenDetailData];
+            }else{
+                [SVProgressHUD showSuccessWithStatus:model.Message];
+            }
+        });
         
+        return ;
     } faild:^(NSString *response, NSError *error) {
-        
+        [SVProgressHUD showErrorWithStatus:@"删除失败"];
     }];
 }
 

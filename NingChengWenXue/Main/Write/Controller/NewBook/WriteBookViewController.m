@@ -66,6 +66,8 @@
     [self setUpNavButtonUI];
     
     [self setUpTableViewUI];
+    
+    self.imageData = [[NSData alloc] init];
 }
 
 #pragma mark - 创建UItableView视图
@@ -311,10 +313,10 @@
 #pragma mark - 创作按钮的点击事件
 -(void) clickWriteButton {
 
-    if (self.imageData.length == 0) {
-        [SVProgressHUD showErrorWithStatus:@"请添加小说封面"];
-        return;
-    }
+//    if (self.imageData.length == 0) {
+//        [SVProgressHUD showErrorWithStatus:@"请添加小说封面"];
+//        return;
+//    }
     if (self.nameStr.length == 0) {
         [SVProgressHUD showErrorWithStatus:@"请填写作品名称"];
         return;
@@ -347,7 +349,7 @@
         
         NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         
-        if ([obj[@"StatusCode"] intValue] == 200 ) {
+        if ([obj[@"StatusCode"] intValue] == 200 || [obj[@"StatusCode"] intValue] == 101 ) {
             [SVProgressHUD showSuccessWithStatus:@"成功"];
             NBEditViewController *vc = [[NBEditViewController alloc] init];
             vc.bookID = obj[@"Result"][@"FictionId"];

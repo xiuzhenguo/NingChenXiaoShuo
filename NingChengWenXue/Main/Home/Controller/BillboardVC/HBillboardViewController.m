@@ -303,7 +303,7 @@
             }
             if(self.dataArray.count == 0 && self.pagenum == 1){
                 [self.emptyView removeFromSuperview];
-                self.emptyView = [[EmptyDataView alloc]initWithFrame:self.view.bounds title:@"没有数据" actionTitle:nil];
+                self.emptyView = [[EmptyDataView alloc]initWithFrame:CGRectMake(0, 0, BXScreenW - 65, BXScreenH) title:@"没有数据" actionTitle:nil];
                 [self.rightTableView addSubview:self.emptyView];
                 
             }else{

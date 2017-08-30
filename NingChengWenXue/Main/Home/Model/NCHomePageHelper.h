@@ -139,6 +139,12 @@
 -(void)clickReadNovelWithFictionId:(NSString *)fictionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 /**
+ *  小说内容的获取
+ *
+ */
+-(void)getNovelContentWithSectionId:(NSString *)sectionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
  *  小说章节书评列表的数据获取
  *
  */

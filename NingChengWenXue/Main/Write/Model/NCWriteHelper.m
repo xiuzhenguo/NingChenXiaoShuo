@@ -489,4 +489,21 @@
     }];
 }
 
+#pragma mark - 征文规则
+-(void)callForPapersGuizeWithID:(NSString *)Id success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"solicitationId":Id};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/writing/solicitation/info/config",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"征文规则%@",task.currentRequest.URL);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
 @end

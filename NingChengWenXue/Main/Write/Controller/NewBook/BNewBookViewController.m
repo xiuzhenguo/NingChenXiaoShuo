@@ -65,7 +65,7 @@
 
 #pragma mark - 添加我的社团按钮
 -(void) setUpCreateButton {
-    self.createBtn = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 50, BXScreenH - 64 - 20 - 175, 40, 40)];
+    self.createBtn = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 50, BXScreenH - 64 - 80 - 175, 40, 40)];
     self.createBtn.backgroundColor = BXColor(236,105,65);
     
     [self.createBtn setImage:[UIImage imageNamed:@"创作"] forState:UIControlStateNormal];
@@ -80,7 +80,11 @@
     // 设置按钮标题偏移
     [self.createBtn setTitleEdgeInsets:UIEdgeInsetsMake(0.0, -self.createBtn.imageView.frame.size.width, -(totalHeight - self.createBtn.titleLabel.frame.size.height),0.0)];
     [self.view addSubview:self.createBtn];
-    [self.createBtn addTarget:self action:@selector(clickCreateButton) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *tapBtn = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 80, BXScreenH - 64 - 80 - 175, 80, 80)];
+    [tapBtn addTarget:self action:@selector(clickCreateButton) forControlEvents:UIControlEventTouchUpInside];
+    tapBtn.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:tapBtn];
 }
 
 #pragma mark - 创建TableView

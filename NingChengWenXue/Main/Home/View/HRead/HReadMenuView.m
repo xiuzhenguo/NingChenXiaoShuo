@@ -75,7 +75,10 @@
 #pragma mark -
 -(void)hiddenSelf
 {
-    [self hiddenAnimation:YES];
+//    [self hiddenAnimation:YES];
+    if ([self.delegate respondsToSelector:@selector(menuViewMark)]) {
+        [self.delegate menuViewMark];
+    }
 }
 -(void)showAnimation:(BOOL)animation
 {

@@ -54,8 +54,9 @@
     
     [self.window makeKeyAndVisible];
     
-    [[NSUserDefaults standardUserDefaults] setValue:@"1" forKey:@"whether_read"];
-    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"other"];
+    // 状态栏字体颜色
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     
     return YES;
 }

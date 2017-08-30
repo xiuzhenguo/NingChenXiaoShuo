@@ -13,6 +13,8 @@
 #import "NCWriteHelper.h"
 #import "ZhengWenListModel.h"
 #import "ZWDetailModel.h"
+#import "AwardsZhengWenModel.h"
+#import "AwardsListModel.h"
 
 @interface TADetailViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -20,6 +22,7 @@
 @property (nonatomic, strong) TAWanJieHeaderView *headerView;
 @property (strong, nonatomic) NCWriteHelper *helper;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *awardsArray;
 
 @end
 
@@ -52,6 +55,7 @@
     [self setUpTableViewUI];
     
     [self getZhengWenDetailData];
+    [self getHuoJiangZhengWenData];
 }
 
 #pragma mark - 创建TableView
@@ -80,16 +84,18 @@
 
 -(void) clickRuleButton {
     TARuleViewController *vc = [[TARuleViewController alloc] init];
+    vc.ficId = self.ficID;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - UITableViewViewDelegate
 // 每个分区cell的个数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return self.awardsArray.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    AwardsZhengWenModel *model = self.awardsArray[section];
+    return model.SolicitationBookPrizeList.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -103,7 +109,14 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    AwardsZhengWenModel *list = self.awardsArray[indexPath.section];
+    AwardsListModel *model = list.SolicitationBookPrizeList[indexPath.row];
+    
     cell.nameLab.font = [UIFont boldSystemFontOfSize:15];
+    [cell.imgView sd_setImageWithURL:[NSURL URLWithString:model.FictionImage] placeholderImage:[UIImage imageNamed:@"卡片"]];
+    cell.nameLab.text = model.FictionName;
+    cell.writerLab.text = [NSString stringWithFormat:@"by: %@",model.AuthorName];
+    cell.hotNumLab.text = [NSString stringWithFormat:@"%ld",model.ClickCount];
     
     return cell;
 }
@@ -124,10 +137,9 @@
     UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, 3, 16)];
     lab.backgroundColor = BXColor(236,105,65);
     [backView addSubview:lab];
-    
-    NSArray *rankArray = @[@"一等奖",@"二等奖",@"三等奖"];
+    AwardsZhengWenModel *model = self.awardsArray[section];
     UILabel *rankLab = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab.frame)+15, 0, 240, 45.5)];
-    rankLab.text = rankArray[section];
+    rankLab.text = model.LevelName;
     rankLab.font = [UIFont systemFontOfSize:17];
     rankLab.textColor = BXColor(40,40,40);
     [backView addSubview:rankLab];
@@ -204,6 +216,39 @@
         [self.tableView.mj_header endRefreshing];
         [self.view showFailedViewReloadBlock:^{
             [self getZhengWenDetailData];
+            [self getHuoJiangZhengWenData];
+        }];
+    }];
+}
+
+-(void)getHuoJiangZhengWenData {
+    
+    [self.view showHudWithActivity:@"正在加载"];
+    [self.helper AwardsNovelWithSolicitationId:self.ficID success:^(NSArray *response) {
+        st_dispatch_async_main(^{
+            self.awardsArray = [[NSMutableArray alloc] init];
+            for (int i=0; i<response.count; i++) {
+                AwardsZhengWenModel *model = [AwardsZhengWenModel mj_objectWithKeyValues:response[i]];
+                
+                [self.awardsArray addObject:model];
+            }
+            
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            [self.tableView reloadData];
+            
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.tableView.mj_header endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            [self getZhengWenDetailData];
+            [self getHuoJiangZhengWenData];
         }];
     }];
 }

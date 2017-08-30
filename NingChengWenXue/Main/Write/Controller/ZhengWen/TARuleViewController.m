@@ -8,16 +8,29 @@
 
 #import "TARuleViewController.h"
 #import "TARuleTableViewCell.h"
-#import "ViewModel.h"
+#import "ZhengWenListModel.h"
+#import "NCWriteHelper.h"
+#import "TARuleHeadView.h"
+#import "AwardsZhengWenModel.h"
 
 @interface TARuleViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *footerView;
+@property (nonatomic, strong) TARuleHeadView *headerView;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NCWriteHelper *helper;
 
 @end
 
 @implementation TARuleViewController
+
+-(NCWriteHelper *)helper{
+    if (!_helper) {
+        _helper = [NCWriteHelper helper];
+    }
+    return _helper;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -36,6 +49,8 @@
     [self setUpNavButtonUI];
     
     [self setUpTableViewUI];
+    
+    [self getZhengWenGuiZeData];
 }
 
 #pragma mark - 创建TableView
@@ -49,17 +64,24 @@
     
     [self.tableView registerClass:[TARuleTableViewCell class] forCellReuseIdentifier:@"cell"];
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 130)];
-    imgView.image = [UIImage imageNamed:@"上首页_3"];
-    self.tableView.tableHeaderView = imgView;
-    
-    [self setUpTableFooterViewUI];
+}
+
+#pragma mark - 创建tableView 头视图
+-(void) setUpTableHeaderViewUI {
+    self.headerView = [[TARuleHeadView alloc] init];
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    self.headerView.viewModel = model;
+    self.headerView.frame = CGRectMake(0, 0, BXScreenW, self.headerView.height);
+    self.headerView.backgroundColor = [UIColor whiteColor];
+    self.tableView.tableHeaderView = self.headerView;
+
 }
 
 #pragma mark - UITableViewViewDelegate
 // 每个分区cell的个数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    return model.SolicitationConfigList.count;
 }
 
 #pragma mark - tableViewCell设置
@@ -69,46 +91,14 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    ViewModel *model = [[ViewModel alloc] init];
-    cell.viewModel = model;
+    ZhengWenListModel *model = self.dataArray.firstObject;
+    AwardsZhengWenModel *list = model.SolicitationConfigList[indexPath.row];
+    
+    cell.viewModel = list;
     
     tableView.rowHeight = cell.height;
     
     return cell;
-}
-
-#pragma mark - 创建tableView尾视图
-- (void) setUpTableFooterViewUI {
-    self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 110)];
-    self.footerView.backgroundColor = [UIColor whiteColor];
-    
-    UILabel *shuLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 14, 3, 16)];
-    shuLab.backgroundColor = BXColor(236,105,65);
-    [self.footerView addSubview:shuLab];
-    
-    UILabel *nameLab = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(shuLab.frame)+5, 0, 200, 43.5)];
-    nameLab.font = [UIFont boldSystemFontOfSize:16];
-    nameLab.textColor = BXColor(40, 40, 40);
-    nameLab.text = @"征文时间";
-    [self.footerView addSubview:nameLab];
-    
-    UILabel *lineLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 43.5, BXScreenW, 0.5)];
-    lineLab.backgroundColor = BXColor(242, 242, 242);
-    [self.footerView addSubview:lineLab];
-    
-    UILabel *tougaoLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 59, BXScreenW, 15)];
-    tougaoLab.font = THIRDFont;
-    tougaoLab.textColor = BXColor(40, 40, 40);
-    tougaoLab.text = @"投稿时间：2017.2.3-2023.4.32";
-    [self.footerView addSubview:tougaoLab];
-    
-    UILabel *pingxuanLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 79, BXScreenW, 15)];
-    pingxuanLab.font = THIRDFont;
-    pingxuanLab.textColor = BXColor(40, 40, 40);
-    pingxuanLab.text = @"评选时间：2017.2.3-2023.4.32（遇节假日顺延）";
-    [self.footerView addSubview:pingxuanLab];
-    
-    self.tableView.tableFooterView = self.footerView;
 }
 
 #pragma mark - 设置导航栏按钮
@@ -145,5 +135,37 @@
     
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+#pragma mark - 数据获取
+-(void) getZhengWenGuiZeData {
+    [self.view showHudWithActivity:@"正在加载"];
+    [self.helper callForPapersGuizeWithID:self.ficId success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            
+            self.dataArray = [[NSMutableArray alloc] init];
+    
+            ZhengWenListModel *model = [ZhengWenListModel mj_objectWithKeyValues:response];
+            
+            [self.dataArray addObject:model];
+        
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            [self setUpTableHeaderViewUI];
+            [self.tableView reloadData];
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.tableView.mj_header endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            [self getZhengWenGuiZeData];
+        }];
+    }];
+}
+
 
 @end

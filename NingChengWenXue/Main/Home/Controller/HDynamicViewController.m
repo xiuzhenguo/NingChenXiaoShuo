@@ -15,6 +15,7 @@
 #import "WriterDynModel.h"
 #import "DynFictionModel.h"
 #import "NovelDetailViewController.h"
+#import "HReadPageViewController.h"
 
 @interface HDynamicViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -109,6 +110,12 @@
         NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
         vc.bookId = model.FictionId;
         [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        HReadPageViewController *vc = [[HReadPageViewController alloc] init];
+        vc.bookId = model.FictionId;
+        vc.secID = model.FictionSectionId;
+        vc.pushType = 2;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -116,7 +123,7 @@
 -(void) setUpTableFootViewUI {
     UIButton *footBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 44)];
     footBtn.backgroundColor = [UIColor whiteColor];
-    [footBtn setTitle:@"全部作品 》" forState:UIControlStateNormal];
+    [footBtn setTitle:@"全部动态 》" forState:UIControlStateNormal];
     footBtn.titleLabel.font = FIFFont;
     [footBtn setTitleColor:BXColor(101,101,101) forState:UIControlStateNormal];
     [self.tableFootView addSubview:footBtn];

@@ -371,7 +371,7 @@
 
 #pragma mark - 右侧完成按钮的点击事件
 -(void) clickRightButton {
-    if (self.typeID == -10000000000000) {
+    if (self.typeID < 0) {
         [SVProgressHUD showErrorWithStatus:@"请选择官方标签"];
         return;
     }
@@ -402,7 +402,7 @@
 
 #pragma mark - 新建作品的分类
 -(void) clickRightButtonOne {
-    if (self.typeID == -10000000000000) {
+    if (self.typeID < 0) {
         [SVProgressHUD showErrorWithStatus:@"请选择官方标签"];
         return;
     }

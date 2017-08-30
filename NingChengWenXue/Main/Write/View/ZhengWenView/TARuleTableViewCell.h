@@ -7,19 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewModel.h"
+#import "AwardsZhengWenModel.h"
 
 @interface TARuleTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) ViewModel *viewModel;
+@property (nonatomic, strong) AwardsZhengWenModel *viewModel;
 @property (nonatomic, assign) CGFloat height;
 
-@property (nonatomic, strong) UILabel *titleLab;
-@property (nonatomic, strong) UILabel *typeLab;
-@property (nonatomic, strong) UIImageView *typeImg;
+@property (nonatomic, strong) UILabel *shuLab;
+@property (nonatomic, strong) UILabel *nameLab;
 @property (nonatomic, strong) UILabel *contentLab;
-@property (nonatomic, strong) UILabel *timeLab;
-@property (nonatomic, strong) UILabel *guizeLab;
 @property (nonatomic, strong) UILabel *lineLab;
+@property (nonatomic, strong) UILabel *lineView;
 
 @end

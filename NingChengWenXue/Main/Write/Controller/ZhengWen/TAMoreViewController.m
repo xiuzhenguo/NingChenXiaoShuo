@@ -144,6 +144,7 @@
 
 #pragma mark - 人气榜数据获取
 -(void) getPopularityRankListData {
+    [self.view showHudWithActivity:@"正在加载"];
     [self.helper callForPapersListWithSolicitationId:self.ficID PageIndex:[NSString stringWithFormat:@"%ld",self.pagenum] success:^(NSArray *response) {
         st_dispatch_async_main(^{
             if (self.pagenum == 1) {

@@ -7,8 +7,6 @@
 //
 
 #import "CommunityViewController.h"
-#import "HDynamicViewController.h"
-#import "MLSearchViewController.h"
 
 @interface CommunityViewController ()<UIGestureRecognizerDelegate,UINavigationControllerDelegate,UIGestureRecognizerDelegate>
 

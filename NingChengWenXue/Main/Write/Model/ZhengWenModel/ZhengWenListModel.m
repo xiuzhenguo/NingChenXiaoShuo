@@ -12,7 +12,8 @@
 
 + (NSDictionary *)objectClassInArray{
     return @{
-             @"FictionList" : @"ZWDetailModel"
+             @"FictionList" : @"ZWDetailModel",
+             @"SolicitationConfigList":@"AwardsZhengWenModel"
              };
 }
 

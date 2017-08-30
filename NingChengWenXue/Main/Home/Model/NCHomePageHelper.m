@@ -425,6 +425,26 @@
     }];
 }
 
+#pragma mark - 小说章节内容的获取
+- (void)getNovelContentWithSectionId:(NSString *)sectionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"sectionId":sectionId,@"userId":userId};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/fiction/section/content",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"小说章节内容%@",task.currentRequest.URL);
+        }else{
+            faild(@"",nil);
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
 #pragma mark - 全部书评列表的获取
 - (void)allNovelPinglunListWithFictionId:(NSString *)fictionId UserId:(NSString *)userId Flag:(NSString *)flag PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild{
     NSDictionary *parameters = @{@"fictionId":fictionId,@"flag":flag,@"userId":userId,@"pageIndex":pageIndex};

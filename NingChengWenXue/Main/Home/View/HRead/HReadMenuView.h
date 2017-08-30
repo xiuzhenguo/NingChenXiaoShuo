@@ -14,7 +14,7 @@
 @protocol LSYMenuViewDelegate <NSObject>
 @optional
 
--(void)menuViewMark:(LSYTopMenuView *)topMenu;
+-(void)menuViewMark;
 
 @end
 

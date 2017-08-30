@@ -10,4 +10,6 @@
 
 @interface TARuleViewController : UIViewController
 
+@property (nonatomic, strong) NSString *ficId;
+
 @end

@@ -42,6 +42,7 @@
     [appearance setTitleTextAttributes:att];
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
 }
 
 

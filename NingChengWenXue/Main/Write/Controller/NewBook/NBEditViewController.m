@@ -261,7 +261,7 @@
         
     }else if (indexPath.section == 3) {
         
-        NSString *CellIdentifier = [NSString stringWithFormat:@"cell%ld%ld",indexPath.section,indexPath.row];
+        NSString *CellIdentifier = [NSString stringWithFormat:@"cell%ld%ld",(long)indexPath.section,indexPath.row];
          NBEditSecTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (!cell) {
             cell = [[NBEditSecTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
@@ -352,12 +352,12 @@
     __weak typeof(self)weakSelf = self;
     [weakSelf.rowView setFinishButtonTitle:^(NSString *title){
         
-        if ([title isEqualToString:@"1000"]) {
+        if ([title isEqualToString:@"1000"]) {// 立即发布
             NSLog(@"%@",model.SectionId);
             [weakSelf pushNovelSectionData:model.SectionId Model:model];
         }else if ([title isEqualToString:@"1003"]){
             [weakSelf removeNovelSection:model.SectionId Index:sender.tag - 1000];
-        }else if ([title isEqualToString:@"1001"]){
+        }else if ([title isEqualToString:@"1001"]){// 定时发布
             DateTimePickerView *pickerView = [[DateTimePickerView alloc] init];
             pickerView.delegate = self;
             pickerView.model = model;

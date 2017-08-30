@@ -30,7 +30,7 @@
         
 //        imageview.frame = CGRectMake(0, 0 ,frame.size.width*57.0f/375.0f
 //                                     , frame.size.width*57.0f/375.0f);
-        imageview.frame = CGRectMake(0, 0, BXScreenW-200, BXScreenH-200);
+        imageview.frame = CGRectMake(0, 0, BXScreenW-250, BXScreenH-250);
         imageview.center = CGPointMake(self.frame.size.width/2.0f, self.frame.size.height/2.0f-100);
         [self addSubview:imageview];
         

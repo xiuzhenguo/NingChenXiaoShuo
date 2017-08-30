@@ -303,6 +303,7 @@
 
 #pragma mark - 投稿作品的获取
 -(void) getCanTouGaoData {
+    [self.view showHudWithActivity:@"正在加载"];
     [self.helper canTouNovelWithSolicitationId:self.ficStr UserId:kUserID success:^(NSArray *response) {
         st_dispatch_async_main(^{
             

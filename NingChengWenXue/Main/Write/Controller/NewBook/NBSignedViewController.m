@@ -22,6 +22,9 @@
 @property (strong, nonatomic) NCWriteHelper *helper;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) UIButton *applyBtn;
+@property (nonatomic, strong) UIButton *errorBtn;
+@property (nonatomic, strong) UIButton *detailBtn;
+@property (nonatomic, strong) UIButton *rightBtn;
 
 @end
 
@@ -192,6 +195,7 @@
     leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
+    
 }
 
 #pragma mark - 返回按钮的实现方法
@@ -270,6 +274,7 @@
     [btn setTitle:model.ResultMsg forState:UIControlStateNormal];
     [btn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
     [self.headerView addSubview:btn];
+    _errorBtn = btn;
     
     UIButton *errorBtn = [[UIButton alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(btn.frame)+10, BXScreenW - 30, 15)];
     errorBtn.titleLabel.font = THIRDFont;
@@ -277,6 +282,9 @@
     [errorBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
     [errorBtn addTarget:self action:@selector(clickErrorDetailButton) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView addSubview:errorBtn];
+    _detailBtn = errorBtn;
+    
+    [self errorNavButton];
 }
 
 #pragma mark - 签约失败详情按钮的点击事件
@@ -292,6 +300,8 @@
         st_dispatch_async_main(^{
             [SVProgressHUD showSuccessWithStatus:@"申请成功"];
             [self.applyBtn removeFromSuperview];
+            self.rightBtn.hidden = YES;
+            [self.rightBtn removeFromSuperview];
             [self getSignTiaoJianData];
         });
         
@@ -299,6 +309,27 @@
     } faild:^(NSString *response, NSError *error) {
         [SVProgressHUD showErrorWithStatus:@"申请失败"];
     }];
+}
+
+#pragma mark - 申请失败后重新申请按钮设置
+-(void) errorNavButton {
+    self.rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightBtn.frame = CGRectMake(0, 0, 80, 30);
+    [self.rightBtn setTitle:@"重新申请" forState:UIControlStateNormal];
+    [self.rightBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
+    self.rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    self.rightBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [self.rightBtn addTarget:self action:@selector(clickRightButton) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:self.rightBtn];
+    self.navigationItem.rightBarButtonItem = item1;
+}
+
+#pragma mark - 重新申请按钮的点击方法
+-(void)clickRightButton{
+    [_errorBtn removeFromSuperview];
+    [_detailBtn removeFromSuperview];
+    [self clickQianYUeButton];
 }
 
 @end

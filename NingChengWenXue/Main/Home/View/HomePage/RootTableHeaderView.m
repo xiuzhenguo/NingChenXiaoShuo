@@ -31,7 +31,7 @@
     [self addSubview:title];
     _titleLab = title;
     
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(260, 0, BXScreenW - 275, 50)];
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(200, 0, BXScreenW - 205, 50)];
     btn.titleLabel.font = FIFFont;
     [self addSubview:btn];
     [btn setTitleColor:BXColor(152, 152, 152) forState:UIControlStateNormal];

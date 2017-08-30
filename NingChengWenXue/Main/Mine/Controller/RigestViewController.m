@@ -106,7 +106,7 @@ static NSString * Get_ID_Key = @"getregistid";
     [self.rootScrollView addSubview:self.phonenumField];
     
     // 短信验证码
-    self.codeField = [[UITextField alloc] initWithFrame:CGRectMake(55, 106, BXScreenW - 170, 52)];
+    self.codeField = [[UITextField alloc] initWithFrame:CGRectMake(55, 106, BXScreenW - 210, 52)];
     self.codeField.placeholder = @"请输入短信验证码";
     self.codeField.textColor = The_Prompt_Color_Nine;
     [self.rootScrollView addSubview:self.codeField];
@@ -124,7 +124,7 @@ static NSString * Get_ID_Key = @"getregistid";
     [self.rootScrollView addSubview:self.surePassWordField];
     
     // 获取验证码按钮
-    self.codeButton = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 156, 53, 136, 54)];
+    self.codeButton = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 156, 106, 136, 54)];
     [self.codeButton setTitleColor:BXColor(251, 80, 0) forState:UIControlStateNormal];
     [self.codeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
     self.codeButton.titleLabel.font = [UIFont systemFontOfSize:14];

@@ -169,4 +169,10 @@
  */
 -(void)tuiChuCallForPapersWithID:(NSString *)Id SolicitationId:(NSString *)solicitationId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+/**
+ *  征文规则
+ *
+ */
+-(void)callForPapersGuizeWithID:(NSString *)Id success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
 @end

@@ -12,6 +12,7 @@
 #import "NCHomePageHelper.h"
 #import "SearchModel.h"
 #import "SearchListModel.h"
+#import "HAuthorsViewController.h"
 
 #define PYSEARCH_SEARCH_HISTORY_CACHE_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MLSearchhistories.plist"] // 搜索历史存储路径
 
@@ -162,8 +163,11 @@
 
 #pragma mark - 头视图的点击方法
 -(void)btnCli:(UIButton*)sender{
-    
-    NSLog(@"当前点击的是第%ld部小说",sender.tag - 10);
+
+    SearchListModel *model = self.userArray[sender.tag - 10];
+    HAuthorsViewController *vc = [[HAuthorsViewController alloc] init];
+    vc.autherID = model.UserId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
