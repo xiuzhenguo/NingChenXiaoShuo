@@ -34,7 +34,7 @@
     self.label = label;
     
     // logo
-    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"作者头像"]];
+    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"WechatIMG1"]];
     logo.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:logo];
     self.logo = logo;

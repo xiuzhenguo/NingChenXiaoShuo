@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "TYAttributedLabel.h"
+#import "TReaderManager.h"
 
 @interface NovelConCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) TYAttributedLabel *label;
+@property (nonatomic, strong) TYAttributedLabel *contentLab;
 
-//@property (nonatomic, strong) UILabel *titleLab;
+@property (nonatomic, strong) UILabel *titleLab;
 
 //@property (nonatomic, assign) NSInteger row;
 

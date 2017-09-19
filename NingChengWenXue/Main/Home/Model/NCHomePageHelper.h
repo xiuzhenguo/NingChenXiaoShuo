@@ -145,6 +145,12 @@
 -(void)getNovelContentWithSectionId:(NSString *)sectionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 /**
+ *  记录阅读章节
+ *
+ */
+-(void)RecordsNovelSectionWithFictionId:(NSString *)fictionId SectionId:(NSString *)sectionId UserId:(NSString *)userId TextLength:(NSString *)textLength success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
  *  小说章节书评列表的数据获取
  *
  */

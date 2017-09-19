@@ -20,6 +20,7 @@
 #import "NovelDatailModel.h"
 #import "BookKeysModel.h"
 #import "MuLuListModel.h"
+#import "CeshiViewController.h"
 
 @interface NovelDetailViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate>
 
@@ -142,7 +143,7 @@
     }else if (indexPath.row == 1) {
         CatalogueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell2" forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.catNumLab.text = [NSString stringWithFormat:@"连载至%ld章",model.SectionIndex];
+        cell.catNumLab.text = [NSString stringWithFormat:@"连载至%ld章",model.SerialNumber];
         tableView.rowHeight = 44;
         return cell;
     }else{
@@ -333,7 +334,7 @@
             self.dataArray = [[NSMutableArray alloc] init];
             
             MuLuListModel *model = [MuLuListModel mj_objectWithKeyValues:response];
-            HReadPageViewController *vc = [[HReadPageViewController alloc] init];
+            CeshiViewController *vc = [[CeshiViewController alloc] init];
             vc.bookId = model.FictionId;
             vc.secID = model.SectionId;
             vc.SectionName = model.Title;

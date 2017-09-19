@@ -276,7 +276,7 @@
                 
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoginStateKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
+                [weakSelf.delegate logindelegate:model.datas];
                 [self.navigationController popViewControllerAnimated:YES];
                 
             }else{
@@ -303,7 +303,7 @@
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoginStateKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
-                
+                [weakSelf.delegate logindelegate:model.datas];
                 
                 [self.navigationController popViewControllerAnimated:YES];
                 

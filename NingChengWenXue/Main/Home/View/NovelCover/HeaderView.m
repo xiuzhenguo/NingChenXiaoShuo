@@ -30,10 +30,12 @@
     self.typeLab.text = model.BookStatusName;
     
     self.writorLab.text = [NSString stringWithFormat:@"%@（%@）",model.AuthorName,model.UUID];
-    
-    self.rankLab.text = [NSString stringWithFormat:@"Lv%ld",model.Lv];
+    [self.writorLab sizeToFit];
     
     self.readLab.text = [NSString stringWithFormat:@"%ld阅读/%ld文字/%@",model.Reader,model.Character,model.UpdateTime];
+    
+    self.rankLab.text = [NSString stringWithFormat:@"Lv%ld",model.Lv];
+    self.rankLab.frame = CGRectMake(CGRectGetMaxX(self.writorLab.frame) + 20, CGRectGetMaxY(self.readLab.frame)+22, 32, 15);
     
     self.dainjiLab.text = [NSString stringWithFormat:@"%ld",model.Click];
     self.shoucangLab.text = [NSString stringWithFormat:@"%ld",model.Collect];

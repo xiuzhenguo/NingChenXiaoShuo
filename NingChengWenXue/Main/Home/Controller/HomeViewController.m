@@ -149,6 +149,7 @@
 {
 
     self.pageNum = 1;
+    [self.headLine stop];
     [self getSearchNovelData];
     // 系统消息的获取
     [self getSysmessageDate];

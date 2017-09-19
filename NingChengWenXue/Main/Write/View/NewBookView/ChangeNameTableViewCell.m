@@ -52,7 +52,7 @@
     
     self.img.frame = CGRectMake(15, 7, 20, 30);
     self.tectfield.frame = CGRectMake(CGRectGetMaxX(self.img.frame)+5, 0, BXScreenW - 120, 44);
-    self.btn.frame = CGRectMake(BXScreenW - 60, 10, 45, 24);
+    self.btn.frame = CGRectMake(BXScreenW - 70, 10, 45, 24);
     self.lineLab.frame = CGRectMake(0, 43.5, BXScreenW, 0.5);
 }
 

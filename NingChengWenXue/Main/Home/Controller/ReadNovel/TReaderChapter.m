@@ -80,7 +80,24 @@
     
     // 以上是 test data  ，应该按照你的方式解析文本 然后生成_attString 就可以了
     _attString = [textContainer createAttributedString];
+    
+//    NSMutableParagraphStyle *paraStyle01 = [[NSMutableParagraphStyle alloc] init];
+//    NSUInteger fontsize = [TReaderManager fontSize];
+//    paraStyle01.headIndent = 0.0f;//行首缩进
+//    paraStyle01.lineSpacing = 0;
+//    paraStyle01.tailIndent = 0.0f;
+//    
+//    NSDictionary *attributeDic = @{
+//                                   NSFontAttributeName : [UIFont systemFontOfSize:fontsize-1],
+//                                   
+//                                   NSParagraphStyleAttributeName : paraStyle01,
+//                                   
+//                                   NSForegroundColorAttributeName : BXColor(92,66,69)
+//                                   
+//                                   };
     _pageRangeArray = [_attString pageRangeArrayWithConstrainedToSize:_renderSize];
+    
+    
     
 }
 

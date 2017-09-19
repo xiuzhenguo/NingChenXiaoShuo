@@ -111,6 +111,19 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+#pragma mark - 左滑删除
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        [self clickDeleteButton:indexPath.row];
+    }
+}
+
+#pragma mark - 修改左滑的按钮的字
+-(NSString*)tableView:(UITableView*)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath*)indexpath {
+    return @"删除";
+}
+
 #pragma mark - 书架数据的获取
 -(void) getBookRackListData {
     NSString *ID  = @"";
@@ -159,5 +172,39 @@
         }];
     }];
 }
+
+#pragma mark - 删除书架书功能
+-(void) clickDeleteButton:(NSInteger )row {
+    BookShelfModel *model = self.dataArray[row];
+    [self.view showHudWithActivity:@""];
+    [self.helper removeBookShelfWithFictionId:model.FictionId UserId:kUserID success:^(NSDictionary *response) {
+        
+        st_dispatch_async_main(^{
+            [self.view hideHubWithActivity];
+            [SVProgressHUD showSuccessWithStatus:@"删除成功"];
+            [self.dataArray removeObject:model];
+            if (self.dataArray.count == 0) {
+                [self.emptyView removeFromSuperview];
+                self.emptyView = [[EmptyDataView alloc]initWithFrame:self.view.bounds title:@"没有数据" actionTitle:nil];
+                [self.tableView addSubview:self.emptyView];
+            }
+            [self.view hideHubWithActivity];
+            [self.view hidEmptyDataView];
+            [self.view hidFailedView];
+            [self.tableView reloadData];
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [self.view hideHubWithActivity];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        [self.view showFailedViewReloadBlock:^{
+            
+            [self getBookRackListData];
+        }];
+    }];
+}
+
 
 @end

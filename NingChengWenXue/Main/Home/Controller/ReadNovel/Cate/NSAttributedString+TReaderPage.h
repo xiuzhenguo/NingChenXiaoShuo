@@ -13,4 +13,5 @@
 // 根据渲染图文大小分页，返回range数组
 - (NSArray *)pageRangeArrayWithConstrainedToSize:(CGSize)size;
 
+
 @end

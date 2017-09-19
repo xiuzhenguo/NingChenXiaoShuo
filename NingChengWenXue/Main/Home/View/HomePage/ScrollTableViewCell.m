@@ -45,7 +45,7 @@
         
             BookKeysModel *model = nameArray[i];
             NSString *avatarUrlStr = model.FictionImage;
-            [_classBtn sd_setImageWithURL:[NSURL URLWithString:avatarUrlStr] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"大主宰"]];
+            [_classBtn sd_setImageWithURL:[NSURL URLWithString:avatarUrlStr] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"默认书"]];
 
             _classLab.text = model.FictionName;
             

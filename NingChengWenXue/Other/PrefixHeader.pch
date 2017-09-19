@@ -36,6 +36,7 @@
 #import "EmptyDataView.h"
 #import "NovelDetailViewController.h"
 #import "LoginViewController.h"
+#import "NavLineImage.h"
 
 
 #endif
@@ -76,7 +77,7 @@
 #define kLoadingImage       [UIImage imageNamed:@""]
 
 // 服务器地址
-#define kBaseURL @"http://192.168.199.177:8100/"//正式服务器
+#define kBaseURL @"http://118.190.60.67:8100/"//正式服务器
 
 //富文本编辑 图片标识
 #define RICHTEXT_IMAGE (@"[UIImageView]")
@@ -84,6 +85,7 @@
 // Key
 #define kLoginStateKey @"LoginStateKey_CU"
 #define KServiceAccount @"kUserAccount"
+#define FONT_SIZE_KEY @"FONT_SIZE"
 
 //用户登录状态
 #define kUserLogin [[NSUserDefaults standardUserDefaults] boolForKey:kLoginStateKey]

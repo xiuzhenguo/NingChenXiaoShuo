@@ -67,5 +67,22 @@
     }];
 }
 
+#pragma mark - 移除书架
+-(void)removeBookShelfWithFictionId:(NSString *)fictionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *para = @{@"fictionId":fictionId,@"userId":userId};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/bookrack/readlog/remove",kBaseURL];
+    
+    [self.manager POST:netPath parameters:para progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+            return;
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        //        faild("")
+    }];
+}
 
 @end

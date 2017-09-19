@@ -56,7 +56,8 @@
     
     // 状态栏字体颜色
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KServiceAccount];
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLoginStateKey];
     
     return YES;
 }

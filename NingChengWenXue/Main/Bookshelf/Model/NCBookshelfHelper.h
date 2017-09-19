@@ -30,6 +30,11 @@
  */
 -(void)removeNovelWithFictionId:(NSString *)fictionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock) faild;
 
-
+/**
+ *  移除书架小说
+ *
+ *
+ */
+-(void)removeBookShelfWithFictionId:(NSString *)fictionId UserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock) faild;
 
 @end

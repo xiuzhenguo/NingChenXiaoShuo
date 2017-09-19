@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SectionListModel.h"
 
 @interface PreviewSecViewController : UIViewController
 
 @property (nonatomic, strong) NSString *sectionID;
+
+@property (nonatomic, strong) SectionListModel *sectionModel;
+
+@property (nonatomic, assign) NSInteger loadType;
 
 @end

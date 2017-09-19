@@ -15,6 +15,7 @@
 #import "NBXieXieFontView.h"
 #import "NCWriteHelper.h"
 #import "SectionListModel.h"
+#import "PreviewSecViewController.h"
 
 //Image default max size，图片显示的最大宽度
 #define IMAGE_MAX_SIZE (100)
@@ -219,7 +220,7 @@
     //设置初始内容
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = self.lineSapce;// 字体的行间距
-     paragraphStyle.firstLineHeadIndent = 30.f;    /**首行缩进宽度*/
+     paragraphStyle.firstLineHeadIndent = self.font*2;    /**首行缩进宽度*/
     UIColor *textColor;
     if (self.typeInt != 2 && [self.textView.text isEqualToString:@"编辑章节内容"]) {
         textColor = [UIColor whiteColor];
@@ -376,13 +377,15 @@
     self.leftBtn.frame = CGRectMake(0, 0, 80, 30);
     [self.leftBtn setImage:[UIImage imageNamed:@"返回-1"] forState:UIControlStateNormal];
     
-    NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    NSString *str3 = [self.textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    NSString *strlength = [str3 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *strleng = [strlength stringByReplacingOccurrencesOfString:@"\u3000\u3000" withString:@""];
     
     NSString *strlengh = @"";
     if (self.typeInt != 2 && [self.textView.text isEqualToString:@"编辑章节内容"]) {
         strlengh = [NSString stringWithFormat:@"0字"];
     }else{
-        strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+        strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)strleng.length];
         
     }
     
@@ -469,8 +472,10 @@
         }
         self.btnInt = self.btnInt + 1;
         NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        NSString *strlength = [str3 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        NSString *strleng = [strlength stringByReplacingOccurrencesOfString:@"\u3000\u3000" withString:@""];
         
-        NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+        NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)strleng.length];
         [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
         
     }
@@ -489,8 +494,11 @@
         }
         
         NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        NSString *strlength = [str3 stringByReplacingOccurrencesOfString:@" " withString:@""];
         
-        NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+        NSString *strleng = [strlength stringByReplacingOccurrencesOfString:@"\u3000\u3000" withString:@""];
+        
+        NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)strleng.length];
         self.cishu = self.cishu + 1;
         [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
     }
@@ -499,14 +507,25 @@
 
 #pragma mark - 右侧完成按钮的点击事件
 -(void) clickRightButton:(UIButton *)btn {
-    if (btn.tag == 1001) {
-        self.textView.text = @"fwehehfuwehfuwheufwe";
-    }else if (btn.tag == 1002){
+    if (btn.tag == 1001) {// 预览章节
+        NSDictionary *dic = @{@"SectionName":self.textField.text,@"SectionContent":self.textView.text};
+        SectionListModel *model = [SectionListModel mj_objectWithKeyValues:dic];
+        PreviewSecViewController *vc = [[PreviewSecViewController alloc] init];
+        vc.sectionModel = model;
+        vc.loadType = 1;
+        [self.view showHudWithActivity:@""];
+        int64_t delayInSeconds = 1;      // 延迟的时间
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self.view hideHubWithActivity];
+            [self.navigationController pushViewController:vc animated:YES];
+        });
+    }else if (btn.tag == 1002){// 改变字体大小
         self.fontView = [[NBXieXieFontView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH)];
         [self.view addSubview:self.fontView];
         [self.fontView.addFontBtn addTarget:self action:@selector(clickAddFontButton) forControlEvents:UIControlEventTouchUpInside];
         [self.fontView.subFontBtn addTarget:self action:@selector(clickSubFontButton) forControlEvents:UIControlEventTouchUpInside];
-    }else{
+    }else{// 上传章节
 //        [self uploadData:[_textView.attributedText getPlainString] withImageArray:[_textView.attributedText getImgaeArray]];
         if (self.typeInt != 2) {
             [self createNovelSectionContent];
@@ -574,10 +593,16 @@
 #pragma mark - textView的代理方法
 - (void)textViewDidChange:(UITextView *)textView
 {
-    NSString *str3 = [textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     
-    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+    NSString *str3 = [textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    NSLog(@"%ld",str3.length);
+    NSString *strlength = [str3 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *strleng = [strlength stringByReplacingOccurrencesOfString:@"\u3000\u3000" withString:@""];
+    
+    NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)strleng.length];
     [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
+
+    
 }
 
 
@@ -589,6 +614,7 @@
 
 #pragma mark - 获取章节内容
 -(void) getNovelSectionContentData {
+    [self.view showHudWithActivity:@"正在加载"];
     [self.helper PreviewNovelSectionWithSectionid:self.sectionID success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             self.dataArray = [[NSMutableArray alloc] init];
@@ -601,12 +627,15 @@
             [self.view hidFailedView];
 
             self.textField.text = model.SectionName;
-            self.content = model.SectionContent;
+            self.content = [model.SectionContent stringByReplacingOccurrencesOfString:@"\u3000\u3000" withString:@""];
             [self setRichTextViewContent:self.content];
             [self.houtuiArray addObject:model.SectionContent];
             
             NSString *str3 = [_textView.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-            NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)str3.length];
+            NSString *strlength = [str3 stringByReplacingOccurrencesOfString:@" " withString:@""];
+            NSString *strleng = [strlength stringByReplacingOccurrencesOfString:@"\u3000\u3000" withString:@""];
+            NSString *strlengh = [NSString stringWithFormat:@"%lu字",(unsigned long)strleng.length];
+            
             [self.leftBtn setTitle:strlengh forState:UIControlStateNormal];
         });
         
@@ -629,8 +658,9 @@
         [SVProgressHUD showErrorWithStatus:@"请填写章节内容"];
         return;
     }
-    
-    [self.helper createNewNovelSectionWithFictionId:self.ficID Title:self.textField.text Content:self.textView.text Remark:@"" success:^(NSDictionary *response) {
+    NSString *content = [NSString stringWithFormat:@"\u3000\u3000%@",self.textView.text];
+    NSString *conStr = [content stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\u3000\u3000"];
+    [self.helper createNewNovelSectionWithFictionId:self.ficID Title:self.textField.text Content:conStr Remark:@"" success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             
             ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
@@ -659,8 +689,9 @@
         [SVProgressHUD showErrorWithStatus:@"请填写章节内容"];
         return;
     }
-    
-    [self.helper changeNovelSectionContentWithFictionId:self.ficID SectionId:self.sectionID Title:self.textField.text Content:self.textView.text Remark:@"" success:^(NSDictionary *response) {
+    NSString *content = [NSString stringWithFormat:@"\u3000\u3000%@",self.textView.text];
+    NSString *conStr = [content stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\u3000\u3000"];
+    [self.helper changeNovelSectionContentWithFictionId:self.ficID SectionId:self.sectionID Title:self.textField.text Content:conStr Remark:@"" success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             
             ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];

@@ -118,7 +118,7 @@
     
     BookListModel *listmodel = self.dataArray[indexPath.section];
     BookKeysModel *model = listmodel.FictionList[indexPath.item];
-    [cell.imgView sd_setImageWithURL:[NSURL URLWithString:model.FictionImage] placeholderImage:[UIImage imageNamed:@"上首页_5"]];
+    [cell.imgView sd_setImageWithURL:[NSURL URLWithString:model.FictionImage] placeholderImage:[UIImage imageNamed:@"默认书"]];
     cell.nameLab.text = model.FictionName;
     
     return cell;

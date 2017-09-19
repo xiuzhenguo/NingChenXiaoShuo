@@ -124,7 +124,7 @@
 
 - (void)setModel:(WriterDetailModel *)model{
     _model = model;
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.AuthotImage] placeholderImage:[UIImage imageNamed:@"作者"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.AuthotImage] placeholderImage:[UIImage imageNamed:@"默认书"]];
     self.nameLab.text = model.AuthorName;
     self.rankLab.text = [NSString stringWithFormat:@"Lv%ld",(long)model.lv];
     self.IDLab.text = [NSString stringWithFormat:@"(UUID:%@)",model.UUID];

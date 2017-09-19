@@ -43,6 +43,10 @@
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1];
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;//不设置为黑色背景
+    UIImage *colorImage = [NavLineImage imageWithColor:[UIColor clearColor] size:CGSizeMake(BXScreenW, 0.5)];
+    [self.navigationController.navigationBar setBackgroundImage:colorImage forBarMetrics:UIBarMetricsDefault];
+    
+    [self.navigationController.navigationBar setShadowImage:[NavLineImage imageWithColor:BXColor(195, 195, 195) size:CGSizeMake(BXScreenW, 0.5)]];
 }
 
 - (void)viewDidLoad {

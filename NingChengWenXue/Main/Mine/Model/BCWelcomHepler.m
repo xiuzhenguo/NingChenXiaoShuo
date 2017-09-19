@@ -227,4 +227,80 @@
     }];
 }
 
+#pragma mark - 个人资料的获取
+- (void)minePersonInformationWithUserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/mine/home/Personal",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"个人资料%@",task.currentRequest.URL);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 收件人集合
+- (void)getReceivePersonListWithUserId:(NSString *)userId PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"pageIndex":pageIndex};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/messsage/find/users",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"shoujianren集合%@",task.currentRequest.URL);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 写信息、回复信息
+- (void)wirteMessageWithUserId:(NSString *)userId ReceiveId:(NSString *)receiveId ReceiveName:(NSString *)receiveName MsgGene:(NSString *)msgGene Title:(NSString *)title Content:(NSString *)content success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"receiveId":receiveId,@"receiveName":receiveName,@"msgGener":msgGene,@"title":title,@"content":content};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/messsage/user/send",kBaseURL];
+    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 发件箱详情
+- (void)sendMessageDetailWithMsgId:(NSString *)msgId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"msgId":msgId};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/messsage/outbox/info",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"发件箱详情%@",task.currentRequest.URL);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
 @end

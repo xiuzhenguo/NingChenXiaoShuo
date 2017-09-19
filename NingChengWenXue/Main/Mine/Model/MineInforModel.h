@@ -22,4 +22,24 @@
 
 @property (nonatomic, assign) NSInteger UserAttentionCount;
 
+@property (nonatomic, strong) NSString *UUID;
+
+@property (nonatomic, strong) NSString *UserPhone;
+
+@property (nonatomic, assign) NSInteger MMPoint;
+
+@property (nonatomic, assign) NSInteger UUPoint;
+
+@property (nonatomic, assign) NSInteger Lv;
+
+@property (nonatomic, assign) NSInteger UserCardCount;
+
+@property (nonatomic, assign) NSInteger UserMedalCount;
+
+@property (nonatomic, assign) NSInteger UserEnergy;
+
+@property (nonatomic, strong) NSString *UserMartial;
+
+@property (nonatomic, strong) NSString *UserAddress;
+
 @end

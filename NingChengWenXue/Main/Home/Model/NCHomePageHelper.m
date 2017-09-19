@@ -445,6 +445,26 @@
     }];
 }
 
+#pragma mark - 记录阅读章节
+-(void)RecordsNovelSectionWithFictionId:(NSString *)fictionId SectionId:(NSString *)sectionId UserId:(NSString *)userId TextLength:(NSString *)textLength success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+
+    NSDictionary *parameters = @{@"fictionId":fictionId,@"sectionId":sectionId,@"userId":userId,@"textLength":textLength};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/author/fiction/position",kBaseURL];
+    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+        }else{
+            faild(@"",nil);
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
 #pragma mark - 全部书评列表的获取
 - (void)allNovelPinglunListWithFictionId:(NSString *)fictionId UserId:(NSString *)userId Flag:(NSString *)flag PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild{
     NSDictionary *parameters = @{@"fictionId":fictionId,@"flag":flag,@"userId":userId,@"pageIndex":pageIndex};

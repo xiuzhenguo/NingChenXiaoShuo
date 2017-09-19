@@ -72,7 +72,7 @@
 //        [self.delegate menuViewMark:topMenu];
 //    }
 //}
-#pragma mark -
+#pragma mark - tag手势代理
 -(void)hiddenSelf
 {
 //    [self hiddenAnimation:YES];
@@ -80,6 +80,8 @@
         [self.delegate menuViewMark];
     }
 }
+
+#pragma mark - 显示上下视图
 -(void)showAnimation:(BOOL)animation
 {
     self.hidden = NO;
@@ -94,6 +96,8 @@
     }];
     
 }
+
+#pragma mark - 隐藏上下出现的视图
 -(void)hiddenAnimation:(BOOL)animation
 {
     [UIView animateWithDuration:animation?AnimationDelay:0 animations:^{

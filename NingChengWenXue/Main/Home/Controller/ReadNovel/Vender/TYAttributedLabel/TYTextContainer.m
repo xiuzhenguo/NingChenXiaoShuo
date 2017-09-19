@@ -99,7 +99,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     _font = [UIFont systemFontOfSize:15];
     _characterSpacing = 1;
-    _linesSpacing = 2;
+    _linesSpacing = 5;
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;

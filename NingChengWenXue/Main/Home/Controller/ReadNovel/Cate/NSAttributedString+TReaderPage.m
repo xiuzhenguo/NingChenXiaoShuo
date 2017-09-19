@@ -25,7 +25,7 @@
         NSUInteger length = MIN(600, attributedString.length - rangeIndex);
         NSAttributedString * childString = [attributedString attributedSubstringFromRange:NSMakeRange(rangeIndex, length)];
         CTFramesetterRef childFramesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef) childString);
-        UIBezierPath * bezierPath = [UIBezierPath bezierPathWithRect:rect];
+        UIBezierPath * bezierPath = [UIBezierPath bezierPathWithRect:rect];// 画矩形
         CTFrameRef frame = CTFramesetterCreateFrame(childFramesetter, CFRangeMake(0, 0), bezierPath.CGPath, NULL);
         
         CFRange range = CTFrameGetVisibleStringRange(frame);

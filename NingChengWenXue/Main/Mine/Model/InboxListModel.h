@@ -26,4 +26,8 @@
 
 @property (nonatomic, assign) NSInteger MessageGener;
 
+@property (nonatomic, strong) NSString *SendTime;
+
+@property (nonatomic, strong) NSString *RecevieUserName;
+
 @end

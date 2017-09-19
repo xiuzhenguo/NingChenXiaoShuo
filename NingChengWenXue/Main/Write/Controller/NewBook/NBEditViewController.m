@@ -12,7 +12,7 @@
 #import "SectionListModel.h"
 #import "NBRightItemView.h"
 #import "NBEditPhoneView.h"
-#import "HReadPageViewController.h"
+#import "NovelDetailViewController.h"
 #import "NBTableViewRowView.h"
 #import "NBIntruViewController.h"
 #import "NBSignedViewController.h"
@@ -365,6 +365,10 @@
             pickerView.pickerViewMode = DatePickerViewDateTimeMode;
             [self.view.window addSubview:pickerView];
             [pickerView showDateTimePickerView];
+        }else{
+            PreviewSecViewController *vc = [[PreviewSecViewController alloc] init];
+            vc.sectionID = model.SectionId;
+            [self.navigationController pushViewController:vc animated:YES];
         }
     }];
 }
@@ -501,8 +505,15 @@
 -(void) clickButton:(UIButton *)sender {
     [self.rightItemView removeFromSuperview];
     if (sender.tag == 1000) {
-        HReadPageViewController *vc = [[HReadPageViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
+        NewBookListModel *model = self.messageArray.firstObject;
+        if (model.IsPublish == true) {
+            NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
+            vc.bookId = self.bookID;
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [SVProgressHUD showErrorWithStatus:@"作品还未公开,暂时不能阅读"];
+            return;
+        }
     }else if (sender.tag == 1001){
         // 签约
         NBSignedViewController *vc = [[NBSignedViewController alloc] init];
@@ -701,12 +712,14 @@
 -(void)removeNovelSection:(NSString *)secID Index:(NSInteger )index {
     NewBookModel *model = self.dataArray.firstObject;
     SectionListModel *list = model.SectionItem[index];
+
     [self.helper removeNovelSectionWithFictionId:self.bookID SectionId:secID success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             [SVProgressHUD showSuccessWithStatus:@"删除成功"];
             NSMutableArray *arr = [[NSMutableArray alloc] init];
             arr = [model.SectionItem mutableCopy];
             [arr removeObjectAtIndex:index];
+            [self.listArray removeObjectAtIndex:index];
             model.SectionItem = [arr copy];
             if (list.SectionStatus == 2) {
                 model.Count = model.Count - 1;

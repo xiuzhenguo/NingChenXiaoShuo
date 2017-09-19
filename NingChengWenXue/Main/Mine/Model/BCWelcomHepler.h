@@ -90,4 +90,30 @@
  */
 -(void)sendMessageBoxListWithUserId:(NSString *)userId PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+/**
+ *  个人资料
+ *
+ */
+-(void)minePersonInformationWithUserId:(NSString *)userId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  收件人集合
+ *
+ */
+-(void)getReceivePersonListWithUserId:(NSString *)userId PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  写信息、回复信息
+ *
+ */
+-(void)wirteMessageWithUserId:(NSString *)userId ReceiveId:(NSString *)receiveId ReceiveName:(NSString *)receiveName MsgGene:(NSString *)msgGene Title:(NSString *)title Content:(NSString *)content success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  发件箱详情
+ *
+ */
+-(void)sendMessageDetailWithMsgId:(NSString *)msgId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+
+
 @end

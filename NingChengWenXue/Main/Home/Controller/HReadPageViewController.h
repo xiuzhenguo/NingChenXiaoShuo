@@ -24,5 +24,4 @@
 @property (nonatomic, strong) NSMutableArray *novelArray;
 @property (nonatomic, assign) NSInteger loadType;
 
-
 @end

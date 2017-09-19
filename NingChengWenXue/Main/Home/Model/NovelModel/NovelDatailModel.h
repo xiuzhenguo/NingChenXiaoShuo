@@ -48,6 +48,8 @@
 
 @property (nonatomic, assign) NSInteger EvalauteIndex;
 
+@property (nonatomic, assign) NSInteger SerialNumber;
+
 @property (nonatomic, strong) NSString *BookStatusName;
 
 @property (nonatomic, assign) NSInteger FictionClassID;

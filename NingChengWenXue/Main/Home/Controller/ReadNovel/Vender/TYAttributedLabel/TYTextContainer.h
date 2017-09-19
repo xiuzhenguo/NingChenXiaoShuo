@@ -14,6 +14,7 @@
 #import "TYDrawStorage.h"
 #import "TYImageStorage.h"
 #import "TYViewStorage.h"
+#import "TReaderManager.h"
 
 @interface TYTextContainer : NSObject
 

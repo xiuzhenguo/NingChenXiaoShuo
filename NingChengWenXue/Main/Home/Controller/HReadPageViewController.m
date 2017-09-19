@@ -42,6 +42,8 @@
 @property (nonatomic, assign) CGSize renderSize;    // 渲染大小
 @property (nonatomic, assign) NSInteger curPage;    // 当前页数
 @property (nonatomic, strong) UILabel *titleLab;
+@property (nonatomic, strong) NSString *sectionId;
+@property (nonatomic, weak) UIActivityIndicatorView *indicatorView;
 
 @end
 
@@ -64,7 +66,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = BXColor(240,226,226);
     
     self.navigationController.delegate = self;
     [self setUpCollectionViewUI];
@@ -79,6 +81,7 @@
     // 上方标题
     self.titleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, BXScreenW, 20)];
     self.titleLab.font = THIRDFont;
+    self.titleLab.backgroundColor = BXColor(240,226,226);
     self.titleLab.textColor = BXColor(152, 152, 152);
     //        headLab.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLab];
@@ -89,6 +92,7 @@
         tap;
     })];
     
+       
     self.collectionView.mj_header = [MJDIYHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     
     self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadNextMoreData)];
@@ -112,15 +116,18 @@
     self.flowLayout=[[UICollectionViewFlowLayout alloc]init];
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.flowLayout.minimumLineSpacing = 0;
+//    self.flowLayout.itemSize = CGSizeMake(BXScreenW, BXScreenH - 40);
     
     self.collectionView=[[UICollectionView alloc]initWithFrame:self.view.bounds collectionViewLayout:self.flowLayout];
     self.collectionView.delegate=self;
     self.collectionView.dataSource=self;
     _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
+//    self.collectionView.pagingEnabled = YES;
+//    self.collectionView.bounces = NO;
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.collectionView];
-    self.collectionView.frame=CGRectMake(0, 40, BXScreenW, BXScreenH-50);
+    self.collectionView.frame=CGRectMake(0, 40, BXScreenW, BXScreenH-40);
     self.flowLayout.itemSize = self.collectionView.bounds.size;
     
     [_collectionView registerClass:[NovelConCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
@@ -143,34 +150,41 @@
     
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(BXScreenW, BXScreenH - 40);
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NovelConCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    cell.backgroundColor = BXColor(240,226,226);
     
-//    cell.titleLab.text = self.sectionArray[]
-    cell.label.attributedText = self.dataArray[indexPath.section][indexPath.row];
-//    [cell getNovelRow:indexPath.row Title:self.sectionArray[indexPath.section] Content:self.dataArray[indexPath.section][indexPath.row]];
-
+    cell.contentLab.attributedText = self.dataArray[indexPath.section][indexPath.row];
+    
     return cell;
 }
 
 #pragma mark - 确定是当前内容的章节
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-
-    int64_t delayInSeconds = 0.2;      // 延迟的时间
-    /*
-     *@parameter 1,时间参照，从此刻开始计时
-     *@parameter 2,延时多久，此处为秒级，还有纳秒等。10ull * NSEC_PER_MSEC
-     */
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        // do something
-        
-        self.titleLab.text = self.sectionArray[indexPath.section];
-    });
     self.SectionIndex = indexPath.section;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSInteger page = scrollView.contentOffset.y / scrollView.frame.size.height;
+    
+    for (int i = 0; i < self.novelArray.count; i++) {
+        _chapter.chapterContent = self.novelArray[i];
+        [_chapter parseChapter];
+        if (page < _chapter.totalPage) {
+            self.titleLab.text = self.sectionArray[i];
+            return;
+        }
+        page = page - _chapter.totalPage;
+    }
+    
+
+}
 
 //#pragma mark - 分区头设置
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -179,7 +193,7 @@
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
         ReadHeadCollectionReusableView *header=[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"headerCell" forIndexPath:indexPath];
-        header.backgroundColor = [UIColor whiteColor];
+        header.backgroundColor = BXColor(240,226,226);
         header.titleLab.text = self.sectionArray[indexPath.section];
         
         
@@ -193,7 +207,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return (CGSize){BXScreenW,40};
+    return (CGSize){BXScreenW,0};
 }
 
 #pragma mark - 添加菜单栏
@@ -316,6 +330,7 @@
 
 #pragma mark - 返回按钮点击事件
 -(void)clickBackButton{
+//    [self jiluNovelSectonList];
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     if (self.pushType ==1) {//从动态列表页面直接跳阅读页
@@ -345,7 +360,11 @@
 #pragma mark - 章节内容的获取
 -(void) getNovelContentData{
     [self.view showHudWithActivity:@"正在加载"];
-    [self.helper getNovelContentWithSectionId:self.secID UserId:kUserID success:^(NSDictionary *response) {
+    NSString *userId = @"00000000-0000-0000-0000-000000000000";
+    if (kUserLogin == YES) {
+        userId = kUserID;
+    }
+    [self.helper getNovelContentWithSectionId:self.secID UserId:userId success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             
             [self.view hideHubWithActivity];
@@ -355,10 +374,11 @@
             MuLuListModel *model = [MuLuListModel mj_objectWithKeyValues:response];
             [self.novelArray addObject:model.Content];
             [self.sectionArray addObject:model.Title];
-
+            self.titleLab.text = model.Title;
             self.preID = model.Pre;
             self.nextID = model.Next;
-        
+            self.sectionId = model.SectionId;
+            
             [self getBookChapter:1 Model:model];
             [self.collectionView.mj_footer endRefreshing];
             [self.collectionView.mj_header endRefreshing];
@@ -393,7 +413,11 @@
         return;
     }
     [self.view showHudWithActivity:@"正在加载"];
-    [self.helper getNovelContentWithSectionId:self.nextID UserId:kUserID success:^(NSDictionary *response) {
+    NSString *userId = @"00000000-0000-0000-0000-000000000000";
+    if (kUserLogin == YES) {
+        userId = kUserID;
+    }
+    [self.helper getNovelContentWithSectionId:self.nextID UserId:userId success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             
             [self.view hideHubWithActivity];
@@ -405,6 +429,7 @@
             [self.sectionArray addObject:model.Title];
             [self.secIDArray addObject:model.SectionId];
             self.nextID = model.Next;
+            self.sectionId = model.SectionId;
             
             [self getBookChapter:1 Model:model];
             [self.collectionView.mj_footer endRefreshing];
@@ -432,7 +457,11 @@
         return;
     }
     [self.view showHudWithActivity:@"正在加载"];
-    [self.helper getNovelContentWithSectionId:self.preID UserId:kUserID success:^(NSDictionary *response) {
+    NSString *userId = @"00000000-0000-0000-0000-000000000000";
+    if (kUserLogin == YES) {
+        userId = kUserID;
+    }
+    [self.helper getNovelContentWithSectionId:self.preID UserId:userId success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             
             [self.view hideHubWithActivity];
@@ -444,6 +473,7 @@
             [self.sectionArray insertObject:model.Title atIndex:0];
             [self.secIDArray insertObject:model.SectionId atIndex:0];
             self.preID = model.Pre;
+            self.sectionId = model.SectionId;
             
             [self getBookChapter:1 Model:model];
             [self.collectionView.mj_footer endRefreshing];
@@ -477,7 +507,7 @@
 
 - (CGRect)renderFrameWithFrame:(CGRect)frame
 {
-    return CGRectMake(15, 0, CGRectGetWidth(frame)-30, CGRectGetHeight(frame));
+    return CGRectMake(15, 0, CGRectGetWidth(frame) - 20, CGRectGetHeight(frame));
 }
 
 - (CGSize)renderSizeWithFrame:(CGRect)frame
@@ -556,6 +586,16 @@
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
+
+//-(void)jiluNovelSectonList{
+//    [self.helper RecordsNovelSectionWithFictionId:self.bookId SectionId:self.sectionId UserId:kUserID TextLength:@"0" success:^(NSDictionary *response) {
+//        
+//        NSLog(@"234567");
+//        
+//    } faild:^(NSString *response, NSError *error) {
+//        
+//    }];
+//}
 
 
 @end

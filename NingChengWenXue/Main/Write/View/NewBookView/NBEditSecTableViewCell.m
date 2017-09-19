@@ -58,7 +58,7 @@
         view.frame = CGRectZero;
     }
     
-    self.imgbtn.frame = CGRectMake(BXScreenW - 90, 12, 90, 30);
+    self.imgbtn.frame = CGRectMake(BXScreenW - 100, 12, 90, 30);
     self.imgbtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     self.imgbtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     

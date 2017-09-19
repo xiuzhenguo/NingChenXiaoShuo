@@ -7,10 +7,10 @@
 //
 
 #define READER_THEME_KEY @"READERTHEME"
+#define FONT_SIZE 17
 #define FONT_SIZE_KEY @"FONT_SIZE"
-#define FONT_SIZE 16
 
-#define MAX_FONT_SIZE 20
+#define MAX_FONT_SIZE 21
 #define MIN_FONT_SIZE 15
 
 #define MARK_TEXT_LENGTH 120
