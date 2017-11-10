@@ -19,7 +19,7 @@
 #import "UnionHomeModel.h"
 #import "UnionModel.h"
 
-@interface HSchUniViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
+@interface HSchUniViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate, CreateSchoolUnionDelegate, SchoolUnionFaildReasonDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *rightBtn;
@@ -66,8 +66,18 @@
     [self setUpMyClubsButton];
     
     [self getDataList];
+    
+    self.tableView.mj_header = [MJDIYHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
 }
 
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    [self getDataList];
+    
+}
 #pragma mark - 添加我的社团按钮
 -(void) setUpMyClubsButton {
     self.clubBtn = [[UIButton alloc] initWithFrame:CGRectMake(BXScreenW - 70, BXScreenH - 64 - 190, 60, 60)];
@@ -111,7 +121,7 @@
     self.tableView.showsVerticalScrollIndicator = NO;
     [self.tableView registerClass:[HSchUniTableViewCell class] forCellReuseIdentifier:@"cell"];
     // 头视图
-    self.tableHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 242)];
+    self.tableHeadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 274)];
     self.tableHeadView.backgroundColor = BXColor(242,242,242);
     self.tableView.tableHeaderView = self.tableHeadView;
     // 添加轮播图
@@ -123,7 +133,7 @@
 #pragma mark - tableView头视图--轮播图设置
 - (void) setUpTableHeaderScrollViewUI {
     NSArray *imageNames = @[@"上首页_1",@"上首页_2",@"上首页_3",@"上首页_4",@"上首页_5",@"上首页_6"];
-    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 144) shouldInfiniteLoop:YES imageNamesGroup:imageNames];
+    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 176) shouldInfiniteLoop:YES imageNamesGroup:imageNames];
     cycleScrollView.delegate = self;
     cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
     [self.tableHeadView addSubview:cycleScrollView];
@@ -135,7 +145,7 @@
 #pragma mark - 头视图——轮播图下四个按钮设置
 -(void) setUpTableHeadViewButtonUI {
     for (int i = 0; i < 4; i++) {
-        UIButton *typeBtn = [[UIButton alloc] initWithFrame:CGRectMake(i%2*(BXScreenW/2.0), 144+i/2*44, BXScreenW/2.0-0.5, 43.5)];
+        UIButton *typeBtn = [[UIButton alloc] initWithFrame:CGRectMake(i%2*(BXScreenW/2.0), 176+i/2*44, BXScreenW/2.0-0.5, 43.5)];
         typeBtn.backgroundColor = [UIColor whiteColor];
         typeBtn.tag = 1000+i;
         [typeBtn setTitle:self.btnArray[i] forState:UIControlStateNormal];
@@ -151,12 +161,12 @@
             [typeBtn setTitleColor:BXColor(218,143,163) forState:UIControlStateNormal];
         }
         
-        UILabel *HorizontalLab = [[UILabel alloc] initWithFrame:CGRectMake(i%2*(BXScreenW/2.0), 144+i/2*44+43.5, BXScreenW/2.0, 0.5)];
+        UILabel *HorizontalLab = [[UILabel alloc] initWithFrame:CGRectMake(i%2*(BXScreenW/2.0), 176+i/2*44+43.5, BXScreenW/2.0, 0.5)];
         HorizontalLab.backgroundColor = BXColor(195,195,195);
         [self.tableHeadView addSubview:HorizontalLab];
     }
     
-    UILabel *VerticalLab = [[UILabel alloc] initWithFrame:CGRectMake(BXScreenW/2.0-0.5, 144, 0.5, 88)];
+    UILabel *VerticalLab = [[UILabel alloc] initWithFrame:CGRectMake(BXScreenW/2.0-0.5, 176, 0.5, 88)];
     VerticalLab.backgroundColor = BXColor(195,195,195);
     [self.tableHeadView addSubview:VerticalLab];
 }
@@ -266,14 +276,27 @@
     }else{
         
         HCreateClubViewController *vc = [[HCreateClubViewController alloc] init];
+        vc.delegate = self;
         [self.navigationController pushViewController:vc animated:YES];
     }
+}
+
+#pragma mark - 创建社团成功后回调
+- (void)createSchoolUnion{
+    self.createBtn.backgroundColor = BXColor(195,195,195);
+    [self.createBtn setTitle:@"审核中" forState:UIControlStateNormal];
 }
 
 #pragma mark - 查看失败原因
 -(void) clickFaileButton {
     HFaileViewController *vc = [[HFaileViewController alloc] init];
+    vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 查看失败原因后调用
+- (void)SchoolUnionFaildReason{
+    [self getDataList];
 }
 
 #pragma mark - 设置导航栏按钮

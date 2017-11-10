@@ -8,11 +8,13 @@
 
 #import "CommunityViewController.h"
 
-@interface CommunityViewController ()<UIGestureRecognizerDelegate,UINavigationControllerDelegate,UIGestureRecognizerDelegate>
+
+@interface CommunityViewController ()
 
 @end
 
 @implementation CommunityViewController
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];

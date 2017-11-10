@@ -82,7 +82,7 @@
  *  收件箱详情
  *
  */
--(void)receivedMessageBoxDetailWithUserId:(NSString *)userId MsgId:(NSString *)msgId MsgGener:(NSInteger)msgGener success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+-(void)receivedMessageBoxDetailWithUserId:(NSString *)userId MsgId:(NSString *)msgId MsgGener:(NSInteger)msgGener SendId:(NSString *)sendId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 /**
  *  发件箱集合
@@ -114,6 +114,42 @@
  */
 -(void)sendMessageDetailWithMsgId:(NSString *)msgId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+/**
+ *  性别修改
+ *
+ */
+-(void)changeMineSexWithUserId:(NSString *)userId UserSex:(NSString *)userSex success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+/**
+ *  名字修改
+ *
+ */
+-(void)changeMineNameWithUserId:(NSString *)userId UserName:(NSString *)userName success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  个性签名修改
+ *
+ */
+-(void)changeMineSignWithUserId:(NSString *)userId UserSign:(NSString *)userSign success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  生日修改
+ *
+ */
+-(void)changeMineBirthdayWithUserId:(NSString *)userId UserBirthday:(NSString *)userBirthday success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+
+#pragma mark - 商城相关接口
+/**
+ *  商城轮播图
+ *
+ */
+-(void)getLunBoPictureWithSuccess:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+/**
+ *  商城首页商品
+ *
+ */
+-(void)getShopProductListWithType:(NSString *)type PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
 @end

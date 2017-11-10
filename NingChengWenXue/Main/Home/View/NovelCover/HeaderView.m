@@ -63,7 +63,7 @@
     self.typeLab = type;
     // 阅读数、文字、更新
     UILabel *readLable = [[UILabel alloc] initWithFrame:CGRectMake(15, 45, BXScreenW - 30, 15)];
-    readLable.text = @"68463阅读 / 106130文字 / 11小时前更新";
+    readLable.text = @"0阅读 / 0文字 / 0小时前更新";
     readLable.font = THIRDFont;
     readLable.textColor = BXColor(35,35,35);
     [self addSubview:readLable];
@@ -138,12 +138,12 @@
     
     for (int i = 0; i < 3; i++) {
         UILabel *lineLab = [[UILabel alloc] initWithFrame:CGRectMake((BXScreenW/4.0)*(i+1), CGRectGetMaxY(imgView.frame)+15, 1, 30)];
-        lineLab.backgroundColor = BXColor(195, 195, 195);
+        lineLab.backgroundColor = BXColor(242, 242, 242);
         [self addSubview:lineLab];
     }
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(imgView.frame)+55, BXScreenW, 10)];
-    lineView.backgroundColor = BXColor(195, 195, 195);
+    lineView.backgroundColor = BXColor(242, 242, 242);
     [self addSubview:lineView];
     
     self.height = CGRectGetMaxY(imgView.frame)+5+50+10;

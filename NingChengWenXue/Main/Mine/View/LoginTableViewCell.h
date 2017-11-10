@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface LoginTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIButton *inforBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *imgView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLab;
 @property (weak, nonatomic) IBOutlet UILabel *jianjieLab;

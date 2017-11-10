@@ -16,7 +16,7 @@
     if (self) {
         
         self.imgView = [[UIImageView alloc] init];
-        self.imgView.image = [UIImage imageNamed:@"九鼎记"];
+        self.imgView.image = [UIImage imageNamed:@"卡片"];
         [self.contentView addSubview:self.imgView];
         
         self.nameLab = [[UILabel alloc] init];

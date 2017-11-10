@@ -12,7 +12,7 @@
 #import "InboxListModel.h"
 #import "MRecDetailViewController.h"
 
-@interface MReceMesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface MReceMesViewController () <UITableViewDelegate, UITableViewDataSource,ReceiveMessageDelegate>
 
 @property (nonatomic, strong) EmptyDataView *emptyView;
 @property (nonatomic, strong) UITableView *tableView;
@@ -120,7 +120,17 @@
     InboxListModel *model = self.dataArray[indexPath.row];
     vc.msgId = model.Id;
     vc.type = model.MessageGener;
+    vc.row = indexPath.row;
+    vc.sendId = model.SendId;
+    vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 详情页返回代理方法
+- (void)receiveMessageDelegate:(NSInteger)row{
+    InboxListModel *model = self.dataArray[row];
+    model.IsRead = true;
+    [self.tableView reloadData];
 }
 
 #pragma mark - 收件箱集合数据的获取

@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CreateSchoolUnionDelegate <NSObject>
+@optional
+- (void)createSchoolUnion;
+
+@end
+
 @interface HCreateClubViewController : UIViewController
+
+@property (nonatomic, weak) id<CreateSchoolUnionDelegate> delegate;
 
 @end

@@ -195,7 +195,7 @@
             
             [self.dataArray addObject:model];
             
-            if(self.dataArray.count == 0 && self.pagenum == 1){
+            if(model.CommunityIndexList.count == 0 && self.pagenum == 1){
                 [self.emptyView removeFromSuperview];
                 self.emptyView = [[EmptyDataView alloc]initWithFrame:self.view.bounds title:@"没有数据" actionTitle:nil];
                 [self.tableView addSubview:self.emptyView];

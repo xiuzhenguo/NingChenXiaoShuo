@@ -190,8 +190,8 @@
 }
 
 #pragma mark - 收件箱详情
-- (void)receivedMessageBoxDetailWithUserId:(NSString *)userId MsgId:(NSString *)msgId MsgGener:(NSInteger)msgGener success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
-    NSDictionary *parameters = @{@"userId":userId,@"msgId":msgId,@"msgGener":@(msgGener)};
+- (void)receivedMessageBoxDetailWithUserId:(NSString *)userId MsgId:(NSString *)msgId MsgGener:(NSInteger)msgGener SendId:(NSString *)sendId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"msgId":msgId,@"msgGener":@(msgGener),@"sendId":sendId};
     NSString *netPath = [NSString stringWithFormat:@"%@api/messsage/consignee/info",kBaseURL];
     [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
@@ -294,6 +294,103 @@
         if (model.StatusCode == 200) {
             success(model.Result);
             NSLog(@"发件箱详情%@",task.currentRequest.URL);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 性别修改
+- (void)changeMineSexWithUserId:(NSString *)userId UserSex:(NSString *)userSex success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"userSex":userSex};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/mine/home/sex",kBaseURL];
+    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        success(responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 名字修改
+- (void)changeMineNameWithUserId:(NSString *)userId UserName:(NSString *)userName success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"userName":userName};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/mine/home/name",kBaseURL];
+    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        success(responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 个性签名修改
+- (void)changeMineSignWithUserId:(NSString *)userId UserSign:(NSString *)userSign success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"userSign":userSign};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/mine/home/sign",kBaseURL];
+    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 生日修改
+-(void)changeMineBirthdayWithUserId:(NSString *)userId UserBirthday:(NSString *)userBirthday success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"userId":userId,@"userBirthday":userBirthday};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/mine/home/birthday",kBaseURL];
+    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        success(responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+
+#pragma mark - 商城首页轮播图
+-(void)getLunBoPictureWithSuccess:(ResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = [[NSDictionary alloc] init];
+    NSString *netPath = [NSString stringWithFormat:@"%@api/shop/CirFic",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"商城轮播图%@",task.currentRequest.URL);
+        }else{
+            [SVProgressHUD showErrorWithStatus:model.Message];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
+#pragma mark - 商城首页商品
+-(void)getShopProductListWithType:(NSString *)type PageIndex:(NSString *)pageIndex success:(ResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"type":type,@"pageIndex":pageIndex};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/shop/Product",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
+        if (model.StatusCode == 200) {
+            success(model.Result);
+            NSLog(@"商城首页商品%@",task.currentRequest.URL);
         }else{
             [SVProgressHUD showErrorWithStatus:model.Message];
         }

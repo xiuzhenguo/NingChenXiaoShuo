@@ -28,6 +28,8 @@
 #import "MJDIYHeader.h"
 #import "MBProgressHUD.h"
 
+#import "LDImagePicker.h"
+
 #import "CYTabBarController.h"
 #import "UIImageView+WebCache.h"
 #import "UIButton+WebCache.h"
@@ -77,7 +79,7 @@
 #define kLoadingImage       [UIImage imageNamed:@""]
 
 // 服务器地址
-#define kBaseURL @"http://118.190.60.67:8100/"//正式服务器
+#define kBaseURL @"http://www.cpu123.com/"//正式服务器
 
 //富文本编辑 图片标识
 #define RICHTEXT_IMAGE (@"[UIImageView]")
@@ -93,6 +95,11 @@
 #define kUserID [[NSUserDefaults standardUserDefaults] objectForKey:KServiceAccount]
 
 
+// 导航栏高度
+#define kStatusBarHeight [[UIApplication sharedApplication] statusBarFrame].size.height
+#define kNavBarHeight 44.0
+#define kTabBarHeight ([[UIApplication sharedApplication] statusBarFrame].size.height>20?83:49)
+#define kTopHeight (kStatusBarHeight + kNavBarHeight)
 
 
 

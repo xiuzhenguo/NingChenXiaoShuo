@@ -33,7 +33,7 @@
             bookBtn.frame = CGRectMake(15+i*105, 0, 90, 122);
             _scroll.contentSize = CGSizeMake(count*100+100, 90);
             bookBtn.tag = i+10000;
-            //        [bookBtn setBackgroundImage:[UIImage imageNamed:@"上首页_6"] forState:UIControlStateNormal];
+            
             [bookBtn addTarget:self action:@selector(btnCli:) forControlEvents:1<<6];
             [_scroll addSubview: bookBtn];
             _classBtn = bookBtn;
@@ -48,6 +48,7 @@
             [_classBtn sd_setImageWithURL:[NSURL URLWithString:avatarUrlStr] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"默认书"]];
 
             _classLab.text = model.FictionName;
+            _classLab.textAlignment = NSTextAlignmentCenter;
             
         }
         

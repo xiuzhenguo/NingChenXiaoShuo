@@ -219,7 +219,7 @@
         HttpModel *model = [HttpModel mj_objectWithKeyValues:responseObject];
         if (model.StatusCode == 200) {
             success(model.Result);
-//            NSLog(@"热门搜索%@",task.currentRequest.URL);
+            
         }else{
             faild(@"",nil);
         }
@@ -1013,7 +1013,7 @@
 - (void)createCmomunityFaildWithID:(NSString *)ID success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
     NSDictionary *parameters = @{@"id":ID};
     NSString *netPath = [NSString stringWithFormat:@"%@api/community/new/refuse/msg",kBaseURL];
-    [self.manager POST:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         success(responseObject);
         
@@ -1082,5 +1082,20 @@
         faild(nil,nil);
     }];
 }
+
+#pragma mark - 版本判断
+- (void)changeIDWithType:(NSString *)type success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild{
+    NSDictionary *parameters = @{@"type":type};
+    NSString *netPath = [NSString stringWithFormat:@"%@api/Version",kBaseURL];
+    [self.manager GET:netPath parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        success(responseObject);
+        NSLog(@"swdwdwdwd    %@",task.currentRequest.URL);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        faild(nil,nil);
+    }];
+}
+
 
 @end

@@ -403,7 +403,7 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];//设置服务器允许的请求格式内容
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
     //上传图片/文字，只能同POST
-    [manager POST:@"http://118.190.60.67:8100/api/community/new?" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:@"http://www.cpu123.com/api/community/new?" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
         [formData appendPartWithFileData:self.imageData name:@"FileImage" fileName:@"aaa.png" mimeType:@"image/png"];
   
@@ -414,7 +414,8 @@
         NSLog(@"responseObject = %@, task = %@",responseObject,task);
         NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         NSLog(@"obj = %@",obj);
-        
+        [self.delegate createSchoolUnion];
+        [self.navigationController popViewControllerAnimated:YES];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"error = %@",error);

@@ -13,5 +13,7 @@
 @property (copy, nonatomic) NSString *Message;
 @property (copy, nonatomic) NSDictionary *Result;
 @property (copy,nonatomic) NSString *datas;
+@property (nonatomic, strong) NSString *version;
+@property (nonatomic, strong) NSString *url;
 
 @end

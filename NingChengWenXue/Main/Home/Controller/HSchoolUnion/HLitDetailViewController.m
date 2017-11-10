@@ -61,8 +61,16 @@
     // 添加TableView
     [self setUpUITableViewUI];
     
+    self.tableView.mj_header = [MJDIYHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
 }
 
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    [self getCommunityDetailData];
+}
 #pragma mark - 创建UITableView视图
 -(void) setUpUITableViewUI {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH-64)];

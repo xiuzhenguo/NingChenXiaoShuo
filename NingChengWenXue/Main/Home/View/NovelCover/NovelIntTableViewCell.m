@@ -40,7 +40,7 @@
     [self.contentView addSubview:self.moreImg];
     
     self.lineView = [[UIView alloc] init];
-    self.lineView.backgroundColor = BXColor(195, 195, 195);
+    self.lineView.backgroundColor = BXColor(242, 242, 242);
     [self.contentView addSubview:self.lineView];
     
     self.array = @[@"小米",@"小米",@"小米回家吃饭",@"小米",@"小米回",@"小米回家淡淡的",@"小米家不会不会不会还不会吧",@"小米回和版本会不会不好不好不好不会不会不会吧好不不好家你你你您",@"小米家",@"小米",@"小米回家",];

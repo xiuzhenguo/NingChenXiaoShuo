@@ -79,7 +79,7 @@
 
 #pragma mark - 创建TableView
 - (void) setUpTableViewUI{
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH- 64) style:(UITableViewStylePlain)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH - 64) style:(UITableViewStylePlain)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -140,7 +140,7 @@
             }
             if(self.dataArray.count == 0 && self.pageNum == 1){
                 [self.emptyView removeFromSuperview];
-                self.emptyView = [[EmptyDataView alloc]initWithFrame:self.view.bounds title:@"没有数据" actionTitle:nil];
+                self.emptyView = [[EmptyDataView alloc] initWithFrame:self.view.bounds title:@"没有数据" actionTitle:nil];
                 [self.tableView addSubview:self.emptyView];
                 
             }else{
@@ -176,7 +176,7 @@
     [leftBtn addTarget:self action:@selector(leftNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
     
 //    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -197,10 +197,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-//#pragma mark - 离线作品按钮的点击事件的实现
-//-(void)rightNavBtnAction:(UIButton *)sender{
-//    NSLog(@"离线作品");
-//}
+#pragma mark - 离线作品按钮的点击事件的实现
+-(void)rightNavBtnAction:(UIButton *)sender{
+    NSLog(@"离线作品");
+}
 
 
 @end

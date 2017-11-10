@@ -42,6 +42,8 @@
     [self createUILableUI];
     
     [self getFaileReasonData];
+    
+    [self setUpNavButtonUI];
 }
 
 #pragma mark - 创建视图
@@ -77,5 +79,27 @@
     }];
 
 }
+
+#pragma mark - 设置导航栏按钮
+-(void) setUpNavButtonUI {
+    
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftBtn.frame = CGRectMake(0, 0, 100, 30);
+    [leftBtn setImage:[UIImage imageNamed:@"返回"] forState:UIControlStateNormal];
+    [leftBtn addTarget:self action:@selector(leftNavBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    leftBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+    self.navigationItem.leftBarButtonItem = item;
+    
+}
+
+#pragma mark - 返回按钮的实现方法
+-(void)leftNavBtnAction:(UIButton *)btn{
+    
+    [self.delegate SchoolUnionFaildReason];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 @end

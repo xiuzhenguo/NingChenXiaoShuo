@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SchoolUnionFaildReasonDelegate <NSObject>
+@optional
+- (void)SchoolUnionFaildReason;
+
+@end
+
 @interface HFaileViewController : UIViewController
+
+@property (nonatomic, weak) id<SchoolUnionFaildReasonDelegate> delegate;
 
 @end

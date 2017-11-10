@@ -206,11 +206,12 @@
 
 #pragma mark - 添加书评成功后的回调
 - (void)addShupingModel:(ShuPingListModel *)model{
-    if (self.dataArray.count == 0) {
-        [self.emptyView removeFromSuperview];
-    }
-    [self.dataArray insertObject:model atIndex:0];
-    [self.tableView reloadData];
+//    if (self.dataArray.count == 0) {
+//        [self.emptyView removeFromSuperview];
+//    }
+//    [self.dataArray insertObject:model atIndex:0];
+//    [self.tableView reloadData];
+    [self getNovelComListData];
 }
 
 #pragma mark - 设置导航栏按钮

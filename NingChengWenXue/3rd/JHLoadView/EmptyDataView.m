@@ -37,8 +37,6 @@
         [imageview setImage:[UIImage imageNamed:@"no_data_img"]];
         
         
-        
-        
         titleLabel=[[UILabel alloc]init];
         [titleLabel setFrame:CGRectMake(0, self.frame.size.height/2.0f + 100, self.frame.size.width, 20)];
         [titleLabel setTextColor:[UIColor grayColor]];

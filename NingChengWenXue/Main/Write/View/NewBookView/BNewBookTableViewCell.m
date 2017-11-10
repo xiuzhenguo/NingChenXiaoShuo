@@ -77,7 +77,7 @@
     
     // 书的图片
     self.imgView.frame = CGRectMake(15, 15, 139, 88);
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.FictionImage] placeholderImage:[UIImage imageNamed:@"卡片"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.FictionImage] placeholderImage:[UIImage imageNamed:@"默认图片"]];
     
     // 书名字
     self.nameLab.text = viewModel.FictionName;

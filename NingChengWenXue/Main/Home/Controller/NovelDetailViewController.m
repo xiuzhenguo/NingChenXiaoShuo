@@ -20,7 +20,7 @@
 #import "NovelDatailModel.h"
 #import "BookKeysModel.h"
 #import "MuLuListModel.h"
-#import "CeshiViewController.h"
+#import "HReportView.h"
 
 @interface NovelDetailViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate>
 
@@ -36,6 +36,10 @@
 /**网络数据**/
 @property (strong, nonatomic) NCHomePageHelper *helper;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+
+@property (nonatomic, strong) UIView *navView;
+@property (nonatomic, strong) UIButton *rightBtn;
+@property (nonatomic, strong) HReportView *reportView;
 
 @end
 
@@ -54,24 +58,48 @@
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:0];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    if (self.tableView.contentOffset.y > 40) {
+        self.navView.hidden = NO;
+        self.navView.alpha = 0.5;
+        self.rightBtn.hidden = NO;
+    }else{
+        self.navView.alpha = 0.0;
+        self.rightBtn.hidden = YES;
+    }
     
-    [self setUpNavButtonUI];
-     [self getNovelDetailData];
-//    NSLog(@"123456%d",kUserLogin);
+    [self getNovelDetailData];
+
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    CGFloat scrollY = scrollView.contentOffset.y;
+    if (scrollY > 40) {
+        self.navView.hidden = NO;
+        self.navView.alpha = 0.5;
+        self.rightBtn.hidden = NO;
+    }else{
+        self.navView.alpha = 0.0;
+        self.rightBtn.hidden = YES;
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self setUpNavButtonUI];
     // 创建TableView
     [self setRootScrollViewUI];
 //    // 添加底部的三个按钮
 //    [self setUpFootButtonUI];
     
-   
+    self.navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 64)];
+    self.navView.backgroundColor = [UIColor blackColor];
+    self.navView.alpha = 0.0;
+    [self.view addSubview:self.navView];
+    
 }
-
 
 #pragma mark - 创建tableViewUI
 -(void) setRootScrollViewUI {
@@ -217,7 +245,7 @@
     UIView *view = [[UIView alloc] init];
     if (modellist.FictionList.count != 0) {
         view.frame = CGRectMake(0, CGRectGetMaxY(scv.frame), BXScreenW, 20);
-        view.backgroundColor = BXColor(195, 195, 195);
+        view.backgroundColor = BXColor(242, 242, 242);
     }else{
         view.frame = CGRectMake(0, CGRectGetMaxY(likeLab.frame), BXScreenW, 20);
         view.backgroundColor = [UIColor whiteColor];
@@ -248,8 +276,9 @@
 - (void) setUpFootButtonUI {
     NovelDatailModel *model = self.dataArray.firstObject;
     NSString *str = [NSString stringWithFormat:@"%ld",model.PraiseCount];
-    NSArray *imgArray = @[@"形状-10",@"赞"];
-    NSArray *titleArray = @[@"狐仙卡",str];
+//    NSArray *imgArray = @[@"形状-10",@"赞"];
+    NSArray *imgArray = @[@"",@"赞"];
+    NSArray *titleArray = @[@"",str];
     for (int i = 0; i < 2; i++) {
         // 创建自定义按钮
         UIButton *btn_click = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -334,7 +363,7 @@
             self.dataArray = [[NSMutableArray alloc] init];
             
             MuLuListModel *model = [MuLuListModel mj_objectWithKeyValues:response];
-            CeshiViewController *vc = [[CeshiViewController alloc] init];
+            HReadPageViewController *vc = [[HReadPageViewController alloc] init];
             vc.bookId = model.FictionId;
             vc.secID = model.SectionId;
             vc.SectionName = model.Title;
@@ -400,6 +429,34 @@
     leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
+    
+    self.rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightBtn.frame = CGRectMake(0, 0, 80, 30);
+    [self.rightBtn setTitle:@"举报" forState:UIControlStateNormal];
+    [self.rightBtn setTitleColor:BXColor(236,105,65) forState:UIControlStateNormal];
+    self.rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    self.rightBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.rightBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [self.rightBtn addTarget:self action:@selector(clickRightButton) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:self.rightBtn];
+    self.navigationItem.rightBarButtonItem = item1;
+//    self.rightBtn.hidden = YES;
+}
+
+#pragma mark - 举报书籍按钮的点击事件
+-(void)clickRightButton{
+    self.reportView = [[HReportView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH)];
+    
+    [self.view.window addSubview:self.reportView];
+    __weak typeof(self)weakSelf = self;
+    [self.reportView setFinishButtonTitle:^(NSString *title){
+        [weakSelf handleSingleTapGesture];
+        [weakSelf ReportCommentary:title];
+    }];
+    
+}
+- (void)handleSingleTapGesture{
+    [self.reportView removeFromSuperview];
 }
 
 #pragma mark - 返回按钮点击事件
@@ -408,6 +465,28 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+#pragma mark - 举报
+-(void)ReportCommentary:(NSString *)title {
+    if (kUserLogin == NO) {
+        LoginViewController *vc = [[LoginViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    NovelDatailModel *model = self.dataArray.firstObject;
+    [self.helper juBaoWithObjType:@"5" ObjId:model.FictionId ObjClass:title UserId:model.AuthorId OptionId:kUserID success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            [SVProgressHUD showSuccessWithStatus:model.Message];
+            
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"失败"];
+    }];
+}
 
 
 @end

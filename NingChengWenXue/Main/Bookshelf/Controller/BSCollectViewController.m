@@ -70,7 +70,7 @@
 
 #pragma mark - 创建TableView
 - (void) setUpTableViewUI{
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH -  128 - 28 - 54 - 64) style:(UITableViewStylePlain)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenH -  128 - 28 - 54 - 64-63) style:(UITableViewStylePlain)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;

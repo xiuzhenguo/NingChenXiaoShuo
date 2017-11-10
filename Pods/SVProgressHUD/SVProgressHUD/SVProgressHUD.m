@@ -698,7 +698,6 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
     CGContextFillRect(c, rect);
     UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
     return tintedImage;
 }
 

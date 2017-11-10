@@ -32,7 +32,7 @@
 - (void)showFailedViewReloadBlock:(void(^)())reloadBlock
 {
     [self hidFailedView];
-    FailedloadView *failedView = [[FailedloadView alloc]initWithFrame:self.bounds];
+    FailedloadView *failedView = [[FailedloadView alloc] initWithFrame:self.bounds];
     [failedView setTag:FailedTag];
     [failedView setBackgroundColor:[UIColor whiteColor]];
     [failedView setReloadBlock:reloadBlock];
@@ -46,7 +46,7 @@
 - (void)showEmptyDataViewWitlTitle:(NSString *)title actionTitle:(NSString *)actionTitle actionBlock:(void(^)())actionBlock
 {
     
-    EmptyDataView *emptyView = [[EmptyDataView alloc]initWithFrame:self.bounds title:title actionTitle:actionTitle];
+    EmptyDataView *emptyView = [[EmptyDataView alloc] initWithFrame:self.bounds title:title actionTitle:actionTitle];
     [emptyView setBackgroundColor:[UIColor whiteColor]];
     [emptyView setTag:EmptyDataViewTag];
     [emptyView setActionBlock:actionBlock];

@@ -39,6 +39,7 @@
 #import "TuiJianModel.h"
 #import "BookListModel.h"
 #import "BookKeysModel.h"
+#import "AFNetworking.h"
 
 @interface HomeViewController ()<UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, SDCycleScrollViewDelegate ,BFBtnClickDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -99,6 +100,14 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     NSLog(@"%f%f",BXScreenW, BXScreenH);
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    
+    // 当前应用软件版本  比如：1.0.1
+    NSString *appCurVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSLog(@"当前应用软件版本:%@",appCurVersion);
+    
+    [self JudgementAppVersion:appCurVersion];
     
     [self getSearchNovelData];
     // 系统消息的获取
@@ -173,7 +182,7 @@
     self.rootTableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.rootTableView];
     self.rootTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.rootTableView.backgroundColor =BXColor(195, 195, 195);
+    self.rootTableView.backgroundColor =BXColor(242, 242, 242);
     self.rootTableView.estimatedRowHeight = 500;
     
     [self.rootTableView registerClass:[ScrollTableViewCell class] forCellReuseIdentifier:@"thirdcell"];
@@ -186,7 +195,7 @@
 
     self.headView = [[UIView alloc] init];
     self.headView.frame = CGRectMake(0, 0, BXScreenW, 372);
-    self.headView.backgroundColor = BXColor(195, 195, 195);
+    self.headView.backgroundColor = BXColor(242, 242, 242);
     self.rootTableView.tableHeaderView = self.headView;
     
     // 调用按钮
@@ -417,7 +426,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
     UIView *footView = [[UIView alloc] init];
-    footView.backgroundColor = BXColor(195, 195, 195);
+    footView.backgroundColor = BXColor(242, 242, 242);
 
     return footView;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
@@ -476,7 +485,7 @@
     NSLog(@"当前点击的是%ld行id为%zd",indexPathAll.section,BFBtnTag-10000);
     BookListModel *tuijianModel = self.fictionArray[indexPathAll.section];
     BookKeysModel *model = tuijianModel.FictionList[BFBtnTag - 10000];
-    NSLog(@"%@",model.FictionId);
+    
     NovelDetailViewController *vc = [[NovelDetailViewController alloc] init];
     vc.bookId = model.FictionId;
     [self.navigationController pushViewController:vc animated:YES];
@@ -805,7 +814,7 @@
 - (void) setHeadCycleScrollView:(NSMutableArray *)dataArray {
     
     NSArray *groupImgs = [dataArray copy];
-    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 176) delegate:self placeholderImage:[UIImage imageNamed:@"上首页_1"]];
+    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth, 176) delegate:self placeholderImage:[UIImage imageNamed:@"书"]];
     self.cycleScrollView.delegate = self;
     self.cycleScrollView.imageURLStringsGroup = groupImgs;
     self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
@@ -872,5 +881,39 @@
         
     }];
 }
+
+#pragma mark - 版本号判断
+-(void)JudgementAppVersion:(NSString *)version{
+    NSLog(@"dwdewdwedwe   %@",version);
+    
+    [self.helper changeIDWithType:@"ios" success:^(NSDictionary *response) {
+        st_dispatch_async_main(^{
+            ETHttpModel *model = [ETHttpModel mj_objectWithKeyValues:response];
+            if (model.StatusCode == 200 && ![model.url isEqualToString:@"1"]) {
+                if (![model.version isEqualToString:version]) {
+                    UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:@"检测到新版本请到App Store更新新版本" preferredStyle:UIAlertControllerStyleAlert];
+                    __weak typeof(alertControl) wAlert = alertControl;
+                    [wAlert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                        NSString *str = [NSString stringWithFormat:@"https://itunes.apple.com/us/app/id%d",1286579641];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+                    }]];
+                    
+                    [wAlert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+                    
+                    [self presentViewController:wAlert animated:YES completion:nil];
+                    
+                }
+            }
+            
+        });
+        
+        return ;
+    } faild:^(NSString *response, NSError *error) {
+        
+    }];
+    
+   
+}
+
 
 @end

@@ -172,7 +172,7 @@
 -(void)setInitLocation
 {
     self.locationStr=nil;
-    self.locationStr=[[NSMutableAttributedString alloc]initWithAttributedString:self.textView.attributedText];
+    self.locationStr=[[NSMutableAttributedString alloc] initWithAttributedString:self.textView.attributedText];
 }
 
 #pragma mark  设置内容，二次编辑
@@ -204,7 +204,7 @@
     }
     else
     {
-//        NSAssert(NO, @"需要传入字符串");
+        NSAssert(NO, @"需要传入字符串");
         
     }
 }
@@ -414,10 +414,16 @@
     [rightbtn3 addTarget:self action:@selector(clickRightButton:) forControlEvents:UIControlEventTouchUpInside];
     rightbtn3.tag = 1002;
     
+    UIButton *rightbtn4 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 30)];
+    [rightbtn4 setImage:[UIImage imageNamed:@"自动排列"] forState:UIControlStateNormal];
+    [rightbtn4 addTarget:self action:@selector(clickRightButton:) forControlEvents:UIControlEventTouchUpInside];
+    rightbtn4.tag = 1003;
+    
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithCustomView:rightBtn1];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc]initWithCustomView:rightBtn2];
     UIBarButtonItem *item3 = [[UIBarButtonItem alloc] initWithCustomView:rightbtn3];
-    self.navigationItem.rightBarButtonItems = @[item1,item2,item3];
+    UIBarButtonItem *item4 = [[UIBarButtonItem alloc] initWithCustomView:rightbtn4];
+    self.navigationItem.rightBarButtonItems = @[item1,item2,item3,item4];
     
 }
 
@@ -525,6 +531,8 @@
         [self.view addSubview:self.fontView];
         [self.fontView.addFontBtn addTarget:self action:@selector(clickAddFontButton) forControlEvents:UIControlEventTouchUpInside];
         [self.fontView.subFontBtn addTarget:self action:@selector(clickSubFontButton) forControlEvents:UIControlEventTouchUpInside];
+    }else if (btn.tag == 1003){
+        [SVProgressHUD showSuccessWithStatus:@"一键排版完成"];
     }else{// 上传章节
 //        [self uploadData:[_textView.attributedText getPlainString] withImageArray:[_textView.attributedText getImgaeArray]];
         if (self.typeInt != 2) {
@@ -660,6 +668,7 @@
     }
     NSString *content = [NSString stringWithFormat:@"\u3000\u3000%@",self.textView.text];
     NSString *conStr = [content stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\u3000\u3000"];
+    NSLog(@"%@",conStr);
     [self.helper createNewNovelSectionWithFictionId:self.ficID Title:self.textField.text Content:conStr Remark:@"" success:^(NSDictionary *response) {
         st_dispatch_async_main(^{
             

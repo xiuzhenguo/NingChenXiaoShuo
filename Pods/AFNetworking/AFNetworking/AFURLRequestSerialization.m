@@ -805,7 +805,7 @@ NSTimeInterval const kAFUploadStream3GSuggestedDelay = 0.2;
     if ([self.bodyStream isEmpty]) {
         return self.request;
     }
-
+    
     // Reset the initial and final boundaries to ensure correct Content-Length
     [self.bodyStream setInitialAndFinalBoundaries];
     [self.request setHTTPBodyStream:self.bodyStream];

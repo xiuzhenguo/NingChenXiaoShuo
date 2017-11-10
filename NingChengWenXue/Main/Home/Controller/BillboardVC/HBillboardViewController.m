@@ -45,7 +45,7 @@
     
     if (!_leftTableView) {
         
-        _leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 65, BXScreenH-64)];
+        _leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 65, BXScreenH-kTopHeight)];
         _leftTableView.delegate = self;
         _leftTableView.dataSource = self;
         _leftTableView.rowHeight = 44;
@@ -63,7 +63,7 @@
     
     if (!_rightTableView) {
         
-        _rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(65, 0, BXScreenW - 65, BXScreenH-64)];
+        _rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(65, 0, BXScreenW - 65, BXScreenH-kTopHeight)];
         _rightTableView.delegate = self;
         _rightTableView.dataSource = self;
         _rightTableView.separatorStyle = UITableViewCellSeparatorStyleNone;

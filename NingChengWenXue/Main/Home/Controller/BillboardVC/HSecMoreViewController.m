@@ -90,7 +90,7 @@
     self.colletionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.colletionView];
     
-    self.colletionView.frame=CGRectMake(0, 0, BXScreenW, BXScreenH-64);
+    self.colletionView.frame=CGRectMake(0, 0, BXScreenW, BXScreenH-kTopHeight);
     
     //注册cell单元格
     [self.colletionView registerClass:[HSecMoreCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];

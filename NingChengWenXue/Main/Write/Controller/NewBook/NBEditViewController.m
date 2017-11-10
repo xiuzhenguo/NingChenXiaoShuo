@@ -30,7 +30,7 @@
 #import "TABookViewController.h"
 #import "PreviewSecViewController.h"
 
-@interface NBEditViewController ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate, DateTimePickerViewDelegate>
+@interface NBEditViewController ()<UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate, DateTimePickerViewDelegate,LDImagePickerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *imgBtn;
@@ -114,7 +114,7 @@
     [self.tableView registerClass:[SwichTableViewCell class] forCellReuseIdentifier:@"cell3"];
     
     
-    self.imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 177)];
+    self.imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, BXScreenW/3*2)];
     [self.imgBtn setBackgroundImage:[UIImage imageNamed:@"默认图片"] forState:UIControlStateNormal];
     [self.imgBtn addTarget:self action:@selector(clickTitleButton) forControlEvents:UIControlEventTouchUpInside];
     self.tableView.tableHeaderView = self.imgBtn;
@@ -147,30 +147,25 @@
 
 #pragma mark - 调用相册
 - (void)getLocationPhoto{
+    
     [self.titleView removeFromSuperview];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImagePickerController * picker = [[UIImagePickerController alloc]init];
-        picker.delegate = self;
-        picker.allowsEditing = true;
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:picker animated:true completion:nil];
+        //单例工具
+        LDImagePicker *imagePicker = [LDImagePicker sharedInstance];
+        imagePicker.delegate = self;
+        //设置宽高比scale来设置剪切框大小，剪切框宽度固定为屏幕宽度
+        [imagePicker showImagePickerWithType:ImagePickerPhoto   InViewController:self Scale:0.67];
         return;
     }
     [SVProgressHUD showErrorWithStatus:@"相册不可用"];
 }
 
-#pragma mark ----UIImagePickerControllerDelegate-----
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info;{
-    if (![info[UIImagePickerControllerMediaType] isEqualToString:@"public.image"]) {
-        return;
-    }
-    //裁剪后图片
-    UIImage *image = info[UIImagePickerControllerEditedImage];
+- (void)imagePickerDidCancel:(LDImagePicker *)imagePicker{
+}
+- (void)imagePicker:(LDImagePicker *)imagePicker didFinished:(UIImage *)editedImage{
+    NSData *imageData = UIImageJPEGRepresentation(editedImage,1.0);
+    [self changeNovelHeadImage:imageData image:editedImage];
     
-    //先压缩图片
-    NSData *imageData = UIImageJPEGRepresentation(image,0.3);
-    [self changeNovelHeadImage:imageData image:image];
-    [picker dismissViewControllerAnimated:true completion:nil];
 }
 
 
@@ -331,15 +326,8 @@
         vc.sectionID = model.SectionId;
         vc.ficID = self.bookID;
         vc.typeInt = 2;
-        if (model.SectionStatus == 3) {
-            [self.navigationController pushViewController:vc animated:YES];
-        }else if (model.SectionStatus == 2){
-            [SVProgressHUD showErrorWithStatus:@"此章节已发布,不能修改章节内容"];
-            return;
-        }else if (model.SectionStatus == 4){
-            [SVProgressHUD showErrorWithStatus:@"此章节处于待审核状态,不能修改章节内容"];
-            return;
-        }
+        [self.navigationController pushViewController:vc animated:YES];
+        
     }
 }
 
@@ -570,6 +558,7 @@
             [self.view hidEmptyDataView];
             [self.view hidFailedView];
             [self.imgBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:model.FictionImage] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"默认图片"]];
+//            [self.imgBtn sd_setImageWithURL:[NSURL URLWithString:model.FictionImage] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"默认图片"]];
             [self.tableView reloadData];
             [self.tableView.mj_header endRefreshing];
             [self.tableView.mj_footer endRefreshing];
@@ -646,7 +635,7 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];//设置服务器允许的请求格式内容
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
     //上传图片/文字，只能同POST
-    [manager POST:@"http://118.190.60.67:8100/api/writing/fiction/image" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:@"http://www.cpu123.com/api/writing/fiction/image" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
         [formData appendPartWithFileData:imageData name:@"FileImage" fileName:@"aaa.png" mimeType:@"image/png"];
         
@@ -654,7 +643,7 @@
         NSLog(@"uploadProgress = %@",uploadProgress);
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        [self.imgBtn setBackgroundImage:image forState:UIControlStateNormal];
+        [self.imgBtn setImage:image forState:UIControlStateNormal];
         NSLog(@"responseObject = %@, task = %@",responseObject,task);
         NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         NSLog(@"obj = %@",obj);

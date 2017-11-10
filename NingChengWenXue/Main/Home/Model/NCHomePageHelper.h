@@ -350,4 +350,8 @@
  */
 -(void)removeCommunityPersonWithUserId:(NSString *)userId  CommunityId:(NSString *)communityId OptionId:(NSString *)optionId success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
 
+#pragma mark- 版本判断
+-(void)changeIDWithType:(NSString *)type success:(ETResponseBlock)success faild:(ETResponseErrorBlock)faild;
+
+
 @end

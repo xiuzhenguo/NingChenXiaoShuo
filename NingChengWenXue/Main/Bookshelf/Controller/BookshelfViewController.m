@@ -87,7 +87,7 @@
 - (void) setHeadCycleScrollView:(NSMutableArray *)dataArray {
     
     NSArray *groupImgs = [dataArray copy];
-    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 64, kScreenWidth, 113) delegate:self placeholderImage:[UIImage imageNamed:@"上首页_1"]];
+    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 64, kScreenWidth, 176) delegate:self placeholderImage:[UIImage imageNamed:@"书"]];
     cycleScrollView.delegate = self;
     cycleScrollView.imageURLStringsGroup = groupImgs;
     cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
@@ -109,7 +109,7 @@
 #pragma mark - 创建分段控制器
 - (void) createSegmentControl{
     self.segmentControl = [[UISegmentedControl alloc] initWithItems:@[@"书架", @"收藏"]];
-    self.segmentControl.frame = CGRectMake(15, 120+64, BXScreenW - 30, 29);
+    self.segmentControl.frame = CGRectMake(15, 120+63+64, BXScreenW - 30, 29);
     [self.segmentControl addTarget:self action:@selector(segmentControlAction:) forControlEvents:(UIControlEventValueChanged)];
     self.segmentControl.selectedSegmentIndex = 0;
     [self.view addSubview:self.segmentControl];
@@ -127,12 +127,12 @@
 
 #pragma mark - 创建scrollView
 - (void) createScrollView{
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 128+29+64, BXScreenW, BXScreenH - 128 - 28 - 64)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 128+29+64+63, BXScreenW, BXScreenH - 128 - 28 - 64-63)];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.bounces = NO;
     [self.view addSubview:self.scrollView];
     self.scrollView.scrollEnabled = NO;
-    _scrollView.contentSize = CGSizeMake(2 *self.view.width, BXScreenH - 128 - 28 - 64);
+    _scrollView.contentSize = CGSizeMake(2 *self.view.width, BXScreenH - 128 - 28 - 64-63);
     _scrollView.showsHorizontalScrollIndicator = NO;
     
     self.shelfVC = [[ShelfViewController alloc] init];

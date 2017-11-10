@@ -143,6 +143,7 @@
                 <outlet property="fensiLab" destination="Gkc-fI-sb6" id="pUV-8O-xCE"/>
                 <outlet property="guanzhuLab" destination="XV9-Wv-Yxi" id="pvm-jx-xIH"/>
                 <outlet property="imgView" destination="xbA-Ob-KLz" id="HUi-u1-RE7"/>
+                <outlet property="inforBtn" destination="fZt-lw-D9g" id="Hkr-xm-FcB"/>
                 <outlet property="jianjieLab" destination="I8t-mY-5ca" id="O75-Cm-kYl"/>
                 <outlet property="nameLab" destination="eUI-I7-uDc" id="O77-VH-UMG"/>
             </connections>

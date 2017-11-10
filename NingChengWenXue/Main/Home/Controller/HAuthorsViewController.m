@@ -53,7 +53,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = BXColor(195, 195, 195);
+    self.view.backgroundColor = BXColor(242, 242, 242);
     
     
     // 设置返回按钮
@@ -84,9 +84,9 @@
     _hautherView.backgroundColor = [UIColor clearColor];
     [self.headImgView addSubview:_hautherView];
     
-    [_hautherView.cardBtn addTarget:self action:@selector(clickCardButton) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_hautherView.medalBtn addTarget:self action:@selector(cicckMedalButton) forControlEvents:UIControlEventTouchUpInside];
+//    [_hautherView.cardBtn addTarget:self action:@selector(clickCardButton) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    [_hautherView.medalBtn addTarget:self action:@selector(cicckMedalButton) forControlEvents:UIControlEventTouchUpInside];
     
 }
 

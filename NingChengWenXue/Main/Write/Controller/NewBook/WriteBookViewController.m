@@ -16,7 +16,7 @@
 #import "NCWriteHelper.h"
 #import "NBEditViewController.h"
 
-@interface WriteBookViewController ()<UITableViewDelegate, UITableViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, SelectClassfyDelegate, WriteIntrofyDelegate>
+@interface WriteBookViewController ()<UITableViewDelegate, UITableViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, SelectClassfyDelegate, WriteIntrofyDelegate,LDImagePickerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headView;
@@ -82,7 +82,7 @@
     [self.tableView registerClass:[WriteBookTableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[WriteNovelTableViewCell class] forCellReuseIdentifier:@"cell1"];
     
-    self.headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, 220)];
+    self.headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BXScreenW, (BXScreenW - 82)/3*2+40)];
     self.tableView.tableHeaderView = self.headView;
     
     [self setUpTableHeadViewUI];
@@ -108,7 +108,7 @@
     lab.text = @"请添加一张封面图（750x500）";
     [self.headView addSubview:lab];
     
-    self.imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(41, 15, BXScreenW - 82, 182)];
+    self.imgBtn = [[UIButton alloc] initWithFrame:CGRectMake(41, 15, BXScreenW - 82, (BXScreenW - 82)/3*2)];
     [self.imgBtn addTarget:self action:@selector(clickTitleButton) forControlEvents:UIControlEventTouchUpInside];
     [self.headView addSubview:self.imgBtn];
     CAShapeLayer *border = [CAShapeLayer layer];
@@ -157,30 +157,26 @@
 - (void)getLocationPhoto{
     [self.titleView removeFromSuperview];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImagePickerController * picker = [[UIImagePickerController alloc]init];
-        picker.delegate = self;
-        picker.allowsEditing = true;
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        [self presentViewController:picker animated:true completion:nil];
+        //单例工具
+        LDImagePicker *imagePicker = [LDImagePicker sharedInstance];
+        imagePicker.delegate = self;
+        //设置宽高比scale来设置剪切框大小，剪切框宽度固定为屏幕宽度
+        [imagePicker showImagePickerWithType:ImagePickerPhoto   InViewController:self Scale:0.67];
+        return;
         return;
     }
     [SVProgressHUD showErrorWithStatus:@"相册不可用"];
 }
 
 #pragma mark ----UIImagePickerControllerDelegate-----
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info;{
-    if (![info[UIImagePickerControllerMediaType] isEqualToString:@"public.image"]) {
-        return;
-    }
-    //裁剪后图片
-    UIImage *image = info[UIImagePickerControllerEditedImage];
-    
+
+- (void)imagePickerDidCancel:(LDImagePicker *)imagePicker{
+}
+- (void)imagePicker:(LDImagePicker *)imagePicker didFinished:(UIImage *)editedImage{
     //先压缩图片
-    NSData *imageData = UIImageJPEGRepresentation(image,0.3);
+    NSData *imageData = UIImageJPEGRepresentation(editedImage,0.3);
     self.imageData = imageData;
-    [self.imgBtn setBackgroundImage:image forState:UIControlStateNormal];
-    
-    [picker dismissViewControllerAnimated:true completion:nil];
+    [self.imgBtn setBackgroundImage:editedImage forState:UIControlStateNormal];
 }
 
 #pragma mark - UITableViewViewDelegate
@@ -336,7 +332,7 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/json", @"text/javascript,multipart/form-data", nil];
     [self.view showHudWithActivity:@"正在加载"];
     //上传图片/文字，只能同POST
-    [manager POST:@"http://118.190.60.67:8100/api/writing/fiction/new" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:@"http://www.cpu123.com/api/writing/fiction/new" parameters:dicDat constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         // 注意：这个name（我的后台给的字段是file）一定要和后台的参数字段一样 否则不成功
         [formData appendPartWithFileData:self.imageData name:@"FileImage" fileName:@"aaa.png" mimeType:@"image/png"];
         

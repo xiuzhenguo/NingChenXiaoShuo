@@ -11,6 +11,7 @@
 #import "ETTimeManager.h"
 #import "HelperUtil.h"
 #import "BCWelcomHepler.h"
+#import "MineInforViewController.h"
 
 @interface RigestViewController ()<UIScrollViewDelegate>
 
@@ -147,6 +148,7 @@ static NSString * Get_ID_Key = @"getregistid";
 
 #pragma mark - 注册按钮的点击事件
 -(void) clickRigestButton {
+    
     WEAKSELF
     if (self.accountField.text.length == 0) {
         [SVProgressHUD showErrorWithStatus:@"请输入账号"];
@@ -175,6 +177,10 @@ static NSString * Get_ID_Key = @"getregistid";
             if (model.StatusCode == 200) {
                 
                 [SVProgressHUD showSuccessWithStatus:@"注册成功"];
+                MineInforViewController *vc = [[MineInforViewController alloc] init];
+                vc.userId = model.datas;
+                [self.navigationController pushViewController:vc animated:YES];
+                
             }else{
                 [SVProgressHUD showSuccessWithStatus:model.Message];
             }

@@ -37,7 +37,7 @@
     [self.contentView addSubview:self.moreImg];
     
     self.lineView = [[UIView alloc] init];
-    self.lineView.backgroundColor = BXColor(195, 195, 195);
+    self.lineView.backgroundColor = BXColor(242, 242, 242);
     [self.contentView addSubview:self.lineView];
 }
 

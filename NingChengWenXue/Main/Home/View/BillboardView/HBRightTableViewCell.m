@@ -71,8 +71,6 @@
         view.frame = CGRectZero;
     }
     
-    
-    
     CGFloat width = self.contentView.frame.size.width;
     
     self.imgView.frame = CGRectMake(10, 10, 93, 60);
@@ -92,7 +90,8 @@
     }
     
     self.authorLab.frame = CGRectMake(113, CGRectGetMaxY(self.nameLab.frame)+10, 150, 15);
-    self.authorLab.text = [NSString stringWithFormat:@"by：%@",viewModel.AuthorName];
+    self.authorLab.text = [NSString stringWithFormat:@"by:%@",viewModel.AuthorName];
+    
     [self.authorLab sizeToFit];
     
     self.moneyLab.frame = CGRectMake(width - 200, CGRectGetMaxY(self.nameLab.frame)+10, 185, 15);

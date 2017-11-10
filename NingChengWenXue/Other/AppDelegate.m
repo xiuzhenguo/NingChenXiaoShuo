@@ -14,13 +14,14 @@
 #import "BookshelfViewController.h"
 #import "MineViewController.h"
 #import "ViewController.h"
+#import "BCWelcomHepler.h"
 
 @interface AppDelegate ()
+
 
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -54,10 +55,15 @@
     
     [self.window makeKeyAndVisible];
     
-    // 状态栏字体颜色
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KServiceAccount];
-//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLoginStateKey];
+//    NSCalendar *calendar = nil;
+//    NSString *version = [UIDevice currentDevice].systemVersion;
+//    if (version.doubleValue >= 11.0) { // iOS系统版本 >= 8.0
+//        calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+//    } else{ //iOS系统版本 < 8.0
+//        calendar = [NSCalendar currentCalendar];
+//    }
+    
+    
     
     return YES;
 }

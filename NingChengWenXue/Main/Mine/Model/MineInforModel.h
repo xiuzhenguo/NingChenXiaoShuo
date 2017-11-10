@@ -18,6 +18,10 @@
 
 @property (nonatomic, strong) NSString *UserSign;
 
+@property (nonatomic, strong) NSString *UserSex;
+
+@property (nonatomic, strong) NSString *UserBirthday;
+
 @property (nonatomic, assign) NSInteger UserFansCount;
 
 @property (nonatomic, assign) NSInteger UserAttentionCount;

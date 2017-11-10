@@ -318,7 +318,7 @@
         [self.view hideHubWithActivity];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
-        [self.view showFailedViewReloadBlock:^{
+        [self.tableView showFailedViewReloadBlock:^{
 //            [self.view showActivityWithImage:kLoadingImage];
             [self getSearchData];
         }];

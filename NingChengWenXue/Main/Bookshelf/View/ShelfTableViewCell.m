@@ -89,7 +89,7 @@
     // 书的图片
     self.imgView.frame = CGRectMake(15, 15, 139, 88);
 //    self.imgView.image = [UIImage imageNamed:@"卡片"];
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.FictionImage] placeholderImage:[UIImage imageNamed:@"卡片"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:viewModel.FictionImage] placeholderImage:[UIImage imageNamed:@"默认图片"]];
     
     // 类型
     self.typeLab.frame = CGRectMake(0, 68, 139, 20);

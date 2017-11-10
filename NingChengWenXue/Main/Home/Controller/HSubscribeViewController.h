@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SelectReadTypeDelegate <NSObject>
+@optional
+- (void)selectReadtype:(NSString *)typeId;
+
+@end
+
 @interface HSubscribeViewController : UIViewController
 
 @end
